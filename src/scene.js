@@ -18,10 +18,10 @@ import {
 const scene = new Scene()
 const light = new DirectionalLight(0xFFFFFF, 1)
 const ambientLight = new AmbientLight(0xFFFFFF, .5)
-const floor = new Box(200, 1, 200, 0, -50, 0, false, "blue")
+const floor = new Box(200, 1, 200, 0, -40, 0, false, "blue")
 const axis = new AxisHelper(50)
-const fog = new FogExp2(0x000000, .0125)   //Fog(0x000000, 65, 140)
-const column = new Box(25, 50, 25, 0, -27.5, 0, false, "yellow")
+const fog = new FogExp2(0x000000, .0125)   
+//const column = new Box(25, 50, 25, 0, -27.5, 0, false, "yellow")
 
 export function addBox(...aguments) {
     let box = new Box(...arguments)
@@ -45,8 +45,7 @@ light.shadow.camera.top = 100
 
 floor.receiveShadow = true
 
-scene.fog = fog
-
-scene.add(light, axis, ambientLight, floor, column)
+scene.fog = fog 
+scene.add(light, axis, ambientLight, floor)
 
 export default scene
