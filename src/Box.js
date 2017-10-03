@@ -11,7 +11,7 @@ export default function Box(width = 1, height = 1, depth = 1, x = 0, y = 0, z = 
 
     var shape = new PhysicBox(new Vec3(width/2, height/2, depth/2))
     var body = new Body({
-        mass: move ? 1 : 0,
+        mass: move ? width* height * depth : 0,
         
     })
     body.position.set(x, y,z)

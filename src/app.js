@@ -47,11 +47,15 @@ document.addEventListener("click", () => {
     let b1 = boxes[boxes.length - 1]
     let color = c[vi++ % 4]
     let b2 = boxes[boxes.length - 2]
-    let { height, x, leftover } = getIntersection(b1.box, b2.box)
- 
+    let { height, x, leftover } = getIntersection(b1.box, b2.box) 
     let boxy = addBox(height, 5, size, -offset, y, 0, false, new Color(color))
 
-    addBox(leftover.height, 5, size, leftover.x, leftover.y, 0, true, new Color(color))
+    for(let lefty of leftover){
+        if(lefty.height > 0 ){
+            addBox(lefty.height, 5, size, lefty.x, lefty.y, 0, true, new Color(color)) 
+        }
+    }
+
 
     b1.box.scale.x = height
     b1.box.position.x = x
