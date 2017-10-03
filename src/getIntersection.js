@@ -1,10 +1,11 @@
 import { Box3, Vector3 } from "three"
 
 function diff(b1, b2) {
-    let right = new Box3().copy(b2).translate(new Vector3(-b2.getSize().x, 0, 0)).intersect(b1) 
-    let left = new Box3().copy(b2).translate(new Vector3(b2.getSize().x, 0, 0)).intersect(b1) 
-    let top = new Box3().copy(b2).translate(new Vector3(0, 0, b2.getSize().z)).intersect(b1) 
-    let bottom = new Box3().copy(b2).translate(new Vector3(0, 0, -b2.getSize().z)).intersect(b1) 
+    let { x, z } = b2.getSize()
+    let right = new Box3().copy(b2).translate(new Vector3(-x, 0, 0)).intersect(b1) 
+    let left = new Box3().copy(b2).translate(new Vector3(x, 0, 0)).intersect(b1) 
+    let top = new Box3().copy(b2).translate(new Vector3(0, 0, z)).intersect(b1) 
+    let bottom = new Box3().copy(b2).translate(new Vector3(0, 0, -z)).intersect(b1) 
     
     return [
         { 
