@@ -30,9 +30,10 @@ function tick() {
 tick();
 let c = ["red", "green", "blue", "purple"]
 let vi = 0
-let size = 25
+let size = 35
 let height = 5
 let offset = 40
+let offset2 = 65
 let duration = 4000
 let i = 0
 let boxes = [ ]
@@ -55,8 +56,7 @@ document.addEventListener("click", () => {
             addBox(lefty.height, 5, size, lefty.x, lefty.y, 0, true, new Color(color)) 
         }
     }
-
-
+ 
     b1.box.scale.x = height
     b1.box.position.x = x
 
@@ -69,11 +69,11 @@ document.addEventListener("click", () => {
     right.stop() 
 
     right = new Tween(boxy.position)
-        .to({ ...boxy.position, x: offset, }, duration)
+        .to({ ...boxy.position, x: offset2, }, duration)
         .easing(Easing.Linear.None)
 
     left = new Tween(boxy.position)
-        .to({ ...boxy.position, x: -offset, }, duration)
+        .to({ ...boxy.position, x: -offset2, }, duration)
         .easing(Easing.Linear.None)
 
     right.chain(left).start()
@@ -85,9 +85,9 @@ document.addEventListener("click", () => {
      
 })  
 
-let boxy2 = addBox(size, 40, size, 0, -offset/2 - 2.5, 0, false, "yellow")
+let boxy2 = addBox(size, 40, size, 0, -40/2- 2.5, 0, false, "yellow")
 boxes.push({box:boxy2})
-let boxy = addBox(size, 5, size, -offset, 0, 0, false, new Color(Math.random(), Math.random(), Math.random()))
+let boxy = addBox(size, 5, size, -offset2, 0, 0, false, new Color(Math.random(), Math.random(), Math.random()))
 
 let t1 = new Tween(camera.position)
     .to({ ...camera.position, y: camera.position.y + 5 }, 300)
@@ -95,11 +95,11 @@ let t1 = new Tween(camera.position)
     .start()
   
 right = new Tween(boxy.position)
-    .to({ ...boxy.position, x: offset, }, duration)
+    .to({ ...boxy.position, x: offset2, }, duration)
     .easing(Easing.Linear.None)
 
 left = new Tween(boxy.position)
-    .to({ ...boxy.position, x: -offset, }, duration)
+    .to({ ...boxy.position, x: -offset2, }, duration)
     .easing(Easing.Linear.None)
 
 right.chain(left).start()
