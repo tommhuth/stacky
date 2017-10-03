@@ -19,6 +19,10 @@ export default class Box extends Mesh {
         })
         this.body.position.set(x, y, z)
         this.body.addShape(this.shape)
+        
+        var normal = this.normalMatrix 
+
+        console.log(normal)
 
         this.body.applyImpulse(new Vec3(0, -1, 0), new Vec3(0, 0, 0))
         this.body.angularDamping = 0.5;
@@ -35,7 +39,7 @@ export default class Box extends Mesh {
         bodies.push(this.body)  
     }
     update(x, y, z, width, height, depth, move) {
-        world.remove(this.body)
+        world.remove(this.body) 
 
         this.shape = new PhysicBox(new Vec3(width / 2, height / 2, depth / 2))
         this.body = new Body({
@@ -48,6 +52,8 @@ export default class Box extends Mesh {
         this.scale.y = height
         this.scale.z = depth
         this.position.x = x
+        this.position.y = y
+        this.position.z = z
 
         world.addBody(this.body);
     }

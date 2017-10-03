@@ -20,12 +20,12 @@ document.body.appendChild(renderer.domElement);
 
 
 function tick() {
-    try {  
-         physicsTick()
+    try {
+        physicsTick()
         update()
         renderer.render(scene, camera);
         requestAnimationFrame(tick);
-    }catch(e){
+    } catch (e) {
         console.error(e)
     }
 };
@@ -39,28 +39,27 @@ let offset = 40
 let offset2 = 65
 let duration = 4000
 let i = 0
-let boxes = [ ]
+let boxes = []
 let left
 let right
-let hasInitalBox 
- 
+let hasInitalBox
+
 
 document.addEventListener("click", () => { 
-    let y = (boxes.length- 1) * 5
-    let b1 = boxes[boxes.length - 1]
     let color = c[vi++ % 4]
+    let b1 = boxes[boxes.length - 1]
     let b2 = boxes[boxes.length - 2]
-    let { height, x, leftover } = getIntersection(b1, b2) 
-    let boxy = addBox(height, 5, size, -offset, y, 0, false, new Color(color))
+    let { height, width, depth, x, y, z, leftover } = getIntersection(b1, b2)
+    let boxy = addBox(width, height, depth, x, y + 5, z, false, new Color(color))
+ 
+    b1.update(x, y, z, width, height, depth, false)
 
-    b1.update(x, y-5, 0, height, 5, size, false) 
-
-    for(let lefty of leftover){
-        if(lefty.height > 0 ){
-            addBox(lefty.height, 5, size, lefty.x, lefty.y, 0, true, new Color(color)) 
+    for (let lefty of leftover) {
+        if (lefty.width > 0 && lefty.depth > 0) {
+            addBox(lefty.width, lefty.height, lefty.depth, lefty.x, lefty.y, lefty.z, true, new Color(color))
         }
-    } 
-     
+    }
+
     let t1 = new Tween(camera.position)
         .to({ ...camera.position, y: camera.position.y + 5 }, 300)
         .easing(Easing.Back.Out)
@@ -68,25 +67,28 @@ document.addEventListener("click", () => {
 
     left.stop()
     right.stop() 
+    
+    if (vi % 2 === 0) {
+        boxy.position.x = -offset2
 
-    right = new Tween(boxy.position)
-        .to({ ...boxy.position, x: offset2, }, duration)
-        .easing(Easing.Linear.None)
+        right = new Tween(boxy.position).to({ ...boxy.position, x: offset2, }, duration) 
+        left = new Tween(boxy.position).to({ ...boxy.position, x: -offset2, }, duration)
+    } else {
+        boxy.position.z = offset2
 
-    left = new Tween(boxy.position)
-        .to({ ...boxy.position, x: -offset2, }, duration)
-        .easing(Easing.Linear.None)
+        right = new Tween(boxy.position).to({ ...boxy.position, z: -offset2, }, duration) 
+        left = new Tween(boxy.position).to({ ...boxy.position, z: offset2, }, duration)
+    }
 
     right.chain(left).start()
     left.chain(right)
 
     camera.lookAt(new Vector3(0, y, 0))
 
-    boxes.push(  boxy )
-     
-})  
+    boxes.push(boxy) 
+})
 
-let boxy2 = addBox(size, 40, size, 0, -40/2- 2.5, 0, false, "yellow")
+let boxy2 = addBox(size, 40, size, 0, -40 / 2 - 2.5, 0, false, "yellow")
 boxes.push(boxy2)
 let boxy = addBox(size, 5, size, -offset2, 0, 0, false, new Color(Math.random(), Math.random(), Math.random()))
 
@@ -94,7 +96,7 @@ let t1 = new Tween(camera.position)
     .to({ ...camera.position, y: camera.position.y + 5 }, 300)
     .easing(Easing.Back.Out)
     .start()
-  
+
 right = new Tween(boxy.position)
     .to({ ...boxy.position, x: offset2, }, duration)
     .easing(Easing.Linear.None)
@@ -109,3 +111,7 @@ left.chain(right)
 camera.lookAt(new Vector3(0, (boxes.length - 1) * 5, 0))
 
 boxes.push(boxy)
+
+// debug
+window.scene = scene
+window.THREE = require("three")
