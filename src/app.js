@@ -20,11 +20,14 @@ document.body.appendChild(renderer.domElement);
 
 
 function tick() {
-    requestAnimationFrame(tick);
-
-    physicsTick()
-    update()
-    renderer.render(scene, camera);
+    try {  
+         physicsTick()
+        update()
+        renderer.render(scene, camera);
+        requestAnimationFrame(tick);
+    }catch(e){
+        console.error(e)
+    }
 };
 
 tick();

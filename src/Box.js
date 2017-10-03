@@ -4,10 +4,10 @@ import { Box as PhysicBox, Body, Vec3  } from "cannon"
  
 // refactor to class!! this.X/Y/Z
 
-export default function Box(width = 1, height = 1, depth = 1, x = 0, y = 0, z = 0, move = false, color = "red") { 
-    var geometry = new BoxGeometry(1, 1, 1);
-    var material = new MeshPhongMaterial({ color });
-    var cube = new Mesh(geometry, material);
+function Box(width = 1, height = 1, depth = 1, x = 0, y = 0, z = 0, move = false, color = "red") { 
+    this.geometry = new BoxGeometry(1, 1, 1);
+    this.material = new MeshPhongMaterial({ color });
+    Mesh.call(this, this.geometry, this.material);
 
     var shape = new PhysicBox(new Vec3(width/2, height/2, depth/2))
     var body = new Body({
@@ -16,8 +16,8 @@ export default function Box(width = 1, height = 1, depth = 1, x = 0, y = 0, z = 
     })
     body.position.set(x, y,z)
     body.addShape(shape) 
-
-    cube.__doUpdate = function(x ,width){
+/*
+    this.__doUpdate = function(x ,width){
         world.remove(body)
         body.position(x,y,z)
 
@@ -30,27 +30,27 @@ export default function Box(width = 1, height = 1, depth = 1, x = 0, y = 0, z = 
         body.addShape(shape)
         world.addBody(body);
 
-        cube.position.x = x
+        this.cube.position.x = x
         
-    }
-
-    console.log(cube.__doUpdate)
-
+    } 
+*/
     //body.angularVelocity.set(0, .1, 0);
     body.applyImpulse(new Vec3(0, -1,0), new Vec3(0,0,0))
     body.angularDamping = 0.5;
     world.addBody(body);
 
-    cube.castShadow = true;
-    cube.receiveShadow = true;
-    cube.position.set(x, y, z)
+    this.castShadow = true;
+    this.receiveShadow = true;
+    this.position.set(x, y, z) 
+    this.scale.x = width
+    this.scale.y = height
+    this.scale.z = depth
 
-    cube.scale.x = width
-    cube.scale.y = height
-    cube.scale.z = depth
-
-    meshes.push(cube) 
-    bodies.push(body) 
-
-    return cube
+    meshes.push(this) 
+    bodies.push(body)  
 }
+
+Box.prototype = Object.create(Mesh.prototype);
+Box.prototype.constructor = Box;
+
+export default Box
