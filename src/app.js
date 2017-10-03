@@ -45,24 +45,22 @@ let right
 let hasInitalBox 
  
 
-document.addEventListener("click", () => {
-   // console.log(boxes)
+document.addEventListener("click", () => { 
     let y = (boxes.length- 1) * 5
     let b1 = boxes[boxes.length - 1]
     let color = c[vi++ % 4]
     let b2 = boxes[boxes.length - 2]
-    let { height, x, leftover } = getIntersection(b1.box, b2.box) 
+    let { height, x, leftover } = getIntersection(b1, b2) 
     let boxy = addBox(height, 5, size, -offset, y, 0, false, new Color(color))
+
+    b1.update(x, y-5, 0, height, 5, size, false) 
 
     for(let lefty of leftover){
         if(lefty.height > 0 ){
             addBox(lefty.height, 5, size, lefty.x, lefty.y, 0, true, new Color(color)) 
         }
-    }
- 
-    b1.box.scale.x = height
-    b1.box.position.x = x
-
+    } 
+     
     let t1 = new Tween(camera.position)
         .to({ ...camera.position, y: camera.position.y + 5 }, 300)
         .easing(Easing.Back.Out)
@@ -84,12 +82,12 @@ document.addEventListener("click", () => {
 
     camera.lookAt(new Vector3(0, y, 0))
 
-    boxes.push({ height, x, box: boxy, color })
+    boxes.push(  boxy )
      
 })  
 
 let boxy2 = addBox(size, 40, size, 0, -40/2- 2.5, 0, false, "yellow")
-boxes.push({box:boxy2})
+boxes.push(boxy2)
 let boxy = addBox(size, 5, size, -offset2, 0, 0, false, new Color(Math.random(), Math.random(), Math.random()))
 
 let t1 = new Tween(camera.position)
@@ -110,4 +108,4 @@ left.chain(right)
 
 camera.lookAt(new Vector3(0, (boxes.length - 1) * 5, 0))
 
-boxes.push({x: 0, height: size, box: boxy, color: "init"})
+boxes.push(boxy)
