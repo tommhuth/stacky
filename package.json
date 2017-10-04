@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "npm run serve",
+    "start": "node server.js",
     "build": "webpack --watch",
     "serve": "superstatic public --port 3000 --host localhost",
     "run": "npm run build & npm run serve",
@@ -25,21 +25,25 @@
     "babel": "^6.23.0",
     "babel-core": "^6.26.0",
     "babel-loader": "^7.1.2",
+    "babel-plugin-transform-class-properties": "^6.24.1",
+    "babel-plugin-transform-object-rest-spread": "^6.26.0",
     "babel-preset-env": "^1.6.0",
     "babylonjs": "^3.1.0-alpha2",
     "cannon": "^0.6.2",
     "circular-dependency-plugin": "^4.2.1",
+    "compression": "^1.7.1",
+    "express": "^4.16.1",
     "jest": "^21.2.1",
     "oimo": "^1.0.9",
     "physijs-webpack": "0.0.2",
+    "pug": "^2.0.0-rc.4",
+    "regenerator-runtime": "^0.11.0",
+    "serve-static": "^1.13.1",
     "superstatic": "^5.0.1",
     "three": "^0.87.1",
     "three-trackballcontrols": "0.0.5",
     "tween.js": "^16.6.0",
-    "webpack": "^3.6.0",
-    "babel-plugin-transform-class-properties": "^6.24.1",
-    "babel-plugin-transform-object-rest-spread": "^6.26.0",
-    "regenerator-runtime": "^0.11.0"
+    "webpack": "^3.6.0"
   },
   "devDependencies": {
     "babel-jest": "^21.2.0"

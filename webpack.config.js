@@ -2,6 +2,32 @@ const path = require("path")
 const webpack = require("webpack") 
 let CircularDependencyPlugin = require('circular-dependency-plugin')
 
+if (nodeEnv === "production") {
+    plugins.push(
+        new webpack.LoaderOptionsPlugin({
+            minimize: true,
+            debug: false
+        }),
+        new webpack.optimize.UglifyJsPlugin({
+            compress: {
+                warnings: false,
+                screw_ie8: true,
+                conditionals: true,
+                unused: true,
+                comparisons: true,
+                sequences: true,
+                dead_code: true,
+                evaluate: true,
+                if_return: true,
+                join_vars: true,
+            },
+            output: {
+                comments: false,
+            }
+        })
+    )
+}
+
 module.exports = {  
         entry:  "./src/app.js",
         output: { 
@@ -14,7 +40,8 @@ module.exports = {
                 exclude: /a\.js|node_modules/,
                 // add errors to webpack instead of warnings
                 failOnError: true
-            })
+            }),
+            ...plugins
         ],
         module: {
             rules: [
