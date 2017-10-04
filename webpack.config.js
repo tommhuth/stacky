@@ -2,7 +2,7 @@ const path = require("path")
 const webpack = require("webpack") 
 let CircularDependencyPlugin = require('circular-dependency-plugin')
 
-if (nodeEnv === "production") {
+if (process.env.NODE_ENV === "production") {
     plugins.push(
         new webpack.LoaderOptionsPlugin({
             minimize: true,
