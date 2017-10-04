@@ -1,7 +1,7 @@
 import { WebGLRenderer, OrthographicCamera, Vector3, Color } from "three"
 import scene, { addBox } from "./scene"
 import { physicsTick, world } from "./physics"
-import { Tween, Easing, update } from "tween.js"
+import { Tween, Easing, update } from "tween.js" 
 import getIntersection from "./getIntersection"
 
 const frustumSize = 100;
@@ -10,7 +10,7 @@ const camera = new OrthographicCamera(frustumSize * aspect / - 2, frustumSize * 
 const renderer = new WebGLRenderer({ antialias: true, alpha: false });
 
 camera.position.set(-35, 35, -35)
-//camera.up = new Vector3(0, 1, 0);
+camera.up = new Vector3(0, 1, 0);
 camera.lookAt(new Vector3())
 
 renderer.shadowMap.enabled = true;
@@ -38,25 +38,23 @@ let height = 5
 let offset = 40
 let offset2 = 65
 let duration = 4000
-let i = 0
 let boxes = []
 let left
 let right
-let hasInitalBox
 
 
-document.addEventListener("click", () => { 
+document.addEventListener("click", () => {
     let color = c[vi++ % 4]
     let b1 = boxes[boxes.length - 1]
     let b2 = boxes[boxes.length - 2]
     let { height, width, depth, x, y, z, leftover } = getIntersection(b1, b2)
     let boxy = addBox(width, height, depth, x, y + 5, z, false, new Color(color))
- 
+
     b1.update(x, y, z, width, height, depth, false)
 
     for (let lefty of leftover) {
         if (lefty.width > 0 && lefty.depth > 0) {
-            addBox(lefty.width, lefty.height, lefty.depth, lefty.x, lefty.y, lefty.z, true, new Color(color))
+            addBox(lefty.width, lefty.height, lefty.depth, lefty.x, lefty.y, lefty.z, true, b1.material.color)
         }
     }
 
@@ -66,17 +64,17 @@ document.addEventListener("click", () => {
         .start()
 
     left.stop()
-    right.stop() 
-    
+    right.stop()
+
     if (vi % 2 === 0) {
         boxy.position.x = -offset2
 
-        right = new Tween(boxy.position).to({ ...boxy.position, x: offset2, }, duration) 
+        right = new Tween(boxy.position).to({ ...boxy.position, x: offset2, }, duration)
         left = new Tween(boxy.position).to({ ...boxy.position, x: -offset2, }, duration)
     } else {
         boxy.position.z = offset2
 
-        right = new Tween(boxy.position).to({ ...boxy.position, z: -offset2, }, duration) 
+        right = new Tween(boxy.position).to({ ...boxy.position, z: -offset2, }, duration)
         left = new Tween(boxy.position).to({ ...boxy.position, z: offset2, }, duration)
     }
 
@@ -85,7 +83,7 @@ document.addEventListener("click", () => {
 
     camera.lookAt(new Vector3(0, y, 0))
 
-    boxes.push(boxy) 
+    boxes.push(boxy)
 })
 
 let boxy2 = addBox(size, 40, size, 0, -40 / 2 - 2.5, 0, false, "yellow")

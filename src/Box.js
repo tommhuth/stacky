@@ -6,6 +6,8 @@ export default class Box extends Mesh {
     constructor(width = 1, height = 1, depth = 1, x = 0, y = 0, z = 0, move = false, color = "red") {
         let geometry = new BoxGeometry(1, 1, 1);
         let material = new MeshPhongMaterial({ color });
+        let mass = width * height * depth  
+
         super(geometry, material);
 
         this.height = height
@@ -14,20 +16,11 @@ export default class Box extends Mesh {
 
         this.shape = new PhysicBox(new Vec3(width / 2, height / 2, depth / 2))
         this.body = new Body({
-            mass: move ? width * height * depth / 10 : 0,
-
+            mass: move ? mass / 10 : 0  
         })
-        this.body.position.set(x, y, z)
+        this.body.position.set(x, y, z)  
         this.body.addShape(this.shape)
-        
-        var normal = this.normalMatrix 
-
-        console.log(normal)
-
-        this.body.applyImpulse(new Vec3(0, -1, 0), new Vec3(0, 0, 0))
-        this.body.angularDamping = 0.5;
-        world.addBody(this.body);
-
+         
         this.castShadow = true;
         this.receiveShadow = true;
         this.position.set(x, y, z)
@@ -35,8 +28,8 @@ export default class Box extends Mesh {
         this.scale.y = height
         this.scale.z = depth
 
+        world.addBody(this.body);
         meshes.push(this)
-        bodies.push(this.body)  
     }
     update(x, y, z, width, height, depth, move) {
         world.remove(this.body) 

@@ -1,26 +1,22 @@
 import { World, NaiveBroadphase } from "cannon"
 
 const world = new World()
-
-world.gravity.set(0, -9.8, 0) 
-world.broadphase = new NaiveBroadphase();
-world.solver.iterations = 5;
-
-const bodies = []
 const meshes = []
 
+world.gravity.set(0, -9.8, 0)
+world.broadphase = new NaiveBroadphase();
+world.solver.iterations = 10;
+
 function physicsTick() {
-    world.step(1/30)
+    world.step(1 / 30)
 
-    for(let i = 0; i < meshes.length; i++) {
-        let body = bodies[i]
-        let mesh = meshes[i]
+    for (let mesh of meshes) {
 
-        if(body.mass > 0) {   
-            mesh.position.copy(body.position);
-            mesh.quaternion.copy(body.quaternion) 
-        } 
+        if (mesh.body.mass > 0) {
+            mesh.position.copy(mesh.body.position);
+            mesh.quaternion.copy(mesh.body.quaternion)
+        }
     }
 }
 
-export { bodies, meshes, world, physicsTick }
+export { meshes, world, physicsTick }
