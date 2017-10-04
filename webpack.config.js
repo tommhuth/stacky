@@ -1,6 +1,6 @@
 const path = require("path")
-const webpack = require("webpack") 
-let CircularDependencyPlugin = require('circular-dependency-plugin')
+const webpack = require("webpack")  
+const plugins = []
 
 if (process.env.NODE_ENV === "production") {
     plugins.push(
@@ -34,15 +34,7 @@ module.exports = {
             filename: "public/app.js"
         },
         devtool:  "source-map",
-        plugins: [
-            new CircularDependencyPlugin({
-                // exclude detection of files based on a RegExp
-                exclude: /a\.js|node_modules/,
-                // add errors to webpack instead of warnings
-                failOnError: true
-            }),
-            ...plugins
-        ],
+        plugins,
         module: {
             rules: [
                 {
