@@ -1,12 +1,13 @@
 import { BoxGeometry, MeshPhongMaterial, Mesh, Color } from "three"
-import { bodies, meshes, world } from "./physics"
+import {  meshes, world, remove } from "./physics"
 import { Box as PhysicBox, Body, Vec3  } from "cannon"
    
 export default class Box extends Mesh {
     constructor(width = 1, height = 1, depth = 1, x = 0, y = 0, z = 0, move = false, color = "red") {
         let geometry = new BoxGeometry(1, 1, 1);
         let material = new MeshPhongMaterial({ color });
-        let mass = width * height * depth  
+        let mass = width * height * depth / 100
+        console.log(mass)
 
         super(geometry, material);
 
@@ -16,7 +17,7 @@ export default class Box extends Mesh {
 
         this.shape = new PhysicBox(new Vec3(width / 2, height / 2, depth / 2))
         this.body = new Body({
-            mass: move ? mass / 10 : 0  
+            mass: move ? mass : 0  
         })
         this.body.position.set(x, y, z)  
         this.body.addShape(this.shape)
@@ -30,6 +31,11 @@ export default class Box extends Mesh {
 
         world.addBody(this.body);
         meshes.push(this)
+    }
+    remove(){
+        world.remove(this.body)
+        scene.remove(this) 
+        remove(this)  
     }
     update(x, y, z, width, height, depth, move) {
         world.remove(this.body) 

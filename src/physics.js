@@ -1,7 +1,7 @@
 import { World, NaiveBroadphase } from "cannon"
 
-const world = new World()
-const meshes = []
+let world = new World()
+let meshes = []
 
 world.gravity.set(0, -9.8, 0)
 world.broadphase = new NaiveBroadphase();
@@ -18,5 +18,16 @@ function physicsTick() {
         }
     }
 }
+
+export function remove(o){
+    for(let i = 0; i < meshes.length; i++) {
+        let obj = meshes[i]
+        if(obj === o ){
+            meshes.splice(i, 1)
+        }
+    }
+    meshes = meshes.filter(i => i !== o)
+}
+ 
 
 export { meshes, world, physicsTick }

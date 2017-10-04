@@ -14,6 +14,7 @@ function diff(b1, b2) {
             width: right.getSize().x,
             height: right.getSize().y,
             depth: right.getSize().z,
+            type: "right"
         },
         {
             ...left.getCenter(),
@@ -21,6 +22,7 @@ function diff(b1, b2) {
             width: left.getSize().x,
             height: left.getSize().y,
             depth: left.getSize().z,
+            type: "left"
         },
         {
             ...top.getCenter(),
@@ -28,6 +30,7 @@ function diff(b1, b2) {
             width: top.getSize().x,
             height: top.getSize().y,
             depth: top.getSize().z,
+            type: "top"
         },
         {
             ...bottom.getCenter(),
@@ -35,6 +38,7 @@ function diff(b1, b2) {
             width: bottom.getSize().x,
             height: bottom.getSize().y,
             depth: bottom.getSize().z,
+            type: "bottom"
         },
     ]
 }
@@ -46,10 +50,13 @@ export default function (current, previous) {
     let intersection = b1.intersect(b2)
 
     if (!b2.intersectsBox(b1)) {
-        throw new Error("game over!")
+        return {
+            hasIntersection: false
+        }
     }
 
     return {
+        hasIntersection: true,
         width: intersection.getSize().x,
         depth: intersection.getSize().z,
         height: intersection.getSize().y,

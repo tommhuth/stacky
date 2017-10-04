@@ -6,7 +6,7 @@ import {
     BoxGeometry,
     AxisHelper,
     DirectionalLight,
-    AmbientLight,
+    AmbientLight, VertexNormalsHelper,
     PlaneGeometry,
     Mesh,
     MeshPhongMaterial,
@@ -23,12 +23,13 @@ const axis = new AxisHelper(50)
 const fog = new FogExp2(0x000000, .0125)    
 
 export function addBox(...aguments) {
-    let box = new Box(...arguments)
+    let box = new Box(...arguments) 
 
-    scene.add(box)
+    scene.add(box )
 
     return box
 }
+ 
 
 light.position.set(10, 20, 10)
 light.target = floor
