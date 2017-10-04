@@ -11,9 +11,10 @@ const aspect = window.innerWidth / window.innerHeight;
 const camera = new OrthographicCamera(frustumSize * aspect / - 2, frustumSize * aspect / 2, frustumSize / 2, frustumSize / - 2, -100, 1000);
 const renderer = new WebGLRenderer({ antialias: true, alpha: false });
 
-camera.position.set(-35, 35, -35)
+camera.position.set(-35, 25, -35)
 camera.up = new Vector3(0, 1, 0);
 camera.lookAt(new Vector3())
+
 
 renderer.shadowMap.enabled = true;
 renderer.setSize(window.innerWidth, window.innerHeight);
@@ -21,6 +22,7 @@ renderer.setSize(window.innerWidth, window.innerHeight);
 document.body.appendChild(renderer.domElement);
 
 function tick() {
+    console.log(scene)
     try {
         physicsTick()
         update()
@@ -90,16 +92,16 @@ document.addEventListener("click", () => {
         if (vi % 2 === 0) {
             boxy.position.x = -offset2
 
-            right = new Tween(boxy.position).to({ ...boxy.position, x: offset2, }, duration)
-            left = new Tween(boxy.position).to({ ...boxy.position, x: -offset2, }, duration)
+            right = new Tween(boxy.position).to({ ...boxy.position, x: offset2 }, duration)
+            left = new Tween(boxy.position).to({ ...boxy.position, x: -offset2 }, duration)
         } else {
             boxy.position.z = offset2
 
-            right = new Tween(boxy.position).to({ ...boxy.position, z: -offset2, }, duration)
-            left = new Tween(boxy.position).to({ ...boxy.position, z: offset2, }, duration)
+            right = new Tween(boxy.position).to({ ...boxy.position, z: -offset2 }, duration)
+            left = new Tween(boxy.position).to({ ...boxy.position, z: offset2 }, duration)
 
             new Tween(camera.position)
-                .to({ ...camera.position, y: camera.position.y + 10 }, 3000)
+                .to({ ...camera.position, y: camera.position.y + 10 }, 5000)
                 .easing(Easing.Back.Out)
                 .start()
         }
