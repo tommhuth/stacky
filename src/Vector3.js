@@ -1,6 +1,6 @@
 import { Vector3 as ThreeVector3, ArrowHelper } from "three"
 import { Vec3 } from "cannon"
-import scene from "./scene"
+import {scene} from "./scene"
 
 export class Vector3 extends ThreeVector3 { 
     normalize(){

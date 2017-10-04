@@ -1,5 +1,12 @@
 import { Box3, Vector3 } from "three"
 
+export const SliceType = {
+    Right: "right",
+    Left: "left",
+    Top: "top",
+    Bottom: "bottom"
+}
+
 function diff(b1, b2) {
     let { x, z } = b2.getSize()
     let right = new Box3().copy(b2).translate(new Vector3(-x, 0, 0)).intersect(b1)

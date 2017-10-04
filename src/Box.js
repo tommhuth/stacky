@@ -1,6 +1,6 @@
 import { BoxGeometry, MeshPhongMaterial, Mesh, Color } from "three"
 import { world, remove } from "./physics"
-import scene from "./scene"
+import { scene } from "./scene"
 import { Box as PhysicBox, Body } from "cannon"
 import { VectorC } from "./Vector3"
 
@@ -52,3 +52,12 @@ export default class Box extends Mesh {
     }
 }
 
+export class Pillar extends Box {
+    constructor(width, height, depth, sliceHeight, color) {
+        super(width, height, depth, 0, (-height / 2) - (sliceHeight / 2), 0, 0, color)
+    }
+}
+
+export class Slice extends Box {
+    
+}
