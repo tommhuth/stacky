@@ -1,51 +1,22 @@
-import Box from "./Box"
-import {
-    Scene,
-    FogExp2,
-    Fog,
-    BoxGeometry,
-    AxisHelper,
-    DirectionalLight,
-    AmbientLight, VertexNormalsHelper,
-    PlaneGeometry,
-    Mesh,
-    MeshPhongMaterial,
-    Vector3,
-    DoubleSide,
-    Math
-} from "three"
+import { Scene, FogExp2, Fog, AxisHelper, DirectionalLight, AmbientLight, Mesh, Vector3 } from "three"
 
 const scene = new Scene()
 const light = new DirectionalLight(0xFFFFFF, 1)
 const ambientLight = new AmbientLight(0xFFFFFF, .5)
-const floor = new Box(200, 1, 200, 0, -40, 0, false, "blue")
-const axis = new AxisHelper(50)
-const fog = new FogExp2(0x000000, .0125)    
-
-export function addBox(...aguments) {
-    let box = new Box(...arguments) 
-
-    scene.add(box )
-
-    return box
-}
+const axis = new AxisHelper(50) 
  
-
 light.position.set(10, 20, 10)
-light.target = floor
 light.castShadow = true
-light.shadow.mapSize.width = 1024 // default is 512 
-light.shadow.mapSize.height = 1024 // default is 512
-light.shadow.camera.near = -100
-light.shadow.camera.far = 100
-light.shadow.camera.left = -100
-light.shadow.camera.right = 100
-light.shadow.camera.bottom = -100
-light.shadow.camera.top = 100
-
-floor.receiveShadow = true
-
-scene.fog = fog 
-scene.add(light, axis, ambientLight, floor)
+light.shadow.mapSize.width = 1024 
+light.shadow.mapSize.height = 1024 
+light.shadow.camera.near = -50
+light.shadow.camera.far = 50
+light.shadow.camera.left = -50
+light.shadow.camera.right = 50
+light.shadow.camera.bottom = -50
+light.shadow.camera.top = 50
+ 
+scene.fog = new FogExp2(0x666666, .0125)
+scene.add(light, axis, ambientLight)
 
 export default scene

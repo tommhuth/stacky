@@ -1,61 +1,54 @@
 import { BoxGeometry, MeshPhongMaterial, Mesh, Color } from "three"
-import {  meshes, world, remove } from "./physics"
-import { Box as PhysicBox, Body, Vec3  } from "cannon"
-   
-export default class Box extends Mesh {
-    constructor(width = 1, height = 1, depth = 1, x = 0, y = 0, z = 0, move = false, color = "red") {
-        let geometry = new BoxGeometry(1, 1, 1);
-        let material = new MeshPhongMaterial({ color });
-        let mass = width * height * depth / 100
-        console.log(mass)
+import { world, remove } from "./physics"
+import scene from "./scene"
+import { Box as PhysicBox, Body } from "cannon"
+import { VectorC } from "./Vector3"
 
-        super(geometry, material);
+export default class Box extends Mesh {
+    constructor(width = 1, height = 1, depth = 1, x = 0, y = 0, z = 0, mass = width * height * depth / 100, color = "red") {
+        let geometry = new BoxGeometry(1, 1, 1)
+        let material = new MeshPhongMaterial({ color })
+
+        super(geometry, material)
 
         this.height = height
         this.width = width
         this.depth = depth
 
-        this.shape = new PhysicBox(new Vec3(width / 2, height / 2, depth / 2))
-        this.body = new Body({
-            mass: move ? mass : 0  
-        })
-        this.body.position.set(x, y, z)  
+        this.shape = new PhysicBox(new VectorC(width / 2, height / 2, depth / 2))
+        this.body = new Body({ mass })
+        this.body.position.set(x, y, z)
         this.body.addShape(this.shape)
-         
-        this.castShadow = true;
-        this.receiveShadow = true;
+
+        this.castShadow = true
+        this.receiveShadow = true
         this.position.set(x, y, z)
         this.scale.x = width
         this.scale.y = height
         this.scale.z = depth
 
-        world.addBody(this.body);
-        meshes.push(this)
+        world.addBody(this.body)
+        scene.add(this)
     }
-    remove(){
-        world.remove(this.body)
-        scene.remove(this) 
-        remove(this)  
-    }
-    update(x, y, z, width, height, depth, move) {
-        world.remove(this.body) 
 
-        this.shape = new PhysicBox(new Vec3(width / 2, height / 2, depth / 2))
-        this.body = new Body({
-            mass: move ? width * height * depth / 10 : 0,
-        }) 
-        this.body.position.set(x, y, z)
+    remove() {
+        world.removeBody(this.body)
+        scene.remove(this)
+    }
+
+    resize(width, height, depth, move = false) {
+        world.remove(this.body)
+
+        this.shape = new PhysicBox(new VectorC(width / 2, height / 2, depth / 2))
+        this.body = new Body({ mass: move ? width * height * depth / 10 : 0 })
+        this.body.position.set(this.position.x, this.position.y, this.position.z)
         this.body.addShape(this.shape)
 
         this.scale.x = width
         this.scale.y = height
         this.scale.z = depth
-        this.position.x = x
-        this.position.y = y
-        this.position.z = z
 
-        world.addBody(this.body);
+        world.addBody(this.body)
     }
 }
 
- 

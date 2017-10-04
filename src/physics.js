@@ -1,33 +1,22 @@
 import { World, NaiveBroadphase } from "cannon"
+import scene from "./scene"
 
-let world = new World()
-let meshes = []
+const world = new World() 
 
 world.gravity.set(0, -9.8, 0)
-world.broadphase = new NaiveBroadphase();
-world.solver.iterations = 10;
+world.broadphase = new NaiveBroadphase()
+world.solver.iterations = 10
 
 function physicsTick() {
     world.step(1 / 30)
 
-    for (let mesh of meshes) {
+    for (let mesh of scene.children) {
 
-        if (mesh.body.mass > 0) {
-            mesh.position.copy(mesh.body.position);
+        if (mesh.body && mesh.body.mass > 0) {
+            mesh.position.copy(mesh.body.position)
             mesh.quaternion.copy(mesh.body.quaternion)
         }
     }
 }
-
-export function remove(o){
-    for(let i = 0; i < meshes.length; i++) {
-        let obj = meshes[i]
-        if(obj === o ){
-            meshes.splice(i, 1)
-        }
-    }
-    meshes = meshes.filter(i => i !== o)
-}
- 
-
-export { meshes, world, physicsTick }
+   
+export {  world, physicsTick }
