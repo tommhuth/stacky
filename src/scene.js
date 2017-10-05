@@ -1,11 +1,6 @@
-import { 
-    Scene, FogExp2, Fog, 
-    AxisHelper, 
-    DirectionalLight, AmbientLight, 
-    Mesh, Vector3, 
-    OrthographicCamera, 
-    WebGLRenderer 
-} from "three"
+import { Tween, Easing } from "tween.js"
+import { Scene, FogExp2, AxisHelper, DirectionalLight, AmbientLight, Mesh, OrthographicCamera, WebGLRenderer } from "three"
+import {  Vector3 } from "./Vector"
 
 const renderer = new WebGLRenderer({ antialias: true, alpha: false })
 const frustumSize = 100
@@ -21,12 +16,22 @@ function render() {
     renderer.render(scene, camera)
 }
 
+function raiseCamera(y, focus) {
+    new Tween(camera.position)
+        .to({ y: camera.position.y + y }, 4000)
+        .easing(Easing.Cubic.InOut)
+        .start()
+
+    light.shadow.camera.bottom += y
+    light.shadow.camera.top += y
+}
+
 renderer.shadowMap.enabled = true
 renderer.setSize(window.innerWidth, window.innerHeight)
 
 camera.position.set(-35, 25, -35)
 camera.up = new Vector3(0, 1, 0)
-camera.lookAt(new Vector3())
+camera.lookAt(new Vector3(0, 0, 0))
 
 light.position.set(10, 20, 10)
 light.castShadow = true
@@ -44,4 +49,4 @@ scene.add(light, ambientLight)
 
 document.body.appendChild(renderer.domElement)
 
-export { scene, camera, render }
+export { scene, camera, render, raiseCamera }

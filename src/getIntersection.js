@@ -1,4 +1,5 @@
-import { Box3, Vector3 } from "three"
+import { Box3 } from "three"
+import { Vector3 } from "./Vector"
 
 export const SliceType = {
     Right: "right",

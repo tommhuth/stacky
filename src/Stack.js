@@ -1,23 +1,24 @@
 import getIntersection, { SliceType } from "./getIntersection"
 import Box, { Pillar, Slice } from "./Box"
 import { Tween, Easing, update } from "tween.js"
-import { camera } from "./scene"
+import { raiseCamera } from "./scene"
 import { Color } from "three"
-import { VectorC } from "./Vector3"
+import { VectorC } from "./Vector"
 
 const Settings = {
     Colors: ["red", "green", "blue", "purple"],
     PillarHeight: 60,
     SliceHeight: 5,
     SliceSize: 35,
-    AnimationDuration: 4000,
+    AnimationDuration: 6000,
     AnimationOffset: 65
 }
 
 export default class Stack {
     slices = []
-    leftAnimation
-    rightAnimation
+    sliceAnimation = new Tween()
+    sliceDirection
+    sliceMagnitude
 
     constructor() {
         this.init()
@@ -65,7 +66,7 @@ export default class Stack {
 
             this.slices.push(nextSlice)
         } else {
-            let dropOut = new Slice(currentSlice.width, currentSlice.height, currentSlice.depth, currentSlice.position.x, currentSlice.position.y, currentSlice.position.z, currentSlice.material.color)
+            let dropOut = new Slice(currentSlice.scale.x, currentSlice.scale.y, currentSlice.scale.z, currentSlice.position.x, currentSlice.position.y, currentSlice.position.z, currentSlice.material.color)
 
             currentSlice.remove()
             dropOut.body.applyLocalImpulse(new VectorC(1, dropOut.body.mass * 10, 0), new VectorC(0, 0, 0))
@@ -77,30 +78,27 @@ export default class Stack {
         let offset = Settings.AnimationOffset
         let duration = Settings.AnimationDuration
 
-        if (this.rightAnimation && this.leftAnimation) {
-            this.rightAnimation.stop()
-            this.leftAnimation.stop()
-        }
+        this.sliceAnimation.stop()
 
         if (this.slices.length % 2 === 0) {
+            this.sliceDirection = "x"
             slice.position.x = -offset
 
-            this.rightAnimation = new Tween(position).to({ ...position, x: offset }, duration)
-            this.leftAnimation = new Tween(position).to({ ...position, x: -offset }, duration)
+            this.sliceAnimation = new Tween(position)
+                .to({ x: [offset, -offset] }, duration)
+                .repeat(Infinity)
+                .start()
         } else {
+            this.sliceDirection = "z"
             slice.position.z = offset
 
-            this.rightAnimation = new Tween(position).to({ ...position, z: -offset }, duration)
-            this.leftAnimation = new Tween(position).to({ ...position, z: offset }, duration)
-
-            new Tween(camera.position)
-                .to({ ...camera.position, y: camera.position.y + 10 }, 5000)
-                .easing(Easing.Cubic.InOut)
+            this.sliceAnimation = new Tween(position)
+                .to({ z: [-offset, offset] }, duration)
+                .repeat(Infinity)
                 .start()
         }
 
-        this.rightAnimation.chain(this.leftAnimation).start()
-        this.leftAnimation.chain(this.rightAnimation)
+        raiseCamera(10)
     }
 
     init() {

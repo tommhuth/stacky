@@ -2,18 +2,14 @@ import { BoxGeometry, MeshPhongMaterial, Mesh, Color } from "three"
 import { world, remove } from "./physics"
 import { scene } from "./scene"
 import { Box, Body } from "cannon"
-import { VectorC } from "./Vector3"
+import { VectorC } from "./Vector"
 
 export class Slice extends Mesh {
     constructor(width = 1, height = 1, depth = 1, x = 0, y = 0, z = 0, color = "red", mass = width * height * depth / 100) {
         let geometry = new BoxGeometry(1, 1, 1)
         let material = new MeshPhongMaterial({ color })
 
-        super(geometry, material)
-
-        this.height = height
-        this.width = width
-        this.depth = depth
+        super(geometry, material) 
 
         this.shape = new Box(new VectorC(width / 2, height / 2, depth / 2))
         this.body = new Body({ mass })

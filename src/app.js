@@ -1,10 +1,6 @@
-import { WebGLRenderer, Color } from "three"
-import { Vector3, VectorC } from "./Vector3"
-import { scene, camera, render } from "./scene"
-import { physicsTick, world } from "./physics"
-import { Tween, Easing, update as tweenTick } from "tween.js"
-import getIntersection from "./getIntersection"
-import Box from "./Box"
+import { scene, render } from "./scene"
+import { physicsTick } from "./physics"
+import { update as tweenTick } from "tween.js"
 import Stack from "./Stack"
 
 const stack = new Stack();

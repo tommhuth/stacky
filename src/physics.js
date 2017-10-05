@@ -1,5 +1,5 @@
 import { World, NaiveBroadphase } from "cannon"
-import {scene} from "./scene"
+import { scene } from "./scene"
 
 const world = new World()
 
