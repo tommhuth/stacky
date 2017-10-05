@@ -24,6 +24,10 @@ document.addEventListener("click", () => {
     stack.match()
 })
 
+document.addEventListener("touchstart", () => {
+    stack.match()
+})
+
 
 // debug
 
