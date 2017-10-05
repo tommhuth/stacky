@@ -1,7 +1,7 @@
 import { scene, render } from "./scene"
-import { physicsLoop } from "./physics"
+import { physicsLoop } from "./simulation"
 import { update as tweenLoop } from "tween.js"
-import Stack from "./Stack"
+import Stack from "./objects/Stack"
 
 // kick it off
 (function loop() {

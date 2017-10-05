@@ -1,14 +1,15 @@
-import getIntersection, { SliceType } from "./getIntersection"
-import Box, { Pillar, Slice } from "./Box"
+import intersection, { SliceType } from "../helpers/intersection"
+import Slice from "./Slice"
+import Pillar from "./Pillar"
 import { Tween, Easing, update } from "tween.js"
-import { raiseCamera } from "./scene"
-import { Color } from "three"
-import { VectorC } from "./Vector"
+import { raiseCamera } from "../scene"
+import Color from "../helpers/Color"
+import { VectorC } from "../helpers/Vector"
 
-const Settings = {
+export const Settings = {
     Colors: ["red", "green", "blue", "purple"],
     PillarHeight: 60,
-    SliceHeight: 5,
+    SliceHeight: 8,
     SliceSize: 35,
     AnimationDuration: 6000,
     AnimationOffset: 65
@@ -53,10 +54,10 @@ export default class Stack {
         let color = Settings.Colors[this.slices.length % Settings.Colors.length]
         let currentSlice = this.slices[this.slices.length - 1]
         let previousSlice = this.slices[this.slices.length - 2]
-        let { hasIntersection, height, width, depth, x, y, z, leftovers } = getIntersection(currentSlice, previousSlice)
+        let { hasIntersection, height, width, depth, x, y, z, leftovers } = intersection(currentSlice, previousSlice)
 
         if (hasIntersection) {
-            let nextSlice = new Slice(width, height, depth, x, y + Settings.SliceHeight, z, new Color(color), 0)
+            let nextSlice = new Slice(width, height, depth, x, y + Settings.SliceHeight, z, undefined, 0)
 
             currentSlice.position.set(x, y, z)
             currentSlice.resize(width, height, depth)
@@ -92,8 +93,8 @@ export default class Stack {
             this.sliceDirection = "z"
             slice.position.z = offset
 
-            raiseCamera(10)
-            
+            raiseCamera(Settings.SliceHeight * 2)
+
             this.sliceAnimation = new Tween(position)
                 .to({ z: [-offset, offset] }, duration)
                 .repeat(Infinity)
@@ -102,8 +103,8 @@ export default class Stack {
     }
 
     init() {
-        let pillar = new Pillar(Settings.SliceSize, Settings.PillarHeight, Settings.SliceSize, Settings.SliceHeight, "yellow")
-        let firstSlice = new Slice(Settings.SliceSize, Settings.SliceHeight, Settings.SliceSize, -Settings.AnimationOffset, 0, 0, "red", 0)
+        let pillar = new Pillar(Settings.SliceSize, Settings.PillarHeight, Settings.SliceSize, Settings.SliceHeight)
+        let firstSlice = new Slice(Settings.SliceSize, Settings.SliceHeight, Settings.SliceSize, -Settings.AnimationOffset, 0, 0, undefined, 0)
 
         this.slices.push(pillar, firstSlice)
         this.animate(firstSlice)

@@ -1,19 +1,20 @@
 import { Box3 } from "three"
 import { Vector3 } from "./Vector"
+import { Settings } from "../objects/Stack"
 
 export const SliceType = {
     Right: "right",
     Left: "left",
     Top: "top",
     Bottom: "bottom"
-}
+} 
 
-function diff(b1, b2) {
-    let { x, z } = b2.getSize()
-    let right = new Box3().copy(b2).translate(new Vector3(-x, 0, 0)).intersect(b1)
-    let left = new Box3().copy(b2).translate(new Vector3(x, 0, 0)).intersect(b1)
-    let top = new Box3().copy(b2).translate(new Vector3(0, 0, z)).intersect(b1)
-    let bottom = new Box3().copy(b2).translate(new Vector3(0, 0, -z)).intersect(b1)
+function difference(a, b) {
+    let { x, z } = b.getSize()
+    let right = new Box3().copy(b).translate(new Vector3(-x, 0, 0)).intersect(a)
+    let left = new Box3().copy(b).translate(new Vector3(x, 0, 0)).intersect(a)
+    let top = new Box3().copy(b).translate(new Vector3(0, 0, z)).intersect(a)
+    let bottom = new Box3().copy(b).translate(new Vector3(0, 0, -z)).intersect(a)
 
     return [
         {
@@ -48,16 +49,16 @@ function diff(b1, b2) {
             depth: bottom.getSize().z,
             type: "bottom"
         },
-    ].filter(i => i.width > .1 && i.depth > .1)
+    ].filter(i => i.width > .25 && i.depth > .25)
 }
 
 export default function (current, previous) {
-    let b1 = new Box3().setFromObject(current)
-    let b2 = new Box3().setFromObject(previous).translate(new Vector3(0, 5, 0))
-    let dff = diff(b1.clone(), b2.clone())
-    let intersection = b1.intersect(b2)
+    let a = new Box3().setFromObject(current)
+    let b = new Box3().setFromObject(previous).translate(new Vector3(0, Settings.SliceHeight, 0))
+    let leftovers = difference(a.clone(), b.clone())
+    let intersection = a.intersect(b)
 
-    if (!b2.intersectsBox(b1)) {
+    if (!b.intersectsBox(a)) {
         return {
             hasIntersection: false
         }
@@ -71,6 +72,6 @@ export default function (current, previous) {
         x: intersection.getCenter().x,
         z: intersection.getCenter().z,
         y: intersection.getCenter().y,
-        leftovers: dff
+        leftovers 
     }
 }

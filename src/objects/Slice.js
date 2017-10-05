@@ -1,15 +1,16 @@
-import { BoxGeometry, MeshPhongMaterial, Mesh, Color } from "three"
-import { world, remove } from "./physics"
-import { scene } from "./scene"
+import { BoxGeometry, MeshPhongMaterial, Mesh } from "three"
+import { world } from "../simulation"
+import { scene } from "../scene"
 import { Box, Body } from "cannon"
-import { VectorC } from "./Vector"
-
-export class Slice extends Mesh {
-    constructor(width = 1, height = 1, depth = 1, x = 0, y = 0, z = 0, color = "red", mass = width * height * depth / 100) {
+import { VectorC } from "../helpers/Vector" 
+import ColorMixer from "../helpers/ColorMixer"
+ 
+export default class Slice extends Mesh {
+    constructor(width = 1, height = 1, depth = 1, x = 0, y = 0, z = 0, color = ColorMixer.next(), mass = width * height * depth / 100) {  
         let geometry = new BoxGeometry(1, 1, 1)
-        let material = new MeshPhongMaterial({ color })
+        let material = new MeshPhongMaterial({ color  })
 
-        super(geometry, material) 
+        super(geometry, material)
 
         this.shape = new Box(new VectorC(width / 2, height / 2, depth / 2))
         this.body = new Body({ mass })
@@ -46,10 +47,4 @@ export class Slice extends Mesh {
 
         world.addBody(this.body)
     }
-}
-
-export class Pillar extends Slice {
-    constructor(width, height, depth, sliceHeight, color) {
-        super(width, height, depth, 0, (-height / 2) - (sliceHeight / 2), 0, 0, color)
-    }
-}
+} 
