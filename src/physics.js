@@ -7,7 +7,7 @@ world.gravity.set(0, -9.8, 0)
 world.broadphase = new NaiveBroadphase()
 world.solver.iterations = 10
 
-function physicsTick() {
+function physicsLoop() {
     world.step(1 / 30)
 
     for (let child of scene.children) {
@@ -23,4 +23,4 @@ function physicsTick() {
     }
 }
 
-export { world, physicsTick }
+export { world, physicsLoop }

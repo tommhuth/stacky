@@ -1,20 +1,22 @@
 import { scene, render } from "./scene"
-import { physicsTick } from "./physics"
-import { update as tweenTick } from "tween.js"
+import { physicsLoop } from "./physics"
+import { update as tweenLoop } from "tween.js"
 import Stack from "./Stack"
 
-const stack = new Stack();
-
+// kick it off
 (function loop() {
     try {
-        physicsTick()
-        tweenTick()
+        physicsLoop()
+        tweenLoop()
         render()
         requestAnimationFrame(loop)
     } catch (e) {
         console.error(e)
     }
 })()
+
+// make stack
+const stack = new Stack()
 
 document.addEventListener("click", () => {
     stack.match()
@@ -26,6 +28,5 @@ document.addEventListener("touchstart", () => {
 
 
 // debug
-
 window.scene = scene
 window.THREE = require("three")

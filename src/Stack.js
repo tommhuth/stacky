@@ -92,13 +92,13 @@ export default class Stack {
             this.sliceDirection = "z"
             slice.position.z = offset
 
+            raiseCamera(10)
+            
             this.sliceAnimation = new Tween(position)
                 .to({ z: [-offset, offset] }, duration)
                 .repeat(Infinity)
                 .start()
         }
-
-        raiseCamera(10)
     }
 
     init() {
