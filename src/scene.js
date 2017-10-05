@@ -1,4 +1,11 @@
-import { Scene, FogExp2, Fog, AxisHelper, DirectionalLight, AmbientLight, Mesh, Vector3, OrthographicCamera, WebGLRenderer } from "three"
+import { 
+    Scene, FogExp2, Fog, 
+    AxisHelper, 
+    DirectionalLight, AmbientLight, 
+    Mesh, Vector3, 
+    OrthographicCamera, 
+    WebGLRenderer 
+} from "three"
 
 const renderer = new WebGLRenderer({ antialias: true, alpha: false })
 const frustumSize = 100
@@ -33,7 +40,7 @@ light.shadow.camera.bottom = -50
 light.shadow.camera.top = 50
 
 scene.fog = new FogExp2(0x666666, .0125)
-scene.add(light, axis, ambientLight)
+scene.add(light, ambientLight)
 
 document.body.appendChild(renderer.domElement)
 

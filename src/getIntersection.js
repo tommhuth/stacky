@@ -47,7 +47,7 @@ function diff(b1, b2) {
             depth: bottom.getSize().z,
             type: "bottom"
         },
-    ]
+    ].filter(i => i.width > .1 && i.depth > .1)
 }
 
 export default function (current, previous) {
@@ -70,6 +70,6 @@ export default function (current, previous) {
         x: intersection.getCenter().x,
         z: intersection.getCenter().z,
         y: intersection.getCenter().y,
-        leftover: dff
+        leftovers: dff
     }
 }

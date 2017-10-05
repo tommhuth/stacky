@@ -1,20 +1,18 @@
 import getIntersection, { SliceType } from "./getIntersection"
 import Box, { Pillar, Slice } from "./Box"
 import { Tween, Easing, update } from "tween.js"
-import {  camera } from "./scene"
+import { camera } from "./scene"
 import { Color } from "three"
 import { VectorC } from "./Vector3"
 
 const Settings = {
+    Colors: ["red", "green", "blue", "purple"],
     PillarHeight: 60,
     SliceHeight: 5,
     SliceSize: 35,
     AnimationDuration: 4000,
     AnimationOffset: 65
 }
-
-let c = ["red", "green", "blue", "purple"]
-let vi = 0
 
 export default class Stack {
     slices = []
@@ -25,53 +23,52 @@ export default class Stack {
         this.init()
     }
 
+    generateLeftovers(leftovers, color) {
+        for (let slice of leftovers) {
+            let chunk = new Slice(slice.width, slice.height, slice.depth, slice.x, slice.y, slice.z, color)
+            let force = (Math.random() + .5) * chunk.body.mass * 2
+            let impulse
+
+            switch (slice.type) {
+                case SliceType.Top:
+                    impulse = new VectorC(0, 0, force)
+                    break
+                case SliceType.Bottom:
+                    impulse = new VectorC(0, 0, -force)
+                    break
+                case SliceType.Left:
+                    impulse = new VectorC(force, 0, 0)
+                    break
+                case SliceType.Right:
+                    impulse = new VectorC(-force, 0, 0)
+                    break
+            }
+
+            chunk.body.applyLocalImpulse(impulse, new VectorC(0, chunk.scale.y, 0))
+        }
+    }
+
     match() {
-        let color = c[vi++ % 4]
+        let color = Settings.Colors[this.slices.length % Settings.Colors.length]
         let currentSlice = this.slices[this.slices.length - 1]
         let previousSlice = this.slices[this.slices.length - 2]
-        let { hasIntersection, height, width, depth, x, y, z, leftover } = getIntersection(currentSlice, previousSlice)
+        let { hasIntersection, height, width, depth, x, y, z, leftovers } = getIntersection(currentSlice, previousSlice)
 
         if (hasIntersection) {
-            let nextSlice = new Slice(width, height, depth, x, y + 5, z, 0, new Color(color))
+            let nextSlice = new Slice(width, height, depth, x, y + Settings.SliceHeight, z, new Color(color), 0)
 
             currentSlice.position.set(x, y, z)
             currentSlice.resize(width, height, depth)
+
             this.animate(nextSlice)
-
-            for (let lefty of leftover) {
-                if (lefty.width > .1 && lefty.depth > .1) {
-                    let a = new Slice(lefty.width, lefty.height, lefty.depth, lefty.x, lefty.y, lefty.z, undefined, currentSlice.material.color)
-                    let force = Math.random() * a.body.mass * 2
-                    let impulse
-
-                    switch (lefty.type) {
-                        case SliceType.Top:
-                            impulse = new VectorC(0, 0, force)
-                            break
-                        case SliceType.Bottom:
-                            impulse = new VectorC(0, 0, -force)
-                            break
-                        case SliceType.Left:
-                            impulse = new VectorC(force, 0, 0)
-                            break
-                        case SliceType.Right:
-                            impulse = new VectorC(-force, 0, 0)
-                            break
-                    }
-
-                    a.body.applyLocalImpulse(impulse, new VectorC(0, a.scale.y, 0))
-                }
-            }
-
-            
+            this.generateLeftovers(leftovers, currentSlice.material.color)
 
             this.slices.push(nextSlice)
         } else {
-            let nextSlice = new Slice(currentSlice.width, currentSlice.height, currentSlice.depth, currentSlice.position.x, currentSlice.position.y, currentSlice.position.z, undefined, currentSlice.material.color)
-            currentSlice.remove()
+            let dropOut = new Slice(currentSlice.width, currentSlice.height, currentSlice.depth, currentSlice.position.x, currentSlice.position.y, currentSlice.position.z, currentSlice.material.color)
 
-            nextSlice.body.applyLocalImpulse(new VectorC(1, nextSlice.body.mass * 10, 0), new VectorC(0, 0, 0))
-            document.removeEventListener("click", this)
+            currentSlice.remove()
+            dropOut.body.applyLocalImpulse(new VectorC(1, dropOut.body.mass * 10, 0), new VectorC(0, 0, 0))
         }
     }
 
@@ -108,7 +105,7 @@ export default class Stack {
 
     init() {
         let pillar = new Pillar(Settings.SliceSize, Settings.PillarHeight, Settings.SliceSize, Settings.SliceHeight, "yellow")
-        let firstSlice = new Slice(Settings.SliceSize, Settings.SliceHeight, Settings.SliceSize, -Settings.AnimationOffset, 0, 0, 0, "red")
+        let firstSlice = new Slice(Settings.SliceSize, Settings.SliceHeight, Settings.SliceSize, -Settings.AnimationOffset, 0, 0, "red", 0)
 
         this.slices.push(pillar, firstSlice)
         this.animate(firstSlice)
