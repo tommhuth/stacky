@@ -18,9 +18,7 @@ export const Settings = {
 export default class Stack {
     slices = []
     sliceAnimation = new Tween()
-    sliceDirection
-    sliceMagnitude
-    force
+    sliceDirection 
 
     constructor() {
         this.init()
@@ -71,7 +69,7 @@ export default class Stack {
             let dropOut = new Slice(currentSlice.scale.x, currentSlice.scale.y, currentSlice.scale.z, currentSlice.position.x, currentSlice.position.y, currentSlice.position.z, currentSlice.material.color)
             
             currentSlice.remove() 
-            dropOut.body.applyLocalImpulse(this.force.mult(dropOut.body.mass * 10), new VectorC(0, 5, 0))
+            dropOut.body.applyLocalImpulse(this.sliceDirection.mult(dropOut.body.mass * 10), new VectorC(0, 5, 0))
         }
     }
 
@@ -83,17 +81,16 @@ export default class Stack {
         this.sliceAnimation.stop()
 
         if (this.slices.length % 2 === 0) {
-            let prev = -offset
-            this.sliceDirection = "x"
+            let prev = -offset 
             slice.position.x = -offset
 
             this.sliceAnimation = new Tween(position)
                 .to({ x: [offset, -offset] }, duration)
                 .onUpdate(() => {
                     if(prev < position.x){
-                        this.force = new VectorC(1, 0, 0)
+                        this.sliceDirection = new VectorC(1, 0, 0)
                     } else { 
-                        this.force = new VectorC(-1, 0, 0)
+                        this.sliceDirection = new VectorC(-1, 0, 0)
                     }
 
                     prev = position.x
@@ -101,8 +98,7 @@ export default class Stack {
                 .repeat(Infinity)
                 .start()
         } else {
-            let prev = -offset
-            this.sliceDirection = "z"
+            let prev = -offset 
             slice.position.z = offset
 
             raiseCamera(Settings.SliceHeight * 2)
@@ -111,9 +107,9 @@ export default class Stack {
                 .to({ z: [-offset, offset] }, duration)
                 .onUpdate(() => {
                     if (prev < position.z) {
-                        this.force = new VectorC(0, 0, 1)
+                        this.sliceDirection = new VectorC(0, 0, 1)
                     } else {
-                        this.force = new VectorC(0, 0, -1)
+                        this.sliceDirection = new VectorC(0, 0, -1)
                     }
 
                     prev = position.z
