@@ -20,6 +20,7 @@ export default class Stack {
     sliceAnimation = new Tween()
     sliceDirection
     sliceMagnitude
+    force
 
     constructor() {
         this.init()
@@ -68,9 +69,9 @@ export default class Stack {
             this.slices.push(nextSlice)
         } else {
             let dropOut = new Slice(currentSlice.scale.x, currentSlice.scale.y, currentSlice.scale.z, currentSlice.position.x, currentSlice.position.y, currentSlice.position.z, currentSlice.material.color)
-
-            currentSlice.remove()
-            dropOut.body.applyLocalImpulse(new VectorC(1, dropOut.body.mass * 10, 0), new VectorC(0, 0, 0))
+            
+            currentSlice.remove() 
+            dropOut.body.applyLocalImpulse(this.force.mult(dropOut.body.mass * 10), new VectorC(0, 5, 0))
         }
     }
 
@@ -82,14 +83,25 @@ export default class Stack {
         this.sliceAnimation.stop()
 
         if (this.slices.length % 2 === 0) {
+            let prev = -offset
             this.sliceDirection = "x"
             slice.position.x = -offset
 
             this.sliceAnimation = new Tween(position)
                 .to({ x: [offset, -offset] }, duration)
+                .onUpdate(() => {
+                    if(prev < position.x){
+                        this.force = new VectorC(1, 0, 0)
+                    } else { 
+                        this.force = new VectorC(-1, 0, 0)
+                    }
+
+                    prev = position.x
+                })
                 .repeat(Infinity)
                 .start()
         } else {
+            let prev = -offset
             this.sliceDirection = "z"
             slice.position.z = offset
 
@@ -97,6 +109,15 @@ export default class Stack {
 
             this.sliceAnimation = new Tween(position)
                 .to({ z: [-offset, offset] }, duration)
+                .onUpdate(() => {
+                    if (prev < position.z) {
+                        this.force = new VectorC(0, 0, 1)
+                    } else {
+                        this.force = new VectorC(0, 0, -1)
+                    }
+
+                    prev = position.z
+                })
                 .repeat(Infinity)
                 .start()
         }
