@@ -32,8 +32,8 @@ light.position.set(10, 20, 10)
 light.castShadow = true
 light.shadow.mapSize.width = 1024
 light.shadow.mapSize.height = 1024
-light.shadow.camera.near = -50
-light.shadow.camera.far = 50
+light.shadow.camera.near = -100
+light.shadow.camera.far = 100
 light.shadow.camera.left = -50
 light.shadow.camera.right = 50
 light.shadow.camera.bottom = -50
