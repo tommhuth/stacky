@@ -3,12 +3,13 @@ import { physicsLoop } from "./simulation"
 import { update as tweenLoop } from "tween.js"
 import Stack from "./objects/Stack"
 
-// kick it off
 (function loop() {
     try {
+        // order is important here to avoid ghosting/flicker of slices
+        // clamped to center of previous slice
         physicsLoop()
-        tweenLoop()
         render()
+        tweenLoop()
         requestAnimationFrame(loop)
     } catch (e) {
         console.error(e)

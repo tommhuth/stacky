@@ -1,7 +1,9 @@
 import { Tween, Easing } from "tween.js"
-import { Scene, Fog, AxisHelper, 
-    HemisphereLight,CameraHelper, DirectionalLight, 
-    AmbientLight, Mesh, OrthographicCamera, WebGLRenderer } from "three"
+import {
+    Scene, Fog, AxisHelper,
+    HemisphereLight, CameraHelper, DirectionalLight,
+    AmbientLight, Mesh, OrthographicCamera, WebGLRenderer
+} from "three"
 import { Vector3 } from "./helpers/Vector"
 
 const renderer = new WebGLRenderer({ antialias: true, alpha: true })
@@ -21,21 +23,20 @@ function render() {
 
 function raiseCamera(y, focus) {
     new Tween(camera.position)
-        .to({ y: camera.position.y + y }, 3500)
+        .to({ y: camera.position.y + y }, 1500)
         .easing(Easing.Cubic.Out)
-        .delay(500)
-        .start() 
+        .start()
 }
 
 renderer.shadowMap.enabled = true
 renderer.setSize(window.innerWidth, window.innerHeight)
 
-camera.position.set(-35, 25, -35)
+camera.position.set(-35, 35, -35)
 camera.up = new Vector3(0, 1, 0)
 camera.lookAt(new Vector3(0, 0, 0))
 
 light.position.set(-20, 10, 6)
-  
+
 scene.fog = new Fog(0x275DAD, 20, 160)
 scene.add(light, ambientLight, hemisphereLight)
 

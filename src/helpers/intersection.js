@@ -53,25 +53,46 @@ function difference(a, b) {
 }
 
 export default function (current, previous) {
-    let a = new Box3().setFromObject(current)
-    let b = new Box3().setFromObject(previous).translate(new Vector3(0, Settings.SliceHeight, 0))
-    let leftovers = difference(a.clone(), b.clone())
-    let intersection = a.intersect(b)
-
-    if (!b.intersectsBox(a)) {
+    let previousPosition = new Vector3(previous.position.x, previous.position.y + 8, previous.position.z)
+    let distance = current.position.distanceTo(previousPosition)
+    let closeEnough = distance < Settings.ClosenessLeniency
+    
+    if(closeEnough) { 
         return {
-            hasIntersection: false
+            hasIntersection: true,
+            directHit: true,
+            width: previous.scale.x,
+            depth: previous.scale.z,
+            height: previous.scale.y,
+            ...previous.position,
+            y: current.position.y,
+            leftovers: []
         }
-    }
+    } else { 
+        let a = new Box3().setFromObject(current)
+        let b = new Box3().setFromObject(previous).translate(new Vector3(0, Settings.SliceHeight, 0))
+        let leftovers = difference(a.clone(), b.clone())
+        let intersection = a.intersect(b) 
 
-    return {
-        hasIntersection: true,
-        width: intersection.getSize().x,
-        depth: intersection.getSize().z,
-        height: intersection.getSize().y,
-        x: intersection.getCenter().x,
-        z: intersection.getCenter().z,
-        y: intersection.getCenter().y,
-        leftovers 
-    }
+        if (Math.abs(distance) < 1) {
+
+        }
+
+        if (!b.intersectsBox(a)) {
+            return {
+                hasIntersection: false
+            }
+        }
+
+        return {
+            hasIntersection: true,
+            width: intersection.getSize().x,
+            depth: intersection.getSize().z,
+            height: intersection.getSize().y,
+            x: intersection.getCenter().x,
+            z: intersection.getCenter().z,
+            y: intersection.getCenter().y,
+            leftovers
+        }
+    } 
 }

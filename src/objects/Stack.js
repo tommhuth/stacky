@@ -1,7 +1,8 @@
 import intersection, { SliceType } from "../helpers/intersection"
 import Slice from "./Slice"
 import Pillar from "./Pillar"
-import { Tween, Easing, update } from "tween.js"
+import HitPlane from "./HitPlane"
+import { Tween, Easing } from "tween.js"
 import { raiseCamera } from "../scene"
 import Color from "../helpers/Color"
 import { VectorC } from "../helpers/Vector"
@@ -12,13 +13,14 @@ export const Settings = {
     SliceHeight: 8,
     SliceSize: 35,
     AnimationDuration: 6000,
-    AnimationOffset: 65
+    AnimationOffset: 65,
+    ClosenessLeniency: .65
 }
 
 export default class Stack {
     slices = []
     sliceAnimation = new Tween()
-    sliceDirection 
+    sliceDirection
 
     constructor() {
         this.init()
@@ -53,7 +55,7 @@ export default class Stack {
         let color = Settings.Colors[this.slices.length % Settings.Colors.length]
         let currentSlice = this.slices[this.slices.length - 1]
         let previousSlice = this.slices[this.slices.length - 2]
-        let { hasIntersection, height, width, depth, x, y, z, leftovers } = intersection(currentSlice, previousSlice)
+        let { hasIntersection, height, width, depth, x, y, z, leftovers, directHit } = intersection(currentSlice, previousSlice)
 
         if (hasIntersection) {
             let nextSlice = new Slice(width, height, depth, x, y + Settings.SliceHeight, z, undefined, 0)
@@ -65,10 +67,14 @@ export default class Stack {
             this.generateLeftovers(leftovers, currentSlice.material.color)
 
             this.slices.push(nextSlice)
+
+            if (directHit) {
+                new HitPlane(width, depth, x, y, z)
+            }
         } else {
             let dropOut = new Slice(currentSlice.scale.x, currentSlice.scale.y, currentSlice.scale.z, currentSlice.position.x, currentSlice.position.y, currentSlice.position.z, currentSlice.material.color)
-            
-            currentSlice.remove() 
+
+            currentSlice.remove()
             dropOut.body.applyLocalImpulse(this.sliceDirection.mult(dropOut.body.mass * 10), new VectorC(0, 5, 0))
         }
     }
@@ -81,15 +87,15 @@ export default class Stack {
         this.sliceAnimation.stop()
 
         if (this.slices.length % 2 === 0) {
-            let prev = -offset 
+            let prev = -offset
             slice.position.x = -offset
 
             this.sliceAnimation = new Tween(position)
                 .to({ x: [offset, -offset] }, duration)
                 .onUpdate(() => {
-                    if(prev < position.x){
+                    if (prev < position.x) {
                         this.sliceDirection = new VectorC(1, 0, 0)
-                    } else { 
+                    } else {
                         this.sliceDirection = new VectorC(-1, 0, 0)
                     }
 
@@ -98,10 +104,8 @@ export default class Stack {
                 .repeat(Infinity)
                 .start()
         } else {
-            let prev = -offset 
+            let prev = -offset
             slice.position.z = offset
-
-            raiseCamera(Settings.SliceHeight * 2)
 
             this.sliceAnimation = new Tween(position)
                 .to({ z: [-offset, offset] }, duration)
@@ -116,6 +120,10 @@ export default class Stack {
                 })
                 .repeat(Infinity)
                 .start()
+        }
+
+        if (this.slices.length > 3) {
+            raiseCamera(Settings.SliceHeight)
         }
     }
 
