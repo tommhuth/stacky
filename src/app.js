@@ -6,7 +6,7 @@ import Stack from "./objects/Stack"
 (function loop() {
     try {
         // order is important here to avoid ghosting/flicker of slices
-        // clamped to center of previous slice
+        // clamped to center of previous slice -- strange
         physicsLoop()
         render()
         tweenLoop()
@@ -15,18 +15,22 @@ import Stack from "./objects/Stack"
         console.error(e)
     }
 })()
-
-// make stack
+ 
 const stack = new Stack()
+
+
+document.addEventListener("touchstart", (e) => {
+    e.preventDefault()
+    stack.match()
+})
+ 
+document.addEventListener("touchmove", (e) => {
+    e.preventDefault() 
+})
 
 document.addEventListener("click", () => {
     stack.match()
-})
-
-document.addEventListener("touchstart", () => {
-    stack.match()
-})
-
+}) 
 
 // debug
 window.scene = scene

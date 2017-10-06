@@ -12,7 +12,8 @@
     "serve": "superstatic public --port 3000 --host localhost",
     "run": "npm run build & npm run serve",
     "test": "jest tests/ --watchAll src/",
-    "postinstall": "webpack"
+    "postinstall": "webpack",
+    "ngrok": "ngrok http localhost:3000"
   },
   "repository": {
     "type": "git",
@@ -37,6 +38,7 @@
     "compression": "^1.7.1",
     "express": "^4.16.1",
     "jest": "^21.2.1",
+    "ngrok": "^2.2.22",
     "oimo": "^1.0.9",
     "physijs-webpack": "0.0.2",
     "pug": "^2.0.0-rc.4",

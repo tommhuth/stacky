@@ -1,9 +1,5 @@
 import { Tween, Easing } from "tween.js"
-import {
-    Scene, Fog, AxisHelper,
-    HemisphereLight, CameraHelper, DirectionalLight,
-    AmbientLight, Mesh, OrthographicCamera, WebGLRenderer
-} from "three"
+import { Scene, Fog, AxisHelper, HemisphereLight, DirectionalLight, AmbientLight, OrthographicCamera, WebGLRenderer } from "three"
 import { Vector3 } from "./helpers/Vector"
 
 const renderer = new WebGLRenderer({ antialias: true, alpha: true })
