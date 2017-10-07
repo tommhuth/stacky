@@ -26,6 +26,7 @@
   },
   "homepage": "https://github.com/tommhuth/stacky#readme",
   "dependencies": {
+    "array-shuffle": "^1.0.1",
     "babel": "^6.23.0",
     "babel-core": "^6.26.0",
     "babel-loader": "^7.1.2",

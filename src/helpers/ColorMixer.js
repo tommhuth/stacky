@@ -1,9 +1,9 @@
-import Color from "./Color"
-
+import Color from "./Color" 
+import arrayShuffle from "array-shuffle"
 
 export default class ColorMixer {
     static maxShades = 10
-    static colors = ["red", "yellow", "green", "orange", "purple"]
+    static colors = arrayShuffle(["red", "yellow", "green", "orange", "purple"])
     static i = 0
     static j = 0
     static current
@@ -26,6 +26,12 @@ export default class ColorMixer {
             }
         }
 
+        this.setBackgroundColor(blend)
+  
         return blend
+    }
+
+    static setBackgroundColor(color){ 
+        document.body.style.backgroundColor = color.getHexString() 
     }
 }
