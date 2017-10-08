@@ -1,3 +1,4 @@
+import "babel-polyfill"
 import { scene, render } from "./scene"
 import { physicsLoop } from "./simulation"
 import { update as tweenLoop } from "tween.js"

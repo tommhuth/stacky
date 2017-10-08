@@ -5,6 +5,7 @@ import HitPlane from "./HitPlane"
 import { Tween, Easing } from "tween.js"
 import { raiseCamera } from "../scene"
 import Color from "../helpers/Color"
+import timeout from "../helpers/timeout"
 import { VectorC } from "../helpers/Vector"
 
 export const Settings = {
@@ -127,11 +128,13 @@ export default class Stack {
         }
     }
 
-    init() {
-        let pillar = new Pillar(Settings.SliceSize, Settings.PillarHeight, Settings.SliceSize, Settings.SliceHeight)
-        let firstSlice = new Slice(Settings.SliceSize, Settings.SliceHeight, Settings.SliceSize, -Settings.AnimationOffset, 0, 0, undefined, 0)
+    async init() { 
+        let pillar = new Pillar(Settings.SliceSize, Settings.PillarHeight, Settings.SliceSize, Settings.SliceHeight) 
 
+        await timeout(1250)
+
+        let firstSlice = new Slice(Settings.SliceSize, Settings.SliceHeight, Settings.SliceSize, -Settings.AnimationOffset, 0, 0, undefined, 0)
         this.slices.push(pillar, firstSlice)
-        this.animate(firstSlice)
+        this.animate(firstSlice) 
     }
 }

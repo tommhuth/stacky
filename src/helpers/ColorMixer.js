@@ -1,4 +1,4 @@
-import Color from "./Color" 
+import Color from "./Color"
 import arrayShuffle from "array-shuffle"
 
 export default class ColorMixer {
@@ -27,11 +27,11 @@ export default class ColorMixer {
         }
 
         this.setBackgroundColor(blend)
-  
+
         return blend
     }
 
-    static setBackgroundColor(color){ 
-        document.body.style.backgroundColor = color.getHexString() 
+    static setBackgroundColor(color) {
+        document.body.style.backgroundColor = color.getHexString()
     }
 }
