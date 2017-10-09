@@ -3,8 +3,9 @@ import Slice from "./Slice"
 import Pillar from "./Pillar"
 import HitPlane from "./HitPlane"
 import { Tween, Easing } from "tween.js"
-import { raiseCamera } from "../scene"
+import { raiseCamera, lowerCamera } from "../scene"
 import Color from "../helpers/Color"
+import prettyNumber from "../helpers/prettyNumber"
 import timeout from "../helpers/timeout"
 import { VectorC } from "../helpers/Vector"
 
@@ -18,10 +19,26 @@ export const Settings = {
     ClosenessLeniency: .65
 }
 
+export const Event = {
+    GameOver: "game-over",
+    GameStart: "game-start",
+    GameReset: "game-reset",
+    ScoreChange: "score-change"
+}
+
+export const State = {
+    Runnning: "running",
+    Ended: "ended",
+    Ready: "ready"
+}
+
 export default class Stack {
     slices = []
     sliceAnimation = new Tween()
     sliceDirection
+    score = 0
+    state = State.Ready
+    listeners = []
 
     constructor() {
         this.init()
@@ -68,6 +85,7 @@ export default class Stack {
             this.generateLeftovers(leftovers, currentSlice.material.color)
 
             this.slices.push(nextSlice)
+            this.setScore(width * height * depth)
 
             if (directHit) {
                 new HitPlane(width, depth, x, y, z)
@@ -77,6 +95,35 @@ export default class Stack {
 
             currentSlice.remove()
             dropOut.body.applyLocalImpulse(this.sliceDirection.mult(dropOut.body.mass * 10), new VectorC(0, 5, 0))
+
+            this.gameOver()
+        }
+    }
+
+    gameOver() {
+        lowerCamera()
+
+        this.broadcast(Event.GameOver)
+    }
+
+    setScore(cubicUnits) {
+        this.score += Math.ceil(cubicUnits / 10)
+
+        this.broadcast(Event.ScoreChange, prettyNumber(this.score))
+    }
+
+    on(event, callback) {
+        this.listeners.push({
+            event,
+            callback
+        })
+    }
+
+    broadcast(event, data) {
+        for (let listener of this.listeners) {
+            if (listener.event === event) {
+                listener.callback(data)
+            }
         }
     }
 
@@ -128,13 +175,13 @@ export default class Stack {
         }
     }
 
-    async init() { 
-        let pillar = new Pillar(Settings.SliceSize, Settings.PillarHeight, Settings.SliceSize, Settings.SliceHeight) 
+    async init() {
+        let pillar = new Pillar(Settings.SliceSize, Settings.PillarHeight, Settings.SliceSize, Settings.SliceHeight)
 
         await timeout(1250)
 
         let firstSlice = new Slice(Settings.SliceSize, Settings.SliceHeight, Settings.SliceSize, -Settings.AnimationOffset, 0, 0, undefined, 0)
         this.slices.push(pillar, firstSlice)
-        this.animate(firstSlice) 
+        this.animate(firstSlice)
     }
 }

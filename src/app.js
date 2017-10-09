@@ -2,7 +2,7 @@ import "babel-polyfill"
 import { scene, render } from "./scene"
 import { physicsLoop } from "./simulation"
 import { update as tweenLoop } from "tween.js"
-import Stack from "./objects/Stack"
+import Stack, {Event} from "./objects/Stack"
 
 (function loop() {
     try {
@@ -19,7 +19,8 @@ import Stack from "./objects/Stack"
  
 const stack = new Stack()
 
-
+stack.on(Event.ScoreChange, score => document.getElementById("score").innerText = score)
+ 
 document.addEventListener("touchstart", (e) => {
     e.preventDefault()
     stack.match()

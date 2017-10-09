@@ -1,4 +1,4 @@
-import { Color as Color3 } from "three"
+import { Color as Color3 } from "three"
 
 export default class Color extends Color3 {
     mix(color, weight = .5) {
@@ -13,5 +13,8 @@ export default class Color extends Color3 {
         this.b = w1 * color.b + w2 * this.b
 
         return this
+    }
+    getRGBAString(alpha) {
+        return `rgba(${Math.round(this.convertLinearToGamma().r)},${Math.round(this.convertLinearToGamma().g)},${Math.round(this.convertLinearToGamma().b)},${alpha})`
     }
 }

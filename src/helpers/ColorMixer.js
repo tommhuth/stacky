@@ -3,7 +3,7 @@ import arrayShuffle from "array-shuffle"
 
 export default class ColorMixer {
     static maxShades = 10
-    static colors = arrayShuffle(["red", "yellow", "green", "orange", "purple"])
+    static colors = [0xE70E97, 0xffbb00, 0x00D10F]
     static i = 0
     static j = 0
     static current
@@ -32,6 +32,6 @@ export default class ColorMixer {
     }
 
     static setBackgroundColor(color) {
-        document.body.style.backgroundColor = color.getHexString()
+        document.body.style.backgroundColor = new Color(0x001AFF).mix(color, .3).getHexString()
     }
 }

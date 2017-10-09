@@ -9,9 +9,17 @@ html(lang="no")
                 overflow: hidden; 
                 padding: 0; 
                 touch-action: none; 
-                background-image: linear-gradient(rgba(255, 255, 255, .86), rgba(255, 255, 255, .4));
-                background-color: #FFF;
+                background-image: linear-gradient(rgba(0, 0, 0, .35), rgba(0, 0, 0, .0));
+                background-color: #001AFF;
                 transition: background-color 2.5s;
+                color: #FFF;
+            }
+
+            #score {
+                font-size: 4em;
+                position: fixed;
+                top: .35em;
+                right: .35em;
             }
 
             canvas {
@@ -20,4 +28,5 @@ html(lang="no")
             }
         title Stacky
     body 
+        div#score
         script(src=cacheBuster("app.js"))

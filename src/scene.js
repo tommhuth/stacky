@@ -24,6 +24,13 @@ function raiseCamera(y, focus) {
         .start()
 }
 
+function lowerCamera() { 
+    new Tween(camera.position)
+        .to({ y: 35 }, camera.position.y * 100)
+        .easing(Easing.Cubic.Out)
+        .start()
+}
+
 renderer.shadowMap.enabled = true
 renderer.setSize(window.innerWidth, window.innerHeight)
 
@@ -33,9 +40,9 @@ camera.lookAt(new Vector3(0, 0, 0))
 
 light.position.set(-20, 10, 6)
 
-//scene.fog = new Fog(0xFFFFFF, 20, 160)
+scene.fog = new Fog(0x001AFF, 30, 180)
 scene.add(light, ambientLight )
 
 document.body.appendChild(renderer.domElement)
 
-export { scene, camera, render, raiseCamera }
+export { scene, camera, render, raiseCamera, lowerCamera }
