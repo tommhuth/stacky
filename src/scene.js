@@ -2,7 +2,7 @@ import { Tween, Easing } from "tween.js"
 import { Scene, Fog, AxisHelper, HemisphereLight, DirectionalLight, AmbientLight, OrthographicCamera, WebGLRenderer } from "three"
 import { Vector3 } from "./helpers/Vector"
 
-const renderer = new WebGLRenderer({ antialias: true, alpha: true })
+const renderer = new WebGLRenderer({ antialias: true, alpha: true, devicePixelRatio: window.devicePixelRatio })
 const frustumSize = 100
 const aspect = window.innerWidth / window.innerHeight
 const camera = new OrthographicCamera(frustumSize * aspect / - 2, frustumSize * aspect / 2, frustumSize / 2, frustumSize / - 2, -100, 500)
@@ -44,5 +44,17 @@ scene.fog = new Fog(0x001AFF, 30, 180)
 scene.add(light, ambientLight )
 
 document.body.appendChild(renderer.domElement)
+
+window.addEventListener('resize', () => { 
+    let aspect = window.innerWidth / window.innerHeight
+
+    camera.left = frustumSize * aspect / - 2
+    camera.right = frustumSize * aspect / 2
+    camera.top = frustumSize / 2
+    camera.bottom = frustumSize / - 2
+    camera.updateProjectionMatrix()
+
+    renderer.setSize(window.innerWidth, window.innerHeight)
+})
 
 export { scene, camera, render, raiseCamera, lowerCamera }
