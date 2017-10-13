@@ -26,7 +26,7 @@ function raiseCamera(y, focus) {
 
 function lowerCamera() { 
     new Tween(camera.position)
-        .to({ y: 35 }, camera.position.y * 100)
+        .to({ y: 35 }, camera.position.y * 50)
         .easing(Easing.Cubic.Out)
         .start()
 }
