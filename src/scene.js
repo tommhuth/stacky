@@ -10,7 +10,7 @@ const camera = new OrthographicCamera(frustumSize * aspect / - 2, frustumSize * 
 const scene = new Scene()
 const light = new DirectionalLight(0xABA9C3, .35)
 const ambientLight = new AmbientLight(0xABA9C3, 1.1)
-const hemisphereLight = new HemisphereLight(0xFCF7F8, 0x275DAD, .95)
+const hemisphereLight = new HemisphereLight(0xFFFFFF, 0x000000, .25)
 const axis = new AxisHelper(50)
 
 function render() {
