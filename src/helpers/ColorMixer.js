@@ -2,7 +2,7 @@ import Color from "./Color"
 import arrayShuffle from "array-shuffle"
 
 export default class ColorMixer {
-    static maxShades = 10
+    static maxShades = 20
     static colors = [0xE70E97, 0xffbb00, 0x00D10F]
     static i = 0
     static j = 0
