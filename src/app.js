@@ -19,20 +19,20 @@ import Stack, {Event} from "./objects/Stack"
  
 const stack = new Stack()
 
-stack.on(Event.ScoreChange, score => document.getElementById("score").innerText = score)
+stack.on(Event.ScoreChange, score => document.getElementById("score").innerText = score.stackSize)
  
 document.addEventListener("touchstart", (e) => {
     e.preventDefault()
     stack.match()
 })
- 
-document.addEventListener("touchmove", (e) => {
-    e.preventDefault() 
-})
 
 document.addEventListener("click", () => {
     stack.match()
 }) 
+ 
+document.addEventListener("touchmove", (e) => {
+    e.preventDefault() 
+})
 
 // debug
 window.scene = scene

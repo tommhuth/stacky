@@ -109,7 +109,7 @@ export default class Stack {
     setScore(cubicUnits) {
         this.score += Math.ceil(cubicUnits / 10)
 
-        this.broadcast(Event.ScoreChange, prettyNumber(this.score))
+        this.broadcast(Event.ScoreChange, { stackSize: this.slices.length - 2, score: prettyNumber(this.score) })
     }
 
     on(event, callback) {
