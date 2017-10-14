@@ -15,7 +15,7 @@ export default class Slice extends Mesh {
         this.shape = new Box(new VectorC(width / 2, height / 2, depth / 2))
         this.body = new Body({ mass, material: sliceContactMaterial })
         this.body.position.set(x, y, z)
-        this.body.linearDamping = .015
+        this.body.linearDamping = .025
         this.body.addShape(this.shape)
 
         this.castShadow = true

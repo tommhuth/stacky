@@ -8,10 +8,11 @@ import Color from "../helpers/Color"
 import prettyNumber from "../helpers/prettyNumber"
 import timeout from "../helpers/timeout"
 import { VectorC } from "../helpers/Vector"
+import ColorMixer from "../helpers/ColorMixer"
 
 export const Settings = {
     Colors: ["red", "green", "blue", "purple"],
-    PillarHeight: 60,
+    PillarHeight: 80,
     SliceHeight: 8,
     SliceSize: 35,
     AnimationDuration: 6000,
@@ -20,9 +21,9 @@ export const Settings = {
 }
 
 export const Event = {
-    GameOver: "game-over",
-    GameStart: "game-start",
-    GameReset: "game-reset",
+    Running: "running",
+    Ready: "ready",
+    Ended: "ended",
     ScoreChange: "score-change"
 }
 
@@ -103,7 +104,10 @@ export default class Stack {
     gameOver() {
         lowerCamera()
 
-        this.broadcast(Event.GameOver)
+        this.state = State.Ended
+
+        this.sliceAnimation.stop()
+        this.broadcast(Event.Ended)
     }
 
     setScore(cubicUnits) {
@@ -170,18 +174,34 @@ export default class Stack {
                 .start()
         }
 
-        if (this.slices.length > 3) {
+        if (this.slices.length > 2) {
             raiseCamera(Settings.SliceHeight)
         }
     }
 
-    async init() {
+    init() {
         let pillar = new Pillar(Settings.SliceSize, Settings.PillarHeight, Settings.SliceSize, Settings.SliceHeight)
 
-        await timeout(1250)
+        this.slices.push(pillar)
+    }
 
+    reset() {
+        this.slices.forEach((i, index) => index > 0 && i.remove())
+        this.slices.splice(1, this.slices.length - 1)
+        this.score = 0
+
+        ColorMixer.reset()
+
+        this.start()
+        this.setScore(0)
+    }
+
+    start() {
         let firstSlice = new Slice(Settings.SliceSize, Settings.SliceHeight, Settings.SliceSize, -Settings.AnimationOffset, 0, 0, undefined, 0)
-        this.slices.push(pillar, firstSlice)
+
+        this.state = State.Runnning
+        this.slices.push(firstSlice)
         this.animate(firstSlice)
+        this.broadcast(Event.Running)
     }
 }

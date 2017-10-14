@@ -8,9 +8,10 @@ const aspect = window.innerWidth / window.innerHeight
 const camera = new OrthographicCamera(frustumSize * aspect / - 2, frustumSize * aspect / 2, frustumSize / 2, frustumSize / - 2, -100, 500)
 
 const scene = new Scene()
-const light = new DirectionalLight(0xABA9C3, .35)
-const ambientLight = new AmbientLight(0xABA9C3, 1.1)
-const hemisphereLight = new HemisphereLight(0xFFFFFF, 0x000000, .25)
+const light = new DirectionalLight(0xFFFFFF, .35)
+const light2 = new DirectionalLight(0xFFFFFF, .35)
+const ambientLight = new AmbientLight(0xFFFFF, .65)
+const hemisphereLight = new HemisphereLight(0xFFFFFF, 0x000000, .825)
 const axis = new AxisHelper(50)
 
 function render() {
@@ -34,14 +35,15 @@ function lowerCamera() {
 renderer.shadowMap.enabled = true
 renderer.setSize(window.innerWidth, window.innerHeight)
 
-camera.position.set(-35, 35, -35)
+camera.position.set(-35, 45, -35)
 camera.up = new Vector3(0, 1, 0)
 camera.lookAt(new Vector3(0, 0, 0))
 
 light.position.set(-20, 10, 6)
+light2.position.set(20, 10, 20)
 
-scene.fog = new Fog(0x001AFF, 30, 180)
-scene.add(light, ambientLight )
+scene.fog = new Fog(0xFFFFFF, 10, 270)
+scene.add(light, ambientLight, light, hemisphereLight)
 
 document.body.appendChild(renderer.domElement)
 
