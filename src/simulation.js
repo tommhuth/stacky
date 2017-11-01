@@ -3,7 +3,7 @@ import { scene } from "./scene"
 
 const world = new World() 
 const sliceContactMaterial  = new Material()
-const bouncyMaterial = new ContactMaterial(sliceContactMaterial, sliceContactMaterial, { restitution: .85 })
+const bouncyMaterial = new ContactMaterial(sliceContactMaterial, sliceContactMaterial, { restitution: .01 })
 
 world.gravity.set(0, -9.8, 0)
 world.broadphase = new NaiveBroadphase()

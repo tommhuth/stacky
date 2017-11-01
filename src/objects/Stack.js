@@ -35,6 +35,7 @@ export const State = {
 
 export default class Stack {
     slices = []
+    leftovers = []
     sliceAnimation = new Tween()
     sliceDirection
     score = 0
@@ -47,26 +48,31 @@ export default class Stack {
 
     generateLeftovers(leftovers, color) {
         for (let slice of leftovers) {
-            let chunk = new Slice(slice.width, slice.height, slice.depth, slice.x, slice.y, slice.z, color)
-            let force = (Math.random() + .5) * chunk.body.mass * 2
-            let impulse
+            let chunk = new Slice(slice.size.x, slice.size.y, slice.size.z, slice.x, slice.y, slice.z, color)
+            let force = (Math.random() + .5) * chunk.body.mass 
+            let outwardsImpulse 
 
             switch (slice.type) {
                 case SliceType.Top:
-                    impulse = new VectorC(0, 0, force)
+                    outwardsImpulse = new VectorC(0, 0, force) 
                     break
                 case SliceType.Bottom:
-                    impulse = new VectorC(0, 0, -force)
+                    outwardsImpulse = new VectorC(0, 0, -force) 
                     break
                 case SliceType.Left:
-                    impulse = new VectorC(force, 0, 0)
+                    outwardsImpulse = new VectorC(force, 0, 0) 
                     break
-                case SliceType.Right:
-                    impulse = new VectorC(-force, 0, 0)
+                case SliceType.Right: 
+                    outwardsImpulse = new VectorC(-force, 0, 0) 
                     break
             }
+            
+            // push out from cut off point
+            chunk.body.applyLocalImpulse(outwardsImpulse, new VectorC(0, chunk.scale.y / 2, 0))
+            // force down to speed up fall
+            chunk.body.applyLocalImpulse(new VectorC(0, force * -10, 0), new VectorC(0, 0, 0))
 
-            chunk.body.applyLocalImpulse(impulse, new VectorC(0, chunk.scale.y, 0))
+            this.leftovers.push(chunk)
         }
     }
 
@@ -97,6 +103,7 @@ export default class Stack {
             currentSlice.remove()
             dropOut.body.applyLocalImpulse(this.sliceDirection.mult(dropOut.body.mass * 10), new VectorC(0, 5, 0))
 
+            this.leftovers.push(dropOut)
             this.gameOver()
         }
     }
@@ -188,6 +195,8 @@ export default class Stack {
     reset() {
         this.slices.forEach((i, index) => index > 0 && i.remove())
         this.slices.splice(1, this.slices.length - 1)
+        this.leftovers.forEach(i => i.remove())
+        this.leftovers.length = 0
         this.score = 0
 
         ColorMixer.reset()

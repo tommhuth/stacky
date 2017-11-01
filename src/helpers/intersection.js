@@ -19,37 +19,29 @@ function difference(a, b) {
     return [
         {
             ...right.getCenter(),
-            x: right.getCenter().x - .5,
-            width: right.getSize().x,
-            height: right.getSize().y,
-            depth: right.getSize().z,
-            type: "right"
+            x: right.getCenter().x - .25,
+            size: right.getSize(), 
+            type: SliceType.Right
         },
         {
             ...left.getCenter(),
-            x: left.getCenter().x + .5,
-            width: left.getSize().x,
-            height: left.getSize().y,
-            depth: left.getSize().z,
-            type: "left"
+            x: left.getCenter().x + .25,
+            size: left.getSize(), 
+            type: SliceType.Left
         },
         {
             ...top.getCenter(),
-            z: top.getCenter().z + .5,
-            width: top.getSize().x,
-            height: top.getSize().y,
-            depth: top.getSize().z,
-            type: "top"
+            z: top.getCenter().z + .25,
+            size: top.getSize(), 
+            type: SliceType.Top
         },
         {
             ...bottom.getCenter(),
-            z: bottom.getCenter().z - .5,
-            width: bottom.getSize().x,
-            height: bottom.getSize().y,
-            depth: bottom.getSize().z,
-            type: "bottom"
+            z: bottom.getCenter().z - .25,
+            size: bottom.getSize(), 
+            type: SliceType.Bottom
         },
-    ].filter(i => i.width > .25 && i.depth > .25)
+    ].filter(i => i.size.x > 0 && i.size.z > 0)
 }
 
 export default function (current, previous) {
