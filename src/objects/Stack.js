@@ -15,9 +15,9 @@ export const Settings = {
     PillarHeight: 80,
     SliceHeight: 8,
     SliceSize: 35,
-    AnimationDuration: 5000,
+    AnimationDuration: 4000,
     AnimationOffset: 65,
-    ClosenessLeniency: .65
+    ClosenessLeniency: 1
 }
 
 export const StackEvent = {
@@ -49,24 +49,24 @@ export default class Stack {
     generateLeftovers(leftovers, color) {
         for (let slice of leftovers) {
             let chunk = new Slice(slice.size.x, slice.size.y, slice.size.z, slice.x, slice.y, slice.z, color)
-            let force = (Math.random() + .5) * chunk.body.mass 
-            let outwardsImpulse 
+            let force = (Math.random() + .5) * chunk.body.mass
+            let outwardsImpulse
 
             switch (slice.type) {
                 case SliceType.Top:
-                    outwardsImpulse = new VectorC(0, 0, force) 
+                    outwardsImpulse = new VectorC(0, 0, force)
                     break
                 case SliceType.Bottom:
-                    outwardsImpulse = new VectorC(0, 0, -force) 
+                    outwardsImpulse = new VectorC(0, 0, -force)
                     break
                 case SliceType.Left:
-                    outwardsImpulse = new VectorC(force, 0, 0) 
+                    outwardsImpulse = new VectorC(force, 0, 0)
                     break
-                case SliceType.Right: 
-                    outwardsImpulse = new VectorC(-force, 0, 0) 
+                case SliceType.Right:
+                    outwardsImpulse = new VectorC(-force, 0, 0)
                     break
             }
-            
+
             // push out from cut off point
             chunk.body.applyLocalImpulse(outwardsImpulse, new VectorC(0, chunk.scale.y / 2, 0))
             // force down to speed up fall
@@ -151,7 +151,7 @@ export default class Stack {
 
             this.sliceAnimation = new Tween(position)
                 .to({ x: [offset, -offset] }, duration)
-                .onUpdate(() => { 
+                .onUpdate(() => {
                     if (prev < position.x) {
                         this.sliceDirection = new VectorC(1, 0, 0)
                     } else {
@@ -196,8 +196,7 @@ export default class Stack {
         this.slices.forEach((i, index) => index > 0 && i.remove())
         this.slices.splice(1, this.slices.length - 1)
         this.leftovers.forEach(i => i.remove())
-        this.leftovers.length = 0
-        this.score = 0
+        this.leftovers.length = 0 
 
         ColorMixer.reset()
 
