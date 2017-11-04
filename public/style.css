@@ -1,17 +1,26 @@
-body, html {
-    height: 100vh;
-    margin: 0;
-    width: 100wv;
-    overflow: hidden; 
-    padding: 0; 
+body { 
+    font-size: 1.5em;
     touch-action: none; 
     background-image: linear-gradient(rgba(255,255, 255, 0), rgba(255, 255, 255, .9));
     background-color: #C2C1C2;
     transition: background-color 2.5s;
     font-family: "Open Sans";
     font-weight: 300;
-    font-size: 1.25em;
     color: #FFF;
+}
+
+@media (max-width: 50em) {
+    body {
+        font-size: 1.15em;
+    }
+}
+
+body, html {
+    height: 100vh;
+    margin: 0;
+    width: 100wv;
+    overflow: hidden; 
+    padding: 0; 
 }
 
 * {
@@ -21,11 +30,15 @@ body, html {
     padding: 0;
     list-style: none;
     background-color: transparent;
-    border: none;
+    border: none; 
+    -webkit-tap-highlight-color: rgba(0, 0, 0, 0) !important;
+    -webkit-touch-callout: none;
 }
  
 .click-to-start {
     white-space: nowrap;
+    padding-top: 4px;
+    padding-bottom: 4px;
     animation: start-in .7s 1.2s both;
 }
 
@@ -72,7 +85,7 @@ canvas {
 }
 
 .key {
-    padding: .85em 1.25em;
+    padding: .85em 1.25em; 
     text-transform: uppercase;
     font-size: .7em; 
     letter-spacing: .075em;
@@ -90,22 +103,6 @@ canvas {
 
 .ui-section.ui-section--active {
     display: block;
-}
-
-.title {
-    font-size: 30vw;
-    font-family: "Abril Fatface";
-    text-transform: lowercase;
-    text-shadow: 0 0 1em rgba(0,0,0, .2);
-    color: #FFF;
-    margin-bottom: .5em;
-    margin-top: .5em;
-}
-
-@media (min-width: 70em) {
-    .title {
-        font-size: 22vw;
-    }
 }
 
 .running-score {
@@ -131,6 +128,22 @@ canvas {
     color: #FFF;
     margin-top: .5em;
     margin-bottom: .5em;
+}
+
+.title {
+    font-size: 30vw;
+    font-family: "Abril Fatface";
+    text-transform: lowercase;
+    text-shadow: 0 0 1.1em rgba(0,0,0, .2);
+    color: #FFF;
+    margin-bottom: .5em;
+    margin-top: .5em;
+}
+
+@media (min-width: 70em) {
+    .title {
+        font-size: 22vw;
+    }
 }
 
 .title span {
