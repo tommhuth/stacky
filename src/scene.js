@@ -49,7 +49,7 @@ camera.lookAt(new Vector3(0, 0, 0))
 light.position.set(-20, 10, 6)
 light2.position.set(20, 10, 20)
 
-scene.fog = new Fog(0xFFFFFF, 10, 270)
+scene.fog = new Fog(0xFFFFFF, 10, 325)
 scene.add(light, ambientLight, light, hemisphereLight)
 
 document.body.appendChild(renderer.domElement)
