@@ -1,5 +1,5 @@
 const score = document.querySelectorAll(".score")
-const ui = document.querySelector(".ui")
+const ui = document.querySelector(".ui-wrapper")
 const sections = document.querySelectorAll(".ui-section")
 
 export function setEnded() {

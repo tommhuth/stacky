@@ -1,5 +1,6 @@
 import { Tween, Easing } from "tween.js"
-import { Scene, Fog, AxisHelper, HemisphereLight, DirectionalLight, AmbientLight, OrthographicCamera, WebGLRenderer } from "three"
+import { Fog, HemisphereLight, DirectionalLight, AmbientLight } from "three"
+import { Scene, OrthographicCamera, WebGLRenderer } from "three"
 import { Vector3 } from "./helpers/Vector"
 
 const pixelRatio = window.devicePixelRatio
@@ -12,22 +13,27 @@ const scene = new Scene()
 const light = new DirectionalLight(0xFFFFFF, .35)
 const light2 = new DirectionalLight(0xFFFFFF, .35)
 const ambientLight = new AmbientLight(0xFFFFF, .65)
-const hemisphereLight = new HemisphereLight(0xFFFFFF, 0x000000, .825)
-const axis = new AxisHelper(50)
+const hemisphereLight = new HemisphereLight(0xFFFFFF, 0x000000, .825) 
+
+let cameraTween = new Tween()
 
 function render() {
     renderer.render(scene, camera)
 }
 
 function raiseCamera(y, focus) {
-    new Tween(camera.position)
+    cameraTween.stop()
+
+    cameraTween = new Tween(camera.position)
         .to({ y: camera.position.y + y }, 1500)
         .easing(Easing.Cubic.Out)
         .start()
 }
 
 function lowerCamera() { 
-    new Tween(camera.position)
+    cameraTween.stop()
+
+    cameraTween = new Tween(camera.position)
         .to({ y: 35 }, camera.position.y * 50)
         .easing(Easing.Cubic.Out)
         .start()

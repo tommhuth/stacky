@@ -38,6 +38,7 @@
     "cannon": "^0.6.2",
     "circular-dependency-plugin": "^4.2.1",
     "compression": "^1.7.1",
+    "detect-it": "^3.0.3",
     "express": "^4.16.1",
     "jest": "^21.2.1",
     "ngrok": "^2.2.22",

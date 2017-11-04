@@ -15,19 +15,19 @@ export const Settings = {
     PillarHeight: 80,
     SliceHeight: 8,
     SliceSize: 35,
-    AnimationDuration: 6000,
+    AnimationDuration: 5000,
     AnimationOffset: 65,
     ClosenessLeniency: .65
 }
 
-export const Event = {
+export const StackEvent = {
     Running: "running",
     Ready: "ready",
     Ended: "ended",
     ScoreChange: "score-change"
 }
 
-export const State = {
+export const StackState = {
     Runnning: "running",
     Ended: "ended",
     Ready: "ready"
@@ -39,7 +39,7 @@ export default class Stack {
     sliceAnimation = new Tween()
     sliceDirection
     score = 0
-    state = State.Ready
+    state = StackState.Ready
     listeners = []
 
     constructor() {
@@ -111,16 +111,16 @@ export default class Stack {
     gameOver() {
         lowerCamera()
 
-        this.state = State.Ended
+        this.state = StackState.Ended
 
         this.sliceAnimation.stop()
-        this.broadcast(Event.Ended)
+        this.broadcast(StackEvent.Ended)
     }
 
     setScore(cubicUnits) {
         this.score += Math.ceil(cubicUnits / 10)
 
-        this.broadcast(Event.ScoreChange, { stackSize: this.slices.length - 2, score: prettyNumber(this.score) })
+        this.broadcast(StackEvent.ScoreChange, { stackSize: this.slices.length - 2, score: prettyNumber(this.score) })
     }
 
     on(event, callback) {
@@ -151,7 +151,7 @@ export default class Stack {
 
             this.sliceAnimation = new Tween(position)
                 .to({ x: [offset, -offset] }, duration)
-                .onUpdate(() => {
+                .onUpdate(() => { 
                     if (prev < position.x) {
                         this.sliceDirection = new VectorC(1, 0, 0)
                     } else {
@@ -208,9 +208,9 @@ export default class Stack {
     start() {
         let firstSlice = new Slice(Settings.SliceSize, Settings.SliceHeight, Settings.SliceSize, -Settings.AnimationOffset, 0, 0, undefined, 0)
 
-        this.state = State.Runnning
+        this.state = StackState.Runnning
         this.slices.push(firstSlice)
         this.animate(firstSlice)
-        this.broadcast(Event.Running)
+        this.broadcast(StackEvent.Running)
     }
 }

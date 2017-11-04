@@ -2,7 +2,7 @@ import "babel-polyfill"
 import { scene, render } from "./scene"
 import { physicsLoop } from "./simulation"
 import { update as tweenLoop } from "tween.js"
-import Stack, { Event, State } from "./objects/Stack"
+import Stack, { StackEvent, StackState } from "./objects/Stack"
 import { setScore, setReady, setEnded, setRunning } from "./ui"
 
 (function loop() {
@@ -10,8 +10,8 @@ import { setScore, setReady, setEnded, setRunning } from "./ui"
         // order is important here to avoid ghosting/flicker of slices
         // clamped to center of previous slice -- strange
         physicsLoop()
-        render()
         tweenLoop()
+        render()
         requestAnimationFrame(loop)
     } catch (e) {
         console.error(e)
@@ -20,10 +20,10 @@ import { setScore, setReady, setEnded, setRunning } from "./ui"
 
 const stack = new Stack()
 
-stack.on(Event.ScoreChange, setScore)
-stack.on(Event.Ready, setReady)
-stack.on(Event.Ended, setEnded)
-stack.on(Event.Running, setRunning)
+stack.on(StackEvent.ScoreChange, setScore)
+stack.on(StackEvent.Ready, setReady)
+stack.on(StackEvent.Ended, setEnded)
+stack.on(StackEvent.Running, setRunning)
 
 document.addEventListener("touchstart", handleClick)
 document.addEventListener("click", handleClick)
@@ -33,13 +33,13 @@ function handleClick(e) {
     e.preventDefault()
 
     switch (stack.state) {
-        case State.Ready:
+        case StackState.Ready:
             stack.start()
             break;
-        case State.Runnning:
+        case StackState.Runnning:
             stack.match()
             break
-        case State.Ended:
+        case StackState.Ended:
             stack.reset()
             break
     }
