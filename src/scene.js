@@ -1,69 +1,46 @@
-import { Tween, Easing } from "tween.js"
-import { Fog, HemisphereLight, DirectionalLight, AmbientLight } from "three"
-import { Scene, OrthographicCamera, WebGLRenderer } from "three"
-import { Vector3 } from "./helpers/Vector"
+import { Engine, FreeCamera, Scene, CannonJSPlugin, HemisphericLight, Vector3, Camera, Color3, PointLight } from "babylonjs"
 
-const pixelRatio = window.devicePixelRatio
-const renderer = new WebGLRenderer({ antialias: true, alpha: true, devicePixelRatio: pixelRatio })
 const frustumSize = 100
 const aspect = window.innerWidth / window.innerHeight
-const camera = new OrthographicCamera(frustumSize * aspect / - 2, frustumSize * aspect / 2, frustumSize / 2, frustumSize / - 2, -100, 500)
 
-const scene = new Scene()
-const light = new DirectionalLight(0xFFFFFF, .35)
-const light2 = new DirectionalLight(0xFFFFFF, .35)
-const ambientLight = new AmbientLight(0xFFFFF, .65)
-const hemisphereLight = new HemisphereLight(0xFFFFFF, 0x000000, .825) 
+const canvas = document.getElementById("app")
+const engine = new Engine(canvas, true, { deterministicLockstep: true, lockstepMaxSteps: 4 }, true)
+const scene = new Scene(engine)
+const camera = new FreeCamera("camera", new Vector3(-45, 45, -45), scene)
+const light = new HemisphericLight('light1', new Vector3(0, -1, 0), scene)
+const light2 = new HemisphericLight('light12', new Vector3(0, -11, 0), scene)
+var light3 = new PointLight("light", new BABYLON.Vector3(0, 1, 0), scene);
+light3.diffuse = new BABYLON.Color3(1, 0, 0);
+light3.specular = new BABYLON.Color3(0, 1, 0);
+const physEngine = new CannonJSPlugin(false)
 
-let cameraTween = new Tween()
+scene.enablePhysics(new Vector3(0, -9.81, 0), physEngine)
+scene.gravity = new Vector3(0, -9.81, 0)
 
-function render() {
-    renderer.render(scene, camera)
-}
+camera.mode = Camera.ORTHOGRAPHIC_CAMERA
+camera.orthoTop =  frustumSize / 2
+camera.orthoBottom = frustumSize / - 2
+camera.orthoLeft = frustumSize * aspect / - 2
+camera.orthoRight = frustumSize * aspect / 2
+camera.setTarget(Vector3.Zero()) 
 
-function raiseCamera(y, focus) {
-    cameraTween.stop()
+light.groundColor = new Color3(.1, .5, .1)
+light.diffuse = Color3.Blue()
+light.intensity = .4;
 
-    cameraTween = new Tween(camera.position)
-        .to({ y: camera.position.y + y }, 1500)
-        .easing(Easing.Cubic.Out)
-        .start()
-}
+light3.position.x = -40
+light3.position.z = -30 
+ 
+engine.runRenderLoop(() => scene.render()) 
 
-function lowerCamera() { 
-    cameraTween.stop()
+window.addEventListener('resize', () => {
+    const aspect = window.innerWidth / window.innerHeight
 
-    cameraTween = new Tween(camera.position)
-        .to({ y: 35 }, camera.position.y * 50)
-        .easing(Easing.Cubic.Out)
-        .start()
-}
-
-renderer.shadowMap.enabled = true
-renderer.setSize(window.innerWidth * pixelRatio, window.innerHeight * pixelRatio)
-
-camera.position.set(-35, 45, -35)
-camera.up = new Vector3(0, 1, 0)
-camera.lookAt(new Vector3(0, 0, 0))
-
-light.position.set(-20, 10, 6)
-light2.position.set(20, 10, 20)
-
-scene.fog = new Fog(0xFFFFFF, 10, 325)
-scene.add(light, ambientLight, light, hemisphereLight)
-
-document.body.appendChild(renderer.domElement)
-
-window.addEventListener('resize', () => { 
-    let aspect = window.innerWidth / window.innerHeight
-
-    camera.left = frustumSize * aspect / - 2
-    camera.right = frustumSize * aspect / 2
-    camera.top = frustumSize / 2
-    camera.bottom = frustumSize / - 2
-    camera.updateProjectionMatrix()
-
-    renderer.setSize(window.innerWidth * pixelRatio, window.innerHeight * pixelRatio)
+    camera.orthoTop =  frustumSize / 2
+    camera.orthoBottom = frustumSize / - 2
+    camera.orthoLeft = frustumSize * aspect / - 2
+    camera.orthoRight = frustumSize * aspect / 2
+    engine.resize()
 })
 
-export { scene, camera, render, raiseCamera, lowerCamera }
+export { scene, camera }

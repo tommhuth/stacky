@@ -1,33 +1,29 @@
 html(lang="no")
     head 
         meta(name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no")
-        link(href="https://fonts.googleapis.com/css?family=Abril+Fatface|Open+Sans:100,300,700" rel="stylesheet")
-        link(href="/style.css" rel="stylesheet") 
+        link(href="https://fonts.googleapis.com/css?family=Abril+Fatface|Open+Sans:100,300,700" rel="stylesheet") 
+        style.
+            * {
+                font: inherit;
+                color: inherit;
+                margin: 0;
+                padding: 0;
+                list-style: none;
+                background-color: transparent;
+                border: none; 
+                -webkit-tap-highlight-color: rgba(0, 0, 0, 0) !important;
+                -webkit-touch-callout: none;
+            } 
+            canvas {
+                width: 100vw !important;  
+                height: 100vh !important;
+                position: relative;
+                z-index: 2;
+            }
            
         title Stacky
     body 
-        .ui-wrapper 
-            .ui-section.ui-section--active.ready
-                h1.title 
-                    span.s S
-                    span.t t
-                    span.a a
-                    span.c c
-                    span.k k
-                    span.y y
-                button.click-to-start 
-                    | press
-                    span.key Spacebar
-                    | to start
-            .ui-section.ended
-                .total-score.score 0
-                button.click-to-start 
-                    | press
-                    span.key Spacebar
-                    | to restart
-            .ui-section.running 
-                .running-score.score 0
-        .background
-
+        canvas#app
+        
 
         script(src=cacheBuster("app.js"))

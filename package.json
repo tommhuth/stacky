@@ -34,28 +34,21 @@
     "babel-plugin-transform-object-rest-spread": "^6.26.0",
     "babel-polyfill": "^6.26.0",
     "babel-preset-env": "^1.6.0",
-    "babylonjs": "^3.1.0-alpha2",
-    "cannon": "^0.6.2",
+    "babylonjs": "^3.1.0-beta3", 
     "circular-dependency-plugin": "^4.2.1",
     "compression": "^1.7.1",
     "detect-it": "^3.0.3",
     "express": "^4.16.1",
     "jest": "^21.2.1",
-    "ngrok": "^2.2.22",
-    "oimo": "^1.0.9",
-    "physijs-webpack": "0.0.2",
+    "ngrok": "^2.2.22",  
     "pug": "^2.0.0-rc.4",
     "regenerator-runtime": "^0.11.0",
     "serve-static": "^1.13.1",
-    "superstatic": "^5.0.1",
-    "three": "^0.87.1",
-    "three-trackballcontrols": "0.0.5",
-    "tween.js": "^16.6.0",
-    "webpack": "^3.6.0"
-  },
-  "devDependencies": {
+    "superstatic": "^5.0.1",  
+    "webpack": "^3.6.0",
     "babel-jest": "^21.2.0"
   },
+  "devDependencies": { },
   "jest": {
     "transform": {
       "^.+\\.jsx?$": "babel-jest"

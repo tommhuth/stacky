@@ -1,50 +1,116 @@
-import "babel-polyfill"
-import { scene, render } from "./scene"
-import { physicsLoop } from "./simulation"
-import { update as tweenLoop } from "tween.js"
-import Stack, { StackEvent, StackState } from "./objects/Stack"
-import { setScore, setReady, setEnded, setRunning } from "./ui"
+import { Vector3, Animation, MeshBuilder, CSG, PhysicsImpostor, StandardMaterial, Color3 } from "babylonjs"
+import { scene } from "./scene"
 
-(function loop() {
-    try {
-        // order is important here to avoid ghosting/flicker of slices
-        // clamped to center of previous slice -- strange
-        physicsLoop()
-        tweenLoop()
-        render()
-        requestAnimationFrame(loop)
-    } catch (e) {
-        console.error(e)
-    }
-})()
+const stack = []
 
-const stack = new Stack()
 
-stack.on(StackEvent.ScoreChange, setScore)
-stack.on(StackEvent.Ready, setReady)
-stack.on(StackEvent.Ended, setEnded)
-stack.on(StackEvent.Running, setRunning)
+function makeGround() {
+    var ground = MeshBuilder.CreateBox('ground1', { height: 40, depth: 35, width: 35, subdivisions: 1 }, scene)
 
-document.addEventListener("touchstart", handleClick)
-document.addEventListener("click", handleClick)
-document.addEventListener("touchmove", e => e.preventDefault())
+    ground.position.y = -22.5
+    ground.physicsImpostor = new PhysicsImpostor(ground, PhysicsImpostor.BoxImpostor, { mass: 0 })
 
-function handleClick(e) {
-    e.preventDefault()
+    stack.push(ground)
+}
 
-    switch (stack.state) {
-        case StackState.Ready:
-            stack.start()
-            break;
-        case StackState.Runnning:
-            stack.match()
-            break
-        case StackState.Ended:
-            stack.reset()
-            break
+function makeBox() {
+    let top = stack[stack.length - 1]
+    var boundingBx = top.getBoundingInfo()
+    console.log(boundingBx)
+  
+    let boundingBox = boundingBx.boundingBox
+    var box = MeshBuilder.CreateBox('box1', { height: 5, depth: boundingBox.extendSize.z * 2, width: boundingBox.extendSize.x * 2, subdivisions: 1 }, scene)
+
+    box.position =  boundingBx.boundingBox.centerWorld.clone()
+    box.position.y = (stack.length - 1) * 5
+
+    box.material = new StandardMaterial("xx", scene)
+    box.material.diffuseColor = new Color3(Math.random(), Math.random(), Math.random())
+    box.physicsImpostor = new PhysicsImpostor(box, PhysicsImpostor.BoxImpostor, { mass: 0 })
+
+    stack.push(box)
+
+    animateBox(box)
+}
+
+function makeFirstBox() {
+    var box = MeshBuilder.CreateBox('box1', { height: 5, depth: 35, width: 35, subdivisions: 1 }, scene)
+
+    box.position.y = 0
+    box.physicsImpostor = new PhysicsImpostor(box, PhysicsImpostor.BoxImpostor, { mass: 0 })
+
+    stack.push(box)
+
+    animateBox(box)
+}
+
+function animateBox(box) {
+    let lefty = (stack.length - 1) % 2 == 0
+    let prop = lefty ? "x" : "z"
+    var animation = new Animation("anm", "position." + prop, 60, Animation.ANIMATIONTYPE_FLOAT, Animation.ANIMATIONLOOPMODE_CYCLE)
+
+    var keys = [
+        {
+            frame: 0,
+            value: 60  
+        },
+        {
+            frame: 200,
+            value: -60  
+        },
+        {
+            frame: 400,
+            value: 60  
+        }
+    ]
+
+    animation.setKeys(keys)
+
+    box.animations = [animation]
+    box.animation = scene.beginAnimation(box, 0, 400, true)
+}
+
+function match() {
+    let top = stack[stack.length - 1]
+
+    top.animation.stop()
+    top.position.y -= 5
+
+    let a = CSG.FromMesh(top)
+    let b = CSG.FromMesh(stack[stack.length - 2])
+    let intersection = a.intersect(b)
+    let subtraction = a.subtract(b)
+ 
+
+    if (!intersection.polygons.length) {
+        top.physicsImpostor.setMass(5)
+        top.position.y += 5
+
+        throw new Error("Missed - game over!")
+    } else {
+        let box = intersection.toMesh("s", top.material, scene, false)
+        let leftover = subtraction.toMesh("ss", top.material, scene, false)
+
+        box.position.y += 5
+        box.physicsImpostor = new PhysicsImpostor(box, PhysicsImpostor.BoxImpostor, { mass: 0 })
+
+        leftover.position.y += 5
+        leftover.physicsImpostor = new PhysicsImpostor(leftover, PhysicsImpostor.BoxImpostor, { mass: 5 })
+ 
+        console.log(box.position)
+        stack.splice(stack.length - 1, 1) 
+        
+        stack.push(box)
+        top.dispose()
+
+        makeBox()
     }
 }
 
-// debug
-window.scene = scene
-window.THREE = require("three")
+document.addEventListener("click", () => {
+    match()
+})
+
+
+makeGround()
+makeFirstBox()
