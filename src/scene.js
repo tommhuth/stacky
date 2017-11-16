@@ -4,11 +4,13 @@ const frustumSize = 100
 const aspect = window.innerWidth / window.innerHeight
 
 const canvas = document.getElementById("app")
-const engine = new Engine(canvas, true, { deterministicLockstep: true, lockstepMaxSteps: 4 }, false)
+const engine = new Engine(canvas, false, { deterministicLockstep: true, lockstepMaxSteps: 4 }, false)
 const scene = new Scene(engine)
 const camera = new FreeCamera("camera", new Vector3(-45, 45, -45), scene)
 const light = new HemisphericLight('light1', new Vector3(0, -1, 0), scene)  
 const physEngine = new CannonJSPlugin(false)
+
+physEngine.setTimeStep(1/60)
 
 scene.enablePhysics(new Vector3(0, -9.81, 0), physEngine)
 scene.gravity = new Vector3(0, -9.81, 0)
@@ -20,7 +22,7 @@ camera.orthoLeft = frustumSize * aspect / - 2
 camera.orthoRight = frustumSize * aspect / 2
 camera.setTarget(Vector3.Zero()) 
 
-light.groundColor = new Color3(.1, .5, .1)
+light.groundColor = new Color3(0, .5, 0)
 light.diffuse = Color3.White()
 light.intensity = .4;
  
