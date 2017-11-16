@@ -4,14 +4,10 @@ const frustumSize = 100
 const aspect = window.innerWidth / window.innerHeight
 
 const canvas = document.getElementById("app")
-const engine = new Engine(canvas, true, { deterministicLockstep: true, lockstepMaxSteps: 4 }, true)
+const engine = new Engine(canvas, true, { deterministicLockstep: true, lockstepMaxSteps: 4 }, false)
 const scene = new Scene(engine)
 const camera = new FreeCamera("camera", new Vector3(-45, 45, -45), scene)
-const light = new HemisphericLight('light1', new Vector3(0, -1, 0), scene)
-const light2 = new HemisphericLight('light12', new Vector3(0, -11, 0), scene)
-var light3 = new PointLight("light", new BABYLON.Vector3(0, 1, 0), scene);
-light3.diffuse = new BABYLON.Color3(1, 0, 0);
-light3.specular = new BABYLON.Color3(0, 1, 0);
+const light = new HemisphericLight('light1', new Vector3(0, -1, 0), scene)  
 const physEngine = new CannonJSPlugin(false)
 
 scene.enablePhysics(new Vector3(0, -9.81, 0), physEngine)
@@ -25,11 +21,8 @@ camera.orthoRight = frustumSize * aspect / 2
 camera.setTarget(Vector3.Zero()) 
 
 light.groundColor = new Color3(.1, .5, .1)
-light.diffuse = Color3.Blue()
+light.diffuse = Color3.White()
 light.intensity = .4;
-
-light3.position.x = -40
-light3.position.z = -30 
  
 engine.runRenderLoop(() => scene.render()) 
 
