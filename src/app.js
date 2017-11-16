@@ -15,8 +15,7 @@ function makeGround() {
 
 function makeBox() {
     let top = stack[stack.length - 1]
-    var boundingBx = top.getBoundingInfo()
-    console.log(boundingBx)
+    var boundingBx = top.getBoundingInfo() 
   
     let boundingBox = boundingBx.boundingBox
     var box = MeshBuilder.CreateBox('box1', { height: 5, depth: boundingBox.extendSize.z * 2, width: boundingBox.extendSize.x * 2, subdivisions: 1 }, scene)
@@ -81,12 +80,11 @@ function match() {
     let intersection = a.intersect(b)
     let subtraction = a.subtract(b)
  
-
     if (!intersection.polygons.length) {
         top.physicsImpostor.setMass(5)
         top.position.y += 5
 
-        throw new Error("Missed - game over!")
+        console.log("Missed - game over!")
     } else {
         let box = intersection.toMesh("s", top.material, scene, false)
         let leftover = subtraction.toMesh("ss", top.material, scene, false)
@@ -97,7 +95,6 @@ function match() {
         leftover.position.y += 5
         leftover.physicsImpostor = new PhysicsImpostor(leftover, PhysicsImpostor.BoxImpostor, { mass: 5 })
  
-        console.log(box.position)
         stack.splice(stack.length - 1, 1) 
         
         stack.push(box)
