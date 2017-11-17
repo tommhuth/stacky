@@ -1,13 +1,13 @@
 import { Vector3, Animation, MeshBuilder, CSG, PhysicsImpostor, StandardMaterial, Color3 } from "babylonjs"
 import { scene } from "./scene"
+import uuid from "uuid/v1"
 
 const stack = []
 
-
 function makeGround() {
-    var ground = MeshBuilder.CreateBox('ground1', { height: 40, depth: 35, width: 35, subdivisions: 1 }, scene)
+    let ground = MeshBuilder.CreateBox(uuid(), { height: 60, depth: 35, width: 35, subdivisions: 1 }, scene)
 
-    ground.position.y = -22.5
+    ground.position.y = -(60 / 2 + 2.5)
     ground.physicsImpostor = new PhysicsImpostor(ground, PhysicsImpostor.BoxImpostor, { mass: 0 })
 
     stack.push(ground)
@@ -15,17 +15,15 @@ function makeGround() {
 
 function makeBox() {
     let top = stack[stack.length - 1]
-    var boundingBx = top.getBoundingInfo() 
-  
-    let boundingBox = boundingBx.boundingBox
-    var box = MeshBuilder.CreateBox('box1', { height: 5, depth: boundingBox.extendSize.z * 2, width: boundingBox.extendSize.x * 2, subdivisions: 1 }, scene)
+    let boundingBox = top.getBoundingInfo().boundingBox
+    let box = MeshBuilder.CreateBox(uuid(), { height: 5, depth: boundingBox.extendSize.z * 2, width: boundingBox.extendSize.x * 2, subdivisions: 1 }, scene)
 
-    box.position =  boundingBx.boundingBox.centerWorld.clone()
+    box.position = boundingBox.centerWorld.clone()
     box.position.y = (stack.length - 1) * 5
 
-    box.material = new StandardMaterial("xx", scene)
+    box.material = new StandardMaterial(uuid(), scene)
     box.material.diffuseColor = new Color3(Math.random(), Math.random(), Math.random())
-    //box.physicsImpostor = new PhysicsImpostor(box, PhysicsImpostor.BoxImpostor, { mass: 0 })
+    box.physicsImpostor = new PhysicsImpostor(box, PhysicsImpostor.BoxImpostor, { mass: 0 })
 
     stack.push(box)
 
@@ -33,7 +31,7 @@ function makeBox() {
 }
 
 function makeFirstBox() {
-    var box = MeshBuilder.CreateBox('box1', { height: 5, depth: 35, width: 35, subdivisions: 1 }, scene)
+    let box = MeshBuilder.CreateBox(uuid(), { height: 5, depth: 35, width: 35, subdivisions: 1 }, scene)
 
     box.position.y = 0
     box.physicsImpostor = new PhysicsImpostor(box, PhysicsImpostor.BoxImpostor, { mass: 0 })
@@ -44,22 +42,23 @@ function makeFirstBox() {
 }
 
 function animateBox(box) {
-    let lefty = (stack.length - 1) % 2 == 0
+    let lefty = (stack.length - 1) % 2 === 0
+    let flipped = (stack.length - 1) % 2 === 0 
     let prop = lefty ? "x" : "z"
-    var animation = new Animation("anm", "position." + prop, 60, Animation.ANIMATIONTYPE_FLOAT, Animation.ANIMATIONLOOPMODE_CYCLE)
+    let animation = new Animation(uuid(), `position.${prop}`, 60, Animation.ANIMATIONTYPE_FLOAT, Animation.ANIMATIONLOOPMODE_CYCLE)
 
-    var keys = [
+    let keys = [
         {
             frame: 0,
-            value: 60  
+            value: 60 * (flipped ? -1 : 1)
         },
         {
             frame: 200,
-            value: -60  
+            value: -60 * (flipped ? -1 : 1)
         },
         {
             frame: 400,
-            value: 60  
+            value: 60 * (flipped ? -1 : 1)
         }
     ]
 
@@ -70,30 +69,32 @@ function animateBox(box) {
 }
 
 function match() {
-    let top = stack[stack.length - 1]
+    let top = stack.pop()
+    let previous = stack[stack.length - 1]
 
     top.animation.stop()
     top.position.y -= 5
 
     let a = CSG.FromMesh(top)
-    let b = CSG.FromMesh(stack[stack.length - 2])
+    let b = CSG.FromMesh(previous)
     let intersection = a.intersect(b)
     let subtraction = a.subtract(b)
-    let leftover = subtraction.toMesh("ss", top.material, scene, false)
-    
-    leftover.position.y += 5
-    leftover.physicsImpostor = new PhysicsImpostor(leftover, PhysicsImpostor.BoxImpostor, { mass: 5 }) 
- 
-    if (!intersection.polygons.length) { 
-        console.log("Missed - game over!")
+
+    if (subtraction.polygons.length) {
+        let leftover = subtraction.toMesh(uuid(), top.material, scene, false)
+
+        leftover.position.y += 5
+        leftover.physicsImpostor = new PhysicsImpostor(leftover, PhysicsImpostor.BoxImpostor, { mass: 5 })
+    }
+
+    if (!intersection.polygons.length) {
+        console.warn("Missed -- game over!")
     } else {
-        let box = intersection.toMesh("s", top.material, scene, false)
+        let box = intersection.toMesh(uuid(), top.material, scene, false)
 
         box.position.y += 5
-        box.physicsImpostor = new PhysicsImpostor(box, PhysicsImpostor.BoxImpostor, { mass: 10 })
- 
-        stack.splice(stack.length - 1, 1) 
-        
+        box.physicsImpostor = new PhysicsImpostor(box, PhysicsImpostor.BoxImpostor, { mass: 0 })
+  
         stack.push(box)
 
         makeBox()
@@ -105,7 +106,6 @@ function match() {
 document.addEventListener("click", () => {
     match()
 })
-
 
 makeGround()
 makeFirstBox()

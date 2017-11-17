@@ -29,12 +29,13 @@
     "array-shuffle": "^1.0.1",
     "babel": "^6.23.0",
     "babel-core": "^6.26.0",
+    "babel-jest": "^21.2.0",
     "babel-loader": "^7.1.2",
     "babel-plugin-transform-class-properties": "^6.24.1",
     "babel-plugin-transform-object-rest-spread": "^6.26.0",
     "babel-polyfill": "^6.26.0",
     "babel-preset-env": "^1.6.0",
-    "babylonjs": "^3.0.7",
+    "babylonjs": "^3.1.0-beta3",
     "circular-dependency-plugin": "^4.2.1",
     "compression": "^1.7.1",
     "detect-it": "^3.0.3",
@@ -45,8 +46,8 @@
     "regenerator-runtime": "^0.11.0",
     "serve-static": "^1.13.1",
     "superstatic": "^5.0.1",
-    "webpack": "^3.6.0",
-    "babel-jest": "^21.2.0"
+    "uuid": "^3.1.0",
+    "webpack": "^3.6.0"
   },
   "devDependencies": {},
   "jest": {
