@@ -25,7 +25,7 @@ function makeBox() {
 
     box.material = new StandardMaterial("xx", scene)
     box.material.diffuseColor = new Color3(Math.random(), Math.random(), Math.random())
-    box.physicsImpostor = new PhysicsImpostor(box, PhysicsImpostor.BoxImpostor, { mass: 0 })
+    //box.physicsImpostor = new PhysicsImpostor(box, PhysicsImpostor.BoxImpostor, { mass: 0 })
 
     stack.push(box)
 
@@ -79,29 +79,27 @@ function match() {
     let b = CSG.FromMesh(stack[stack.length - 2])
     let intersection = a.intersect(b)
     let subtraction = a.subtract(b)
+    let leftover = subtraction.toMesh("ss", top.material, scene, false)
+    
+    leftover.position.y += 5
+    leftover.physicsImpostor = new PhysicsImpostor(leftover, PhysicsImpostor.BoxImpostor, { mass: 5 }) 
  
-    if (!intersection.polygons.length) {
-        top.physicsImpostor.setMass(5)
-        top.position.y += 5
-
+    if (!intersection.polygons.length) { 
         console.log("Missed - game over!")
     } else {
         let box = intersection.toMesh("s", top.material, scene, false)
-        let leftover = subtraction.toMesh("ss", top.material, scene, false)
 
         box.position.y += 5
-        box.physicsImpostor = new PhysicsImpostor(box, PhysicsImpostor.BoxImpostor, { mass: 0 })
-
-        leftover.position.y += 5
-        leftover.physicsImpostor = new PhysicsImpostor(leftover, PhysicsImpostor.BoxImpostor, { mass: 5 })
+        box.physicsImpostor = new PhysicsImpostor(box, PhysicsImpostor.BoxImpostor, { mass: 10 })
  
         stack.splice(stack.length - 1, 1) 
         
         stack.push(box)
-        top.dispose()
 
         makeBox()
     }
+
+    top.dispose()
 }
 
 document.addEventListener("click", () => {
