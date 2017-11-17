@@ -1,6 +1,7 @@
 import { Vector3, Animation, MeshBuilder, CSG, PhysicsImpostor, StandardMaterial, Color3 } from "babylonjs"
-import { scene } from "./scene"
+import { scene, raiseCamera } from "./scene"
 import uuid from "uuid/v1"
+import { getMass } from "./helpers"
 
 const stack = []
 
@@ -28,6 +29,7 @@ function makeBox() {
     stack.push(box)
 
     animateBox(box)
+    raiseCamera(5)
 }
 
 function makeFirstBox() {
@@ -43,7 +45,7 @@ function makeFirstBox() {
 
 function animateBox(box) {
     let lefty = (stack.length - 1) % 2 === 0
-    let flipped = (stack.length - 1) % 2 === 0 
+    let flipped = (stack.length - 1) % 3 === 0
     let prop = lefty ? "x" : "z"
     let animation = new Animation(uuid(), `position.${prop}`, 60, Animation.ANIMATIONTYPE_FLOAT, Animation.ANIMATIONLOOPMODE_CYCLE)
 
@@ -82,9 +84,13 @@ function match() {
 
     if (subtraction.polygons.length) {
         let leftover = subtraction.toMesh(uuid(), top.material, scene, false)
-
+ 
         leftover.position.y += 5
-        leftover.physicsImpostor = new PhysicsImpostor(leftover, PhysicsImpostor.BoxImpostor, { mass: 5 })
+        leftover.physicsImpostor = new PhysicsImpostor(leftover, PhysicsImpostor.BoxImpostor, { mass: getMass(leftover) })
+        /*leftover.physicsImpostor.applyImpulse(
+            new Vector3(0, -getMass(leftover) * 10, 0), 
+            leftover.position
+        )*/
     }
 
     if (!intersection.polygons.length) {
@@ -94,7 +100,7 @@ function match() {
 
         box.position.y += 5
         box.physicsImpostor = new PhysicsImpostor(box, PhysicsImpostor.BoxImpostor, { mass: 0 })
-  
+
         stack.push(box)
 
         makeBox()
