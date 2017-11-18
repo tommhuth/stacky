@@ -1,4 +1,4 @@
-import { Engine, FreeCamera, Animation, Scene, HemisphericLight, Vector3, Camera, Color3, PointLight, SineEase, EasingFunction } from "babylonjs"
+import { Engine, FreeCamera, Animation, Scene, HemisphericLight, Vector3, Camera, Color3, Color4, PointLight, SineEase, EasingFunction } from "babylonjs"
 import uuid from "uuid/v1"
 
 const frustumSize = 100
@@ -10,9 +10,9 @@ const scene = new Scene(engine)
 const camera = new FreeCamera(uuid(), new Vector3(-45, 45, -45), scene)
 const light = new HemisphericLight(uuid(), new Vector3(0, -1, 0), scene)
 const pointLight = new PointLight(uuid(), new Vector3(-55, -55, -10), scene)
-   
+
 scene.enablePhysics()
-scene.getPhysicsEngine().setTimeStep(1 / 30);
+scene.clearColor = new Color4(0, 0, 0, 0)
 
 camera.mode = Camera.ORTHOGRAPHIC_CAMERA
 camera.orthoTop = frustumSize / 2
@@ -60,7 +60,7 @@ function raiseCamera(increment) {
 
     ease.setEasingMode(EasingFunction.EASINGMODE_EASEINOUT)
 
-    animation.setEasingFunction(ease) 
+    animation.setEasingFunction(ease)
     animation.setKeys(keys)
 
     camera.animations = [animation]
@@ -87,7 +87,7 @@ function lowerCamera() {
 
     ease.setEasingMode(EasingFunction.EASINGMODE_EASEINOUT)
 
-    animation.setEasingFunction(ease) 
+    animation.setEasingFunction(ease)
     animation.setKeys(keys)
 
     camera.animations = [animation]

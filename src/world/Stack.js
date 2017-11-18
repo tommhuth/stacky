@@ -3,12 +3,13 @@ import { Vector3, Animation, MeshBuilder, CSG, PhysicsImpostor, StandardMaterial
 import { scene, raiseCamera, lowerCamera } from "./scene"
 import uuid from "uuid/v1"
 
-export const Settings = {
+const Settings = {
     Colors: ["red", "green", "blue", "purple"],
     PillarHeight: 80,
-    SliceHeight: 8,
-    SliceSize: 35,
-    AnimationOffset: 65
+    LayereHeight: 8,
+    LayerSize: 35,
+    AnimationOffset: 65,
+    ClosenessLeniency: .75
 }
 
 export const StackEvent = {
@@ -42,7 +43,7 @@ export class Stack extends Emitter {
     start() {
         this.state = StackState.Running
 
-        this.makeFirstBox()
+        this.makeFirstLayer()
         this.broadcast(StackEvent.Running)
     }
 
@@ -63,30 +64,7 @@ export class Stack extends Emitter {
 
         this.broadcast(StackEvent.Running)
         this.broadcast(StackEvent.ScoreChange, { score: 0 })
-        this.makeFirstBox()
-    }
-
-    makePillar() {
-        let pillar = MeshBuilder.CreateBox(uuid(), { height: 60, depth: 35, width: 35, subdivisions: 1 }, scene)
-
-        pillar.position.y = -(60 / 2 + 2.5)
-        pillar.___ISPILLAR = true
-        pillar.physicsImpostor = new PhysicsImpostor(pillar, PhysicsImpostor.BoxImpostor, { mass: 0 })
-
-        pillar.computeWorldMatrix(true)
-
-        this.layers.push(pillar)
-    }
-
-    makeFirstBox() {
-        let box = MeshBuilder.CreateBox(uuid(), { height: 5, depth: 35, width: 35, subdivisions: 1 }, scene)
-
-        box.position.y = 0
-        box.physicsImpostor = new PhysicsImpostor(box, PhysicsImpostor.BoxImpostor, { mass: 0 })
-
-        this.layers.push(box)
-
-        this.animate(box)
+        this.makeFirstLayer()
     }
 
     match() {
@@ -99,7 +77,7 @@ export class Stack extends Emitter {
         let distance = Vector3.Distance(top.position, new Vector3(previous.position.x, previous.position.y + 5, previous.position.z))
 
         top.animation.stop()
-        top.position.y -= 5 
+        top.position.y -= Settings.LayereHeight
 
         let a = CSG.FromMesh(top)
         let b = CSG.FromMesh(previous)
@@ -107,8 +85,8 @@ export class Stack extends Emitter {
         let intersection
         let subtraction
 
-        if (distance <= .75) { 
-            console.log("bingo")
+        if (distance <= Settings.ClosenessLeniency) {
+            // count as hit in middle
             intersection = b.intersect(b)
             subtraction = b.subtract(b)
         } else {
@@ -117,25 +95,30 @@ export class Stack extends Emitter {
         }
 
         if (subtraction.polygons.length && distance > .75) {
+            // if has leftover cutoff
             let leftover = subtraction.toMesh(uuid(), top.material, scene, false)
 
-            leftover.position.y += 5
+            // mesh has been lowered for intersection test, readjust
+            leftover.position.y += Settings.LayereHeight
             leftover.physicsImpostor = new PhysicsImpostor(leftover, PhysicsImpostor.BoxImpostor, { mass: this.getMass(leftover) })
 
             this.leftovers.push(leftover)
         }
 
         if (intersection.polygons.length) {
-            let box = intersection.toMesh(uuid(), top.material, scene, false)
+            // has intersection
+            let layer = intersection.toMesh(uuid(), top.material, scene, false)
 
-            box.position.y += 5
-            box.physicsImpostor = new PhysicsImpostor(box, PhysicsImpostor.BoxImpostor, { mass: 0 })
+            // mesh has been lowered for intersection test, readjust
+            layer.position.y += Settings.LayereHeight
+            layer.physicsImpostor = new PhysicsImpostor(layer, PhysicsImpostor.BoxImpostor, { mass: 0 })
 
-            this.layers.push(box)
+            this.layers.push(layer)
 
             this.broadcast(StackEvent.ScoreChange, { score: this.layers.length - 1 })
-            this.makeBox()
+            this.makeLayer()
         } else {
+            // game over!
             this.state = StackState.Ended
 
             this.broadcast(StackEvent.Ended)
@@ -145,16 +128,16 @@ export class Stack extends Emitter {
         top.dispose()
     }
 
-    animate(box) {
+    animate(layer) {
         let lefty = (this.layers.length - 1) % 2 === 0
         let flipped = (this.layers.length - 1) % 3 === 0
-        let prop = lefty ? "x" : "z"
-        let animation = new Animation(uuid(), `position.${prop}`, 60, Animation.ANIMATIONTYPE_FLOAT, Animation.ANIMATIONLOOPMODE_CYCLE)
+        let axis = lefty ? "x" : "z"
+        let animation = new Animation(uuid(), `position.${axis}`, 60, Animation.ANIMATIONTYPE_FLOAT, Animation.ANIMATIONLOOPMODE_CYCLE)
 
         let keys = [
             {
                 frame: 0,
-                value: 60 * (flipped ? -1 : 1)
+                value: Settings.AnimationOffset * (flipped ? -1 : 1)
             },
             {
                 frame: 100,
@@ -162,7 +145,7 @@ export class Stack extends Emitter {
             },
             {
                 frame: 200,
-                value: -60 * (flipped ? -1 : 1)
+                value: -Settings.AnimationOffset * (flipped ? -1 : 1)
             },
             {
                 frame: 300,
@@ -170,36 +153,85 @@ export class Stack extends Emitter {
             },
             {
                 frame: 400,
-                value: 60 * (flipped ? -1 : 1)
+                value: Settings.AnimationOffset * (flipped ? -1 : 1)
             }
         ]
 
         animation.setKeys(keys)
 
-        box.animations = [animation]
-        box.animation = scene.beginAnimation(box, 0, 400, true)
+        layer.animations = [animation]
+        layer.animation = scene.beginAnimation(layer, 0, 400, true)
     }
 
-    makeBox() {
+    makeLayer() {
         let top = this.layers[this.layers.length - 1]
-        let boundingBox = top.getBoundingInfo().boundingBox
-        let box = MeshBuilder.CreateBox(uuid(), { height: 5, depth: boundingBox.extendSize.z * 2, width: boundingBox.extendSize.x * 2, subdivisions: 1 }, scene)
+        let { extendSize, centerWorld } = top.getBoundingInfo().boundingBox
+        let layer = MeshBuilder.CreateBox(
+            uuid(),
+            {
+                height: Settings.LayereHeight,
+                depth: extendSize.z * 2,
+                width: extendSize.x * 2,
+                subdivisions: 1
+            },
+            scene
+        )
 
-        box.position = boundingBox.centerWorld.clone()
-        box.position.y = (this.layers.length - 1) * 5
+        layer.position = centerWorld.clone()
+        layer.position.y = (this.layers.length - 1) * Settings.LayereHeight
 
-        box.material = new StandardMaterial(uuid(), scene)
-        box.material.diffuseColor = new Color3(Math.random(), Math.random(), Math.random())
-        box.physicsImpostor = new PhysicsImpostor(box, PhysicsImpostor.BoxImpostor, { mass: 0 })
+        layer.material = new StandardMaterial(uuid(), scene)
+        layer.material.diffuseColor = new Color3(Math.random(), Math.random(), Math.random())
+        layer.physicsImpostor = new PhysicsImpostor(layer, PhysicsImpostor.BoxImpostor, { mass: 0 })
 
-        this.layers.push(box)
-        this.animate(box)
+        this.layers.push(layer)
+        this.animate(layer)
 
-        raiseCamera(5)
+        raiseCamera(Settings.LayereHeight)
     }
 
-    getMass(mesh) {
-        let boundingBox = mesh.getBoundingInfo().boundingBox
+    makePillar() {
+        let pillar = MeshBuilder.CreateBox(
+            uuid(),
+            {
+                height: Settings.PillarHeight,
+                depth: Settings.LayerSize,
+                width: Settings.LayerSize,
+                subdivisions: 1
+            },
+            scene
+        )
+
+        pillar.position.y = -(Settings.PillarHeight / 2 + Settings.LayereHeight / 2)
+        pillar.physicsImpostor = new PhysicsImpostor(pillar, PhysicsImpostor.BoxImpostor, { mass: 0 })
+
+        pillar.computeWorldMatrix(true)
+
+        this.layers.push(pillar)
+    }
+
+    makeFirstLayer() {
+        let layer = MeshBuilder.CreateBox(
+            uuid(), 
+            { 
+                height: Settings.LayereHeight, 
+                depth: Settings.LayerSize, 
+                width: Settings.LayerSize,
+                subdivisions: 1 
+            },
+             scene
+        )
+
+        layer.position.y = 0
+        layer.physicsImpostor = new PhysicsImpostor(layer, PhysicsImpostor.BoxImpostor, { mass: 0 })
+
+        this.layers.push(layer)
+
+        this.animate(layer)
+    }
+
+    getMass(layer) {
+        let boundingBox = layer.getBoundingInfo().boundingBox
 
         return boundingBox.extendSize.z * boundingBox.extendSize.x * boundingBox.extendSize.y / 3
     }
