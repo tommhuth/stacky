@@ -1,4 +1,4 @@
-const score = document.querySelectorAll(".score")
+const scores = document.querySelectorAll(".score")
 const ui = document.querySelector(".ui-wrapper")
 const sections = document.querySelectorAll(".ui-section")
 
@@ -20,6 +20,6 @@ export function setReady() {
     ui.querySelector(".ready").classList.add("ui-section--active")
 }
 
-export function setScore({ stackSize }) {
-    score.forEach(i => i.innerText = stackSize)
+export function setScore({ score }) { 
+    scores.forEach(i => i.innerText = score)
 }

@@ -67,4 +67,31 @@ function raiseCamera(increment) {
     camera.animation = scene.beginAnimation(camera, 0, 100)
 }
 
-export { scene, raiseCamera }
+function lowerCamera() {
+    if (camera.animation) {
+        camera.animation.stop()
+    }
+
+    let animation = new Animation(uuid(), "position.y", 60, Animation.ANIMATIONTYPE_FLOAT, Animation.ANIMATIONLOOPMODE_CONSTANT)
+    let keys = [
+        {
+            frame: 0,
+            value: camera.position.y
+        },
+        {
+            frame: 100,
+            value: 45
+        }
+    ]
+    let ease = new SineEase()
+
+    ease.setEasingMode(EasingFunction.EASINGMODE_EASEINOUT)
+
+    animation.setEasingFunction(ease) 
+    animation.setKeys(keys)
+
+    camera.animations = [animation]
+    camera.animation = scene.beginAnimation(camera, 0, 100)
+}
+
+export { scene, raiseCamera, lowerCamera }

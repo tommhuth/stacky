@@ -23,12 +23,31 @@ body, html {
     padding: 0; 
 }
 
+* {
+    font: inherit;
+    color: inherit;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    background-color: transparent;
+    border: none; 
+    -webkit-tap-highlight-color: rgba(0, 0, 0, 0) !important;
+    -webkit-touch-callout: none;
+} 
+canvas {
+    width: 100vw !important;  
+    height: 100vh !important;
+    position: relative;
+    z-index: 2;
+}
 
 .click-to-start {
     white-space: nowrap;
     padding-top: 4px;
     padding-bottom: 4px;
     animation: start-in .7s 1.2s both;
+    width: 100%;
+    text-align: center;
 }
 
 
@@ -114,13 +133,13 @@ body, html {
 }
 
 .title {
-    font-size: 30vw;
+    font-size: 25vw;
     font-family: "Abril Fatface";
     text-transform: lowercase;
     text-shadow: 0 0 1.1em rgba(0,0,0, .2);
     color: #FFF;
-    margin-bottom: .5em;
-    margin-top: .5em;
+    margin-bottom: .1em;
+    margin-top: .1em;
 }
 
 @media (min-width: 70em) {
