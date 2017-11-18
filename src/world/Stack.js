@@ -96,16 +96,27 @@ export class Stack extends Emitter {
 
         let top = this.layers.pop()
         let previous = this.layers[this.layers.length - 1]
+        let distance = Vector3.Distance(top.position, new Vector3(previous.position.x, previous.position.y + 5, previous.position.z))
 
         top.animation.stop()
-        top.position.y -= 5
+        top.position.y -= 5 
 
         let a = CSG.FromMesh(top)
         let b = CSG.FromMesh(previous)
-        let intersection = a.intersect(b)
-        let subtraction = a.subtract(b)
 
-        if (subtraction.polygons.length) {
+        let intersection
+        let subtraction
+
+        if (distance <= .75) { 
+            console.log("bingo")
+            intersection = b.intersect(b)
+            subtraction = b.subtract(b)
+        } else {
+            intersection = a.intersect(b)
+            subtraction = a.subtract(b)
+        }
+
+        if (subtraction.polygons.length && distance > .75) {
             let leftover = subtraction.toMesh(uuid(), top.material, scene, false)
 
             leftover.position.y += 5
@@ -146,8 +157,16 @@ export class Stack extends Emitter {
                 value: 60 * (flipped ? -1 : 1)
             },
             {
+                frame: 100,
+                value: 0
+            },
+            {
                 frame: 200,
                 value: -60 * (flipped ? -1 : 1)
+            },
+            {
+                frame: 300,
+                value: 0
             },
             {
                 frame: 400,
