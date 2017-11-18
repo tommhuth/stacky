@@ -1,4 +1,5 @@
 import { Stack, StackState, StackEvent } from "./world/Stack"
+import { scene, engine } from "./world/scene"
 import { setScore, setReady, setEnded, setRunning } from "./ui"
 
 const stack = new Stack()
@@ -20,4 +21,9 @@ document.addEventListener("click", () => {
             stack.match()
             break
     }
-}) 
+})
+
+engine.runRenderLoop(() => {
+    stack.clean()
+    scene.render()
+})

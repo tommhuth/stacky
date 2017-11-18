@@ -9,7 +9,7 @@ const engine = new Engine(canvas, true, undefined, true)
 const scene = new Scene(engine)
 const camera = new FreeCamera(uuid(), new Vector3(-45, 45, -45), scene)
 const light = new HemisphericLight(uuid(), new Vector3(0, -1, 0), scene)
-const pointLight = new PointLight(uuid(), new Vector3(-55, -55, -10), scene)
+const pointLight = new PointLight(uuid(), new Vector3(-85, -55, -95), scene)
 
 scene.enablePhysics()
 scene.clearColor = new Color4(0, 0, 0, 0)
@@ -26,8 +26,6 @@ light.diffuse = new Color3(.5, .5, .5)
 light.intensity = .4;
 
 pointLight.intensity = .4
-
-engine.runRenderLoop(() => scene.render())
 
 window.addEventListener('resize', () => {
     const aspect = window.innerWidth / window.innerHeight
@@ -94,4 +92,4 @@ function lowerCamera() {
     camera.animation = scene.beginAnimation(camera, 0, 100)
 }
 
-export { scene, raiseCamera, lowerCamera }
+export { scene, engine, raiseCamera, lowerCamera }

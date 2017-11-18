@@ -98,7 +98,7 @@ export class Stack extends Emitter {
             // if has leftover cutoff
             let leftover = subtraction.toMesh(uuid(), top.material, scene, false)
 
-            // mesh has been lowered for intersection test, readjust
+            // mesh has been lowered for intersection test, readjust 
             leftover.position.y += Settings.LayereHeight
             leftover.physicsImpostor = new PhysicsImpostor(leftover, PhysicsImpostor.BoxImpostor, { mass: this.getMass(leftover) })
 
@@ -190,6 +190,26 @@ export class Stack extends Emitter {
         raiseCamera(Settings.LayereHeight)
     }
 
+    makeFirstLayer() {
+        let layer = MeshBuilder.CreateBox(
+            uuid(),
+            {
+                height: Settings.LayereHeight,
+                depth: Settings.LayerSize,
+                width: Settings.LayerSize,
+                subdivisions: 1
+            },
+            scene
+        )
+
+        layer.position.y = 0
+        layer.physicsImpostor = new PhysicsImpostor(layer, PhysicsImpostor.BoxImpostor, { mass: 0 })
+
+        this.layers.push(layer)
+
+        this.animate(layer)
+    }
+
     makePillar() {
         let pillar = MeshBuilder.CreateBox(
             uuid(),
@@ -210,29 +230,25 @@ export class Stack extends Emitter {
         this.layers.push(pillar)
     }
 
-    makeFirstLayer() {
-        let layer = MeshBuilder.CreateBox(
-            uuid(), 
-            { 
-                height: Settings.LayereHeight, 
-                depth: Settings.LayerSize, 
-                width: Settings.LayerSize,
-                subdivisions: 1 
-            },
-             scene
-        )
-
-        layer.position.y = 0
-        layer.physicsImpostor = new PhysicsImpostor(layer, PhysicsImpostor.BoxImpostor, { mass: 0 })
-
-        this.layers.push(layer)
-
-        this.animate(layer)
-    }
-
     getMass(layer) {
         let boundingBox = layer.getBoundingInfo().boundingBox
 
         return boundingBox.extendSize.z * boundingBox.extendSize.x * boundingBox.extendSize.y / 3
+    }
+
+    clean() {
+        let removed = []
+
+        for (let leftover of this.leftovers) {
+            if (leftover.position.y < -(Settings.PillarHeight * 2)) {
+                leftover.dispose()
+
+                removed.push(leftover)
+            }
+        }
+
+        if (removed.length) {
+            this.leftovers = this.leftovers.filter(i => !removed.includes(i))
+        }
     }
 }
