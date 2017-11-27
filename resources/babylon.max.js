@@ -18,8 +18,8 @@ var __extends = (this && this.__extends) || (function () {
 
 //# sourceMappingURL=babylon.types.js.map
 
+var BABYLON
 
-var BABYLON;
 (function (BABYLON) {
     var KeyboardEventTypes = /** @class */ (function () {
         function KeyboardEventTypes() {
@@ -70,7 +70,7 @@ var BABYLON;
 //# sourceMappingURL=babylon.keyboardEvents.js.map
 
 
-var BABYLON;
+
 (function (BABYLON) {
     var PointerEventTypes = /** @class */ (function () {
         function PointerEventTypes() {
@@ -175,7 +175,7 @@ var BABYLON;
 
 //# sourceMappingURL=babylon.pointerEvents.js.map
 
-var BABYLON;
+
 (function (BABYLON) {
     BABYLON.ToGammaSpace = 1 / 2.2;
     BABYLON.ToLinearSpace = 2.2;
@@ -4916,7 +4916,7 @@ var BABYLON;
 
 //# sourceMappingURL=babylon.math.js.map
 
-var BABYLON;
+
 (function (BABYLON) {
     var Scalar = /** @class */ (function () {
         function Scalar() {
@@ -5149,7 +5149,7 @@ var BABYLON;
 
 //# sourceMappingURL=babylon.mixins.js.map
 
-var BABYLON;
+
 (function (BABYLON) {
     var __decoratorInitialStore = {};
     var __mergedStore = {};
@@ -5436,7 +5436,7 @@ var BABYLON;
 
 //# sourceMappingURL=babylon.decorators.js.map
 
-var BABYLON;
+
 (function (BABYLON) {
     /**
      * A class serves as a medium between the observable and its observers
@@ -5663,7 +5663,7 @@ var BABYLON;
 //# sourceMappingURL=babylon.observable.js.map
 
 
-var BABYLON;
+
 (function (BABYLON) {
     var SmartArray = /** @class */ (function () {
         function SmartArray(capacity) {
@@ -5765,7 +5765,7 @@ var BABYLON;
 
 //# sourceMappingURL=babylon.smartArray.js.map
 
-var BABYLON;
+
 (function (BABYLON) {
     // Screenshots
     var screenshotCanvas;
@@ -7212,7 +7212,7 @@ var BABYLON;
 
 //# sourceMappingURL=babylon.tools.js.map
 
-var BABYLON;
+
 (function (BABYLON) {
     var Internals;
     (function (Internals) {
@@ -7342,7 +7342,7 @@ var BABYLON;
 
 //# sourceMappingURL=babylon.alphaCullingState.js.map
 
-var BABYLON;
+
 (function (BABYLON) {
     var Internals;
     (function (Internals) {
@@ -7523,7 +7523,7 @@ var BABYLON;
 
 //# sourceMappingURL=babylon.depthCullingState.js.map
 
-var BABYLON;
+
 (function (BABYLON) {
     var Internals;
     (function (Internals) {
@@ -7706,7 +7706,7 @@ var BABYLON;
 
 //# sourceMappingURL=babylon.stencilState.js.map
 
-var BABYLON;
+
 (function (BABYLON) {
     var compileShader = function (gl, source, type, defines, shaderVersion) {
         return compileRawShader(gl, shaderVersion + (defines ? defines + "\n" : "") + source, type);
@@ -12315,7 +12315,7 @@ var BABYLON;
 //# sourceMappingURL=babylon.engine.js.map
 
 
-var BABYLON;
+
 (function (BABYLON) {
     /**
      * Node is the basic class for all scene objects (Mesh, Light Camera).
@@ -12704,7 +12704,7 @@ var BABYLON;
 
 //# sourceMappingURL=babylon.node.js.map
 
-var BABYLON;
+
 (function (BABYLON) {
     var BoundingSphere = /** @class */ (function () {
         function BoundingSphere(minimum, maximum) {
@@ -12756,7 +12756,7 @@ var BABYLON;
 
 //# sourceMappingURL=babylon.boundingSphere.js.map
 
-var BABYLON;
+
 (function (BABYLON) {
     var BoundingBox = /** @class */ (function () {
         function BoundingBox(minimum, maximum) {
@@ -12907,7 +12907,7 @@ var BABYLON;
 
 //# sourceMappingURL=babylon.boundingBox.js.map
 
-var BABYLON;
+
 (function (BABYLON) {
     var computeBoxExtents = function (axis, box) {
         var p = BABYLON.Vector3.Dot(box.centerWorld, axis);
@@ -13055,7 +13055,7 @@ var BABYLON;
 
 
 
-var BABYLON;
+
 (function (BABYLON) {
     var TransformNode = /** @class */ (function (_super) {
         __extends(TransformNode, _super);
@@ -13942,7 +13942,7 @@ var BABYLON;
 //# sourceMappingURL=babylon.transformNode.js.map
 
 
-var BABYLON;
+
 (function (BABYLON) {
     var AbstractMesh = /** @class */ (function (_super) {
         __extends(AbstractMesh, _super);
@@ -15676,7 +15676,7 @@ var BABYLON;
 
 
 
-var BABYLON;
+
 (function (BABYLON) {
     var Light = /** @class */ (function (_super) {
         __extends(Light, _super);
@@ -16362,7 +16362,7 @@ var BABYLON;
 
 
 
-var BABYLON;
+
 (function (BABYLON) {
     var Camera = /** @class */ (function (_super) {
         __extends(Camera, _super);
@@ -17223,7 +17223,7 @@ var BABYLON;
 
 //# sourceMappingURL=babylon.camera.js.map
 
-var BABYLON;
+
 (function (BABYLON) {
     var RenderingManager = /** @class */ (function () {
         function RenderingManager(scene) {
@@ -17401,7 +17401,7 @@ var BABYLON;
 
 //# sourceMappingURL=babylon.renderingManager.js.map
 
-var BABYLON;
+
 (function (BABYLON) {
     var RenderingGroup = /** @class */ (function () {
         /**
@@ -17755,7 +17755,7 @@ var BABYLON;
 
 //# sourceMappingURL=babylon.renderingGroup.js.map
 
-var BABYLON;
+
 (function (BABYLON) {
     var ClickInfo = /** @class */ (function () {
         function ClickInfo() {
@@ -21644,7 +21644,7 @@ var BABYLON;
 
 //# sourceMappingURL=babylon.scene.js.map
 
-var BABYLON;
+
 (function (BABYLON) {
     var Buffer = /** @class */ (function () {
         function Buffer(engine, data, updatable, stride, postponeInternalCreation, instanced) {
@@ -21755,7 +21755,7 @@ var BABYLON;
 
 //# sourceMappingURL=babylon.buffer.js.map
 
-var BABYLON;
+
 (function (BABYLON) {
     var VertexBuffer = /** @class */ (function () {
         function VertexBuffer(engine, data, kind, updatable, postponeInternalCreation, stride, instanced, offset, size) {
@@ -22018,7 +22018,7 @@ var BABYLON;
 
 //# sourceMappingURL=babylon.vertexBuffer.js.map
 
-var BABYLON;
+
 (function (BABYLON) {
     var InternalTexture = /** @class */ (function () {
         function InternalTexture(engine, dataSource) {
@@ -22184,7 +22184,7 @@ var BABYLON;
 //# sourceMappingURL=babylon.internalTexture.js.map
 
 
-var BABYLON;
+
 (function (BABYLON) {
     var BaseTexture = /** @class */ (function () {
         function BaseTexture(scene) {
@@ -22575,7 +22575,7 @@ var BABYLON;
 
 
 
-var BABYLON;
+
 (function (BABYLON) {
     var Texture = /** @class */ (function (_super) {
         __extends(Texture, _super);
@@ -23028,7 +23028,7 @@ var BABYLON;
 //# sourceMappingURL=babylon.texture.js.map
 
 
-var BABYLON;
+
 (function (BABYLON) {
     var _InstancesBatch = /** @class */ (function () {
         function _InstancesBatch() {
@@ -25968,7 +25968,7 @@ var BABYLON;
 //# sourceMappingURL=babylon.mesh.js.map
 
 
-var BABYLON;
+
 (function (BABYLON) {
     var BaseSubMesh = /** @class */ (function () {
         function BaseSubMesh() {
@@ -26288,7 +26288,7 @@ var BABYLON;
 
 //# sourceMappingURL=babylon.subMesh.js.map
 
-var BABYLON;
+
 (function (BABYLON) {
     var EffectFallbacks = /** @class */ (function () {
         function EffectFallbacks() {
@@ -27098,7 +27098,7 @@ var BABYLON;
 
 //# sourceMappingURL=babylon.effect.js.map
 
-var BABYLON;
+
 (function (BABYLON) {
     var MaterialHelper = /** @class */ (function () {
         function MaterialHelper() {
@@ -27492,7 +27492,7 @@ var __assign = (this && this.__assign) || Object.assign || function(t) {
     return t;
 };
 
-var BABYLON;
+
 (function (BABYLON) {
     var MaterialDefines = /** @class */ (function () {
         function MaterialDefines() {
@@ -28242,7 +28242,7 @@ var BABYLON;
 
 //# sourceMappingURL=babylon.material.js.map
 
-var BABYLON;
+
 (function (BABYLON) {
     var UniformBuffer = /** @class */ (function () {
         /**
@@ -28719,7 +28719,7 @@ var BABYLON;
 //# sourceMappingURL=babylon.uniformBuffer.js.map
 
 
-var BABYLON;
+
 (function (BABYLON) {
     var PushMaterial = /** @class */ (function (_super) {
         __extends(PushMaterial, _super);
@@ -28765,7 +28765,7 @@ var BABYLON;
 
 //# sourceMappingURL=babylon.pushMaterial.js.map
 
-var BABYLON;
+
 (function (BABYLON) {
     var VertexData = /** @class */ (function () {
         function VertexData() {
@@ -30980,7 +30980,7 @@ var BABYLON;
 //# sourceMappingURL=babylon.mesh.vertexData.js.map
 
 
-var BABYLON;
+
 (function (BABYLON) {
     var Geometry = /** @class */ (function () {
         function Geometry(id, scene, vertexData, updatable, mesh) {
@@ -32374,7 +32374,7 @@ var BABYLON;
 
 //# sourceMappingURL=babylon.geometry.js.map
 
-var BABYLON;
+
 (function (BABYLON) {
     var PostProcessManager = /** @class */ (function () {
         function PostProcessManager(scene) {
@@ -32524,7 +32524,7 @@ var BABYLON;
 
 //# sourceMappingURL=babylon.postProcessManager.js.map
 
-var BABYLON;
+
 (function (BABYLON) {
     /**
      * Performance monitor tracks rolling average frame-time and frame-time variance over a user defined sliding-window
@@ -32749,7 +32749,7 @@ var BABYLON;
 //# sourceMappingURL=babylon.performanceMonitor.js.map
 
 
-var BABYLON;
+
 (function (BABYLON) {
     /**
      * This groups together the common properties used for image processing either in direct forward pass
@@ -33260,7 +33260,7 @@ var BABYLON;
 //# sourceMappingURL=babylon.imageProcessingConfiguration.js.map
 
 
-var BABYLON;
+
 (function (BABYLON) {
     /**
      * This represents a color grading texture. This acts as a lookup table LUT, useful during post process
@@ -33467,7 +33467,7 @@ var BABYLON;
 //# sourceMappingURL=babylon.colorGradingTexture.js.map
 
 
-var BABYLON;
+
 (function (BABYLON) {
     /**
      * The color grading curves provide additional color adjustmnent that is applied after any color grading transform (3D LUT).
@@ -34018,7 +34018,7 @@ var BABYLON;
 //# sourceMappingURL=babylon.colorCurves.js.map
 
 
-var BABYLON;
+
 (function (BABYLON) {
     var ShaderMaterial = /** @class */ (function (_super) {
         __extends(ShaderMaterial, _super);
@@ -34553,7 +34553,7 @@ var BABYLON;
 
 //# sourceMappingURL=babylon.shaderMaterial.js.map
 
-var BABYLON;
+
 (function (BABYLON) {
     var MeshBuilder = /** @class */ (function () {
         function MeshBuilder() {
@@ -35771,7 +35771,7 @@ var BABYLON;
 
 
 
-var BABYLON;
+
 (function (BABYLON) {
     var StandardMaterialDefines = /** @class */ (function (_super) {
         __extends(StandardMaterialDefines, _super);
@@ -37229,7 +37229,7 @@ var BABYLON;
 
 //# sourceMappingURL=babylon.standardMaterial.js.map
 
-var BABYLON;
+
 (function (BABYLON) {
     BABYLON.CameraInputTypes = {};
     var CameraInputsManager = /** @class */ (function () {
@@ -37373,7 +37373,7 @@ var BABYLON;
 //# sourceMappingURL=babylon.cameraInputsManager.js.map
 
 
-var BABYLON;
+
 (function (BABYLON) {
     var FreeCameraMouseInput = /** @class */ (function () {
         function FreeCameraMouseInput(touchEnabled) {
@@ -37506,7 +37506,7 @@ var BABYLON;
 //# sourceMappingURL=babylon.freeCameraMouseInput.js.map
 
 
-var BABYLON;
+
 (function (BABYLON) {
     var FreeCameraKeyboardMoveInput = /** @class */ (function () {
         function FreeCameraKeyboardMoveInput() {
@@ -37629,7 +37629,7 @@ var BABYLON;
 //# sourceMappingURL=babylon.freeCameraKeyboardMoveInput.js.map
 
 
-var BABYLON;
+
 (function (BABYLON) {
     var FreeCameraInputsManager = /** @class */ (function (_super) {
         __extends(FreeCameraInputsManager, _super);
@@ -37674,7 +37674,7 @@ var BABYLON;
 
 
 
-var BABYLON;
+
 (function (BABYLON) {
     var TargetCamera = /** @class */ (function (_super) {
         __extends(TargetCamera, _super);
@@ -37992,7 +37992,7 @@ var BABYLON;
 
 
 
-var BABYLON;
+
 (function (BABYLON) {
     var FreeCamera = /** @class */ (function (_super) {
         __extends(FreeCamera, _super);
@@ -38194,7 +38194,7 @@ var BABYLON;
 
 
 
-var BABYLON;
+
 (function (BABYLON) {
     var ShadowLight = /** @class */ (function (_super) {
         __extends(ShadowLight, _super);
@@ -38370,7 +38370,7 @@ var BABYLON;
 
 
 
-var BABYLON;
+
 (function (BABYLON) {
     var DirectionalLight = /** @class */ (function (_super) {
         __extends(DirectionalLight, _super);
@@ -38554,7 +38554,7 @@ var BABYLON;
 //# sourceMappingURL=babylon.directionalLight.js.map
 
 
-var BABYLON;
+
 (function (BABYLON) {
     /**
      * This is a holder class for the physics joint created by the physics plugin.
@@ -38720,7 +38720,7 @@ var BABYLON;
 
 //# sourceMappingURL=babylon.physicsJoint.js.map
 
-var BABYLON;
+
 (function (BABYLON) {
     var PhysicsImpostor = /** @class */ (function () {
         function PhysicsImpostor(object, type, _options, _scene) {
@@ -39329,7 +39329,7 @@ var BABYLON;
 
 //# sourceMappingURL=babylon.physicsImpostor.js.map
 
-var BABYLON;
+
 (function (BABYLON) {
     var PhysicsEngine = /** @class */ (function () {
         function PhysicsEngine(gravity, _physicsPlugin) {
@@ -39481,7 +39481,7 @@ var BABYLON;
 
 //# sourceMappingURL=babylon.physicsEngine.js.map
 
-var BABYLON;
+
 (function (BABYLON) {
     /**
      * The strenght of the force in correspondence to the distance of the affected object
@@ -39877,7 +39877,7 @@ var BABYLON;
 
 //# sourceMappingURL=babylon.physicsHelper.js.map
 
-var BABYLON;
+
 (function (BABYLON) {
     var CannonJSPlugin = /** @class */ (function () {
         function CannonJSPlugin(_useDeltaForWorldStep, iterations) {
@@ -40392,7 +40392,7 @@ var BABYLON;
 
 //# sourceMappingURL=babylon.cannonJSPlugin.js.map
 
-var BABYLON;
+
 (function (BABYLON) {
     var OimoJSPlugin = /** @class */ (function () {
         function OimoJSPlugin(iterations) {
@@ -40779,7 +40779,7 @@ var BABYLON;
 
 //# sourceMappingURL=babylon.oimoJSPlugin.js.map
 
-var BABYLON;
+
 (function (BABYLON) {
     // Unique ID when we import meshes from Babylon to CSG
     var currentCSGMeshId = 0;
@@ -41292,7 +41292,7 @@ var BABYLON;
 
 //# sourceMappingURL=babylon.csg.js.map
 
-var BABYLON;
+
 (function (BABYLON) {
     var AnimationRange = /** @class */ (function () {
         function AnimationRange(name, from, to) {
@@ -41863,7 +41863,7 @@ var BABYLON;
 
 //# sourceMappingURL=babylon.animation.js.map
 
-var BABYLON;
+
 (function (BABYLON) {
     var RuntimeAnimation = /** @class */ (function () {
         function RuntimeAnimation(target, animation) {
@@ -42226,7 +42226,7 @@ var BABYLON;
 
 //# sourceMappingURL=babylon.runtimeAnimation.js.map
 
-var BABYLON;
+
 (function (BABYLON) {
     var Animatable = /** @class */ (function () {
         function Animatable(scene, target, fromFrame, toFrame, loopAnimation, speedRatio, onAnimationEnd, animations) {
@@ -42422,7 +42422,7 @@ var BABYLON;
 //# sourceMappingURL=babylon.animatable.js.map
 
 
-var BABYLON;
+
 (function (BABYLON) {
     var EasingFunction = /** @class */ (function () {
         function EasingFunction() {
@@ -42675,7 +42675,7 @@ var BABYLON;
 
 //# sourceMappingURL=babylon.easing.js.map
 
-var BABYLON;
+
 (function (BABYLON) {
     var IntersectionInfo = /** @class */ (function () {
         function IntersectionInfo(bu, bv, distance) {
@@ -42763,7 +42763,7 @@ var BABYLON;
 
 //# sourceMappingURL=babylon.pickingInfo.js.map
 
-var BABYLON;
+
 (function (BABYLON) {
     var Ray = /** @class */ (function () {
         function Ray(origin, direction, length) {
