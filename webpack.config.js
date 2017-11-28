@@ -50,7 +50,6 @@ module.exports = {
         resolve: {
             modules: [
                 path.resolve("./src"),
-                path.resolve("./resources"),
                 path.resolve("./node_modules")
             ] 
         }

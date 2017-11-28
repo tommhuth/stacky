@@ -40392,9 +40392,7 @@ var __assign = (this && this.__assign) || Object.assign || function(t) {
 
 //# sourceMappingURL=babylon.cannonJSPlugin.js.map
 
- 
-
-//# sourceMappingURL=babylon.oimoJSPlugin.js.map
+  
 
 
 (function (BABYLON) {

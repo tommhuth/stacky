@@ -13,8 +13,7 @@
     "serve": "superstatic public --port 3000 --host localhost",
     "run": "npm run build & npm run serve",
     "test": "jest tests/ --watchAll src/",
-    "postinstall": "webpack",
-    "ngrok": "ngrok http localhost:3000"
+    "postinstall": "webpack"
   },
   "repository": {
     "type": "git",
@@ -36,20 +35,21 @@
     "babel-plugin-transform-object-rest-spread": "^6.26.0",
     "babel-polyfill": "^6.26.0",
     "babel-preset-env": "^1.6.0",
-    "circular-dependency-plugin": "^4.2.1",
     "compression": "^1.7.1",
     "detect-it": "^3.0.3",
     "express": "^4.16.1",
     "jest": "^21.2.1",
-    "ngrok": "^2.2.22",
     "pug": "^2.0.0-rc.4",
     "regenerator-runtime": "^0.11.0",
     "serve-static": "^1.13.1",
-    "superstatic": "^5.0.1",
     "uuid": "^3.1.0",
     "webpack": "^3.8.1"
   },
-  "devDependencies": {},
+  "devDependencies": {
+    "superstatic": "^5.0.1",
+    "circular-dependency-plugin": "^4.2.1",
+    "ngrok": "^2.2.22"
+  },
   "jest": {
     "transform": {
       "^.+\\.jsx?$": "babel-jest"
