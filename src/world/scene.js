@@ -1,4 +1,4 @@
-import { Engine, FreeCamera, Animation, Scene, DirectionalLight, Vector3, Camera, Color3, Color4, SineEase, EasingFunction } from "../babylon.max"
+import { Engine, FreeCamera, Animation, Scene, DirectionalLight, Vector3, Camera, Color3, Color4, SineEase, EasingFunction } from "babylonjs"
 import uuid from "uuid/v1"
 
 const frustumSize = 100

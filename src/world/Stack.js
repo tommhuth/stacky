@@ -1,5 +1,5 @@
 import Emitter from "../utils/Emitter"
-import { Vector3, Animation, MeshBuilder, CSG, PhysicsImpostor, StandardMaterial, Color3 } from "../babylon.max"
+import { Vector3, Animation, MeshBuilder, CSG, PhysicsImpostor, StandardMaterial, Color3 } from "babylonjs"
 import { scene, raiseCamera, lowerCamera } from "./scene"
 import uuid from "uuid/v1"
 

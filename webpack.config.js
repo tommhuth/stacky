@@ -49,8 +49,12 @@ module.exports = {
         },
         resolve: {
             modules: [
-                path.resolve("./src"),
-                path.resolve("./node_modules")
-            ] 
+                path.resolve("./src"), 
+                path.resolve("./node_modules"),
+                path.resolve("./resources")
+            ],
+            alias: {
+                babylonjs$: process.env.NODE_ENV === "production" ? path.resolve("./resources/babylon.custom") : "babylonjs"
+            } 
         }
     } 
