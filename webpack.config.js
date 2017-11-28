@@ -50,10 +50,8 @@ module.exports = {
         resolve: {
             modules: [
                 path.resolve("./src"),
+                path.resolve("./resources"),
                 path.resolve("./node_modules")
-            ],
-            alias: { 
-                babylonjs$: process.env.NODE_ENV === "production" ?   'resources/babylon.max.js'  : "babylonjs"
-            }
+            ] 
         }
     } 

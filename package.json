@@ -36,7 +36,6 @@
     "babel-plugin-transform-object-rest-spread": "^6.26.0",
     "babel-polyfill": "^6.26.0",
     "babel-preset-env": "^1.6.0",
-    "babylonjs": "^3.1.0-beta6",
     "circular-dependency-plugin": "^4.2.1",
     "compression": "^1.7.1",
     "detect-it": "^3.0.3",
@@ -48,7 +47,7 @@
     "serve-static": "^1.13.1",
     "superstatic": "^5.0.1",
     "uuid": "^3.1.0",
-    "webpack": "^3.6.0"
+    "webpack": "^3.8.1"
   },
   "devDependencies": {},
   "jest": {
