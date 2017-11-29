@@ -8,7 +8,7 @@ const Settings = {
     PillarHeight: 80,
     LayereHeight: 8,
     LayerSize: 35,
-    AnimationOffset: 65,
+    AnimationOffset: 45,
     ClosenessLeniency: .75
 }
 
@@ -74,7 +74,7 @@ export class Stack extends Emitter {
 
         let top = this.layers.pop()
         let previous = this.layers[this.layers.length - 1]
-        let distance = Vector3.Distance(top.position, new Vector3(previous.position.x, previous.position.y + 5, previous.position.z))
+        let distance = Vector3.Distance(top.position, new Vector3(previous.position.x, previous.position.y + Settings.LayereHeight, previous.position.z))
 
         top.animation.stop()
         top.position.y -= Settings.LayereHeight
@@ -140,19 +140,19 @@ export class Stack extends Emitter {
                 value: Settings.AnimationOffset * (flipped ? -1 : 1)
             },
             {
+                frame: 50,
+                value: 0
+            },
+            {
                 frame: 100,
+                value: -Settings.AnimationOffset * (flipped ? -1 : 1)
+            },
+            {
+                frame: 150,
                 value: 0
             },
             {
                 frame: 200,
-                value: -Settings.AnimationOffset * (flipped ? -1 : 1)
-            },
-            {
-                frame: 300,
-                value: 0
-            },
-            {
-                frame: 400,
                 value: Settings.AnimationOffset * (flipped ? -1 : 1)
             }
         ]
@@ -160,7 +160,7 @@ export class Stack extends Emitter {
         animation.setKeys(keys)
 
         layer.animations = [animation]
-        layer.animation = scene.beginAnimation(layer, 0, 400, true)
+        layer.animation = scene.beginAnimation(layer, 0, 200, true)
     }
 
     makeLayer() {
