@@ -80,10 +80,10 @@ function lowerCamera(layerCount, totalMass) {
     const gravitationalFieldEvent = physicsHelper.gravitationalField(
         // position 5 leves above top layer
         new Vector3(0, (layerCount + 5) * StackSettings.LayereHeight, 0),
-        // let it reach 15 leves down  
-        StackSettings.LayereHeight * 15,  
-        // base force on totalmass from last 5 layers
-        totalMass * 3,
+        // let it reach 18 leves down  
+        StackSettings.LayereHeight * 18,  
+        // base force on totalmass 
+        totalMass,
         PhysicsRadialImpulseFalloff.Linear
     )
 
@@ -110,7 +110,7 @@ function lowerCamera(layerCount, totalMass) {
     gravitationalFieldEvent.enable()
 
     setTimeout(() => camera.animation = scene.beginAnimation(camera, 0, 100), 250)
-    setTimeout(() => gravitationalFieldEvent.disable(), 250)
+    setTimeout(() => gravitationalFieldEvent.disable(), 150)
 }
 
 export { scene, engine, raiseCamera, lowerCamera }

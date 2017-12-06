@@ -145,7 +145,7 @@ export class Stack extends Emitter {
         }
 
         // only use mass from the 5 topmost layers 
-        for (let i = this.layers.length - 1; i > Math.max(this.layers.length - 5, 0); i--) { 
+        for (let i = this.layers.length - 1; i > Math.max(this.layers.length - 13, 0); i--) { 
             totalMass += this.layers[i].physicsImpostor.mass 
         }
 
