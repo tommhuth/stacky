@@ -9,7 +9,7 @@ stack.on(StackEvent.Ready, setReady)
 stack.on(StackEvent.Ended, setEnded)
 stack.on(StackEvent.Running, setRunning)
 
-document.addEventListener("click", () => {
+function eventHandler() {
     switch (stack.state) {
         case StackState.Ended:
             stack.restart()
@@ -21,6 +21,12 @@ document.addEventListener("click", () => {
             stack.match()
             break
     }
+}
+
+document.addEventListener("click", eventHandler)
+document.addEventListener("touchstart", (e) => {
+    e.preventDefault()
+    eventHandler()
 })
 
 engine.runRenderLoop(() => {

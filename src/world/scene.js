@@ -1,4 +1,7 @@
-import { Engine, FreeCamera, Animation, Scene, DirectionalLight, Vector3, Camera, Color3, Color4, SineEase, EasingFunction } from "babylonjs"
+import { CannonJSPlugin, PhysicsRadialImpulseFalloff, PhysicsHelper } from "babylonjs"
+import { Engine, FreeCamera, Scene, DirectionalLight, Vector3, Camera, Color4 } from "babylonjs"
+import { Animation, SineEase, EasingFunction } from "babylonjs"
+import { Settings as StackSettings } from "./Stack"
 import uuid from "uuid/v1"
 
 const frustumSize = 100
@@ -16,6 +19,8 @@ scene.enablePhysics()
 scene.clearColor = new Color4(0, 0, 0, 0)
 
 camera.mode = Camera.ORTHOGRAPHIC_CAMERA
+camera.maxZ = 1000
+camera.minZ = -1000
 camera.orthoTop = frustumSize / 2
 camera.orthoBottom = frustumSize / - 2
 camera.orthoLeft = frustumSize * aspect / - 2
@@ -64,15 +69,24 @@ function raiseCamera(increment) {
     camera.animation = scene.beginAnimation(camera, 0, 100, false, 2)
 }
 
-function lowerCamera() {
+function lowerCamera(layerCount) {
     if (camera.animation) {
         camera.animation.stop()
     }
 
     cameraHeight = 45
 
-    let animation = new Animation(uuid(), "position.y", 60, Animation.ANIMATIONTYPE_FLOAT, Animation.ANIMATIONLOOPMODE_CONSTANT)
-    let keys = [
+    const physicsHelper = new PhysicsHelper(scene)
+    const gravitationalFieldEvent = physicsHelper.gravitationalField(
+        new Vector3(0, layerCount * StackSettings.LayereHeight, 0),
+        StackSettings.LayereHeight * Math.min(15, layerCount),
+        Math.min(15, layerCount) * 100,
+        PhysicsRadialImpulseFalloff.Linear
+    )
+
+    const ease = new SineEase()
+    const animation = new Animation(uuid(), "position.y", 60, Animation.ANIMATIONTYPE_FLOAT, Animation.ANIMATIONLOOPMODE_CONSTANT)
+    const keys = [
         {
             frame: 0,
             value: camera.position.y
@@ -82,7 +96,6 @@ function lowerCamera() {
             value: cameraHeight
         }
     ]
-    let ease = new SineEase()
 
     ease.setEasingMode(EasingFunction.EASINGMODE_EASEINOUT)
 
@@ -90,7 +103,11 @@ function lowerCamera() {
     animation.setKeys(keys)
 
     camera.animations = [animation]
-    camera.animation = scene.beginAnimation(camera, 0, 100)
+
+    gravitationalFieldEvent.enable()
+
+    setTimeout(() => camera.animation = scene.beginAnimation(camera, 0, 100), 250)
+    setTimeout(() => gravitationalFieldEvent.disable(), 250)
 }
 
 export { scene, engine, raiseCamera, lowerCamera }

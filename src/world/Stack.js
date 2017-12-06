@@ -3,7 +3,7 @@ import { Vector3, Animation, MeshBuilder, CSG, PhysicsImpostor, StandardMaterial
 import { scene, raiseCamera, lowerCamera } from "./scene"
 import uuid from "uuid/v1"
 
-const Settings = {
+export const Settings = {
     Colors: ["red", "green", "blue", "purple"],
     PillarHeight: 80,
     LayereHeight: 8,
@@ -74,7 +74,10 @@ export class Stack extends Emitter {
 
         let top = this.layers.pop()
         let previous = this.layers[this.layers.length - 1]
-        let distance = Vector3.Distance(top.position, new Vector3(previous.position.x, previous.position.y + Settings.LayereHeight, previous.position.z))
+        let distance = Vector3.Distance(
+            top.position,
+            new Vector3(previous.position.x, previous.position.y + Settings.LayereHeight, previous.position.z)
+        )
 
         top.animation.stop()
         top.position.y -= Settings.LayereHeight
@@ -89,16 +92,19 @@ export class Stack extends Emitter {
             // count as hit in middle
             intersection = b.intersect(b)
             subtraction = b.subtract(b)
+
+            console.info("bam")
         } else {
             intersection = a.intersect(b)
             subtraction = a.subtract(b)
         }
 
-        if (subtraction.polygons.length && distance > .75) {
+        if (subtraction.polygons.length && distance >= .5) {
             // if has leftover cutoff
             let leftover = subtraction.toMesh(uuid(), top.material, scene, false)
 
             // mesh has been lowered for intersection test, readjust 
+            leftover.convertToFlatShadedMesh()
             leftover.position.y += Settings.LayereHeight
             leftover.physicsImpostor = new PhysicsImpostor(leftover, PhysicsImpostor.BoxImpostor, { mass: this.getMass(leftover) })
 
@@ -110,6 +116,7 @@ export class Stack extends Emitter {
             let layer = intersection.toMesh(uuid(), top.material, scene, false)
 
             // mesh has been lowered for intersection test, readjust
+            layer.convertToFlatShadedMesh()
             layer.position.y += Settings.LayereHeight
             layer.physicsImpostor = new PhysicsImpostor(layer, PhysicsImpostor.BoxImpostor, { mass: 0 })
 
@@ -119,13 +126,25 @@ export class Stack extends Emitter {
             this.makeLayer()
         } else {
             // game over!
-            this.state = StackState.Ended
-
-            this.broadcast(StackEvent.Ended)
-            lowerCamera()
+            this.gameOver()
         }
 
         top.dispose()
+    }
+
+    gameOver() {
+        for (let i = 0; i < this.layers.length; i++) {
+            if (i > 0) {
+                let layer = this.layers[i]
+
+                layer.physicsImpostor.setMass(Math.max(this.getMass(layer), 25))
+            }
+        }
+
+        this.state = StackState.Ended
+        this.broadcast(StackEvent.Ended)
+
+        lowerCamera(this.layers.length)
     }
 
     animate(layer) {
@@ -177,6 +196,7 @@ export class Stack extends Emitter {
             scene
         )
 
+        layer.convertToFlatShadedMesh()
         layer.position = centerWorld.clone()
         layer.position.y = (this.layers.length - 1) * Settings.LayereHeight
 
@@ -202,6 +222,7 @@ export class Stack extends Emitter {
             scene
         )
 
+        layer.convertToFlatShadedMesh()
         layer.position.y = 0
         layer.physicsImpostor = new PhysicsImpostor(layer, PhysicsImpostor.BoxImpostor, { mass: 0 })
 
@@ -222,10 +243,9 @@ export class Stack extends Emitter {
             scene
         )
 
+        pillar.convertToFlatShadedMesh()
         pillar.position.y = -(Settings.PillarHeight / 2 + Settings.LayereHeight / 2)
         pillar.physicsImpostor = new PhysicsImpostor(pillar, PhysicsImpostor.BoxImpostor, { mass: 0 })
-
-        pillar.computeWorldMatrix(true)
 
         this.layers.push(pillar)
     }
