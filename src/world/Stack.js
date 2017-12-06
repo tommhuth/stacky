@@ -5,11 +5,11 @@ import uuid from "uuid/v1"
 
 export const Settings = {
     Colors: ["red", "green", "blue", "purple"],
-    PillarHeight: 80,
-    LayereHeight: 8,
-    LayerSize: 35,
-    AnimationOffset: 45,
-    ClosenessLeniency: .75
+    PillarHeight: 20,
+    LayereHeight: 1,
+    LayerSize: 5,
+    AnimationOffset: 10,
+    ClosenessLeniency: .1
 }
 
 export const StackEvent = {
@@ -99,7 +99,7 @@ export class Stack extends Emitter {
             subtraction = a.subtract(b)
         }
 
-        if (subtraction.polygons.length && distance >= .5) {
+        if (subtraction.polygons.length) {
             // if has leftover cutoff
             let leftover = subtraction.toMesh(uuid(), top.material, scene, false)
 
@@ -133,18 +133,26 @@ export class Stack extends Emitter {
     }
 
     gameOver() {
+        let totalMass = 0
+
         for (let i = 0; i < this.layers.length; i++) {
             if (i > 0) {
                 let layer = this.layers[i]
+                let mass = this.getMass(layer) 
 
-                layer.physicsImpostor.setMass(Math.max(this.getMass(layer), 25))
+                layer.physicsImpostor.setMass(mass)
             }
+        }
+
+        // only use mass from the 5 topmost layers 
+        for (let i = this.layers.length - 1; i > Math.max(this.layers.length - 5, 0); i--) { 
+            totalMass += this.layers[i].physicsImpostor.mass 
         }
 
         this.state = StackState.Ended
         this.broadcast(StackEvent.Ended)
 
-        lowerCamera(this.layers.length)
+        lowerCamera(this.layers.length, totalMass)
     }
 
     animate(layer) {
@@ -179,7 +187,7 @@ export class Stack extends Emitter {
         animation.setKeys(keys)
 
         layer.animations = [animation]
-        layer.animation = scene.beginAnimation(layer, 0, 200, true)
+        layer.animation = scene.beginAnimation(layer, 0, 200, true, .9)
     }
 
     makeLayer() {
@@ -253,7 +261,7 @@ export class Stack extends Emitter {
     getMass(layer) {
         let boundingBox = layer.getBoundingInfo().boundingBox
 
-        return boundingBox.extendSize.z * boundingBox.extendSize.x * boundingBox.extendSize.y / 3
+        return Math.min(10, boundingBox.extendSize.z * boundingBox.extendSize.x * boundingBox.extendSize.y)
     }
 
     clean() {

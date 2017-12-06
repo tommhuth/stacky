@@ -4,13 +4,13 @@ import { Animation, SineEase, EasingFunction } from "babylonjs"
 import { Settings as StackSettings } from "./Stack"
 import uuid from "uuid/v1"
 
-const frustumSize = 100
+const frustumSize = 13
 const aspect = window.innerWidth / window.innerHeight
 
 const canvas = document.getElementById("app")
 const engine = new Engine(canvas, true, undefined, true)
 const scene = new Scene(engine)
-const camera = new FreeCamera(uuid(), new Vector3(-45, 45, -45), scene)
+const camera = new FreeCamera(uuid(), new Vector3(-15, 15, -15), scene)
 const light = new DirectionalLight(uuid(), new Vector3(.2, -.81, .5), scene)
 
 let cameraHeight = camera.position.y
@@ -66,21 +66,24 @@ function raiseCamera(increment) {
     animation.setKeys(keys)
 
     camera.animations = [animation]
-    camera.animation = scene.beginAnimation(camera, 0, 100, false, 2)
+    camera.animation = scene.beginAnimation(camera, 0, 100, false, 1)
 }
 
-function lowerCamera(layerCount) {
+function lowerCamera(layerCount, totalMass) {
     if (camera.animation) {
         camera.animation.stop()
     }
 
-    cameraHeight = 45
+    cameraHeight = 15
 
     const physicsHelper = new PhysicsHelper(scene)
     const gravitationalFieldEvent = physicsHelper.gravitationalField(
-        new Vector3(0, layerCount * StackSettings.LayereHeight, 0),
-        StackSettings.LayereHeight * Math.min(15, layerCount),
-        Math.min(15, layerCount) * 100,
+        // position 5 leves above top layer
+        new Vector3(0, (layerCount + 5) * StackSettings.LayereHeight, 0),
+        // let it reach 15 leves down  
+        StackSettings.LayereHeight * 15,  
+        // base force on totalmass from last 5 layers
+        totalMass * 3,
         PhysicsRadialImpulseFalloff.Linear
     )
 
