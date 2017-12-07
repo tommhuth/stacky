@@ -107,6 +107,8 @@ export class Stack extends Emitter {
             leftover.convertToFlatShadedMesh()
             leftover.position.y += Settings.LayereHeight
             leftover.physicsImpostor = new PhysicsImpostor(leftover, PhysicsImpostor.BoxImpostor, { mass: this.getMass(leftover) })
+            leftover.physicsImpostor.physicsBody.linearDamping = .5
+            leftover.physicsImpostor.physicsBody.angularDamping = .1
 
             this.leftovers.push(leftover)
         }
@@ -119,6 +121,8 @@ export class Stack extends Emitter {
             layer.convertToFlatShadedMesh()
             layer.position.y += Settings.LayereHeight
             layer.physicsImpostor = new PhysicsImpostor(layer, PhysicsImpostor.BoxImpostor, { mass: 0 })
+            layer.physicsImpostor.physicsBody.linearDamping = .5
+            layer.physicsImpostor.physicsBody.angularDamping = .1
 
             this.layers.push(layer)
 
@@ -144,7 +148,7 @@ export class Stack extends Emitter {
             }
         }
 
-        // only use mass from the 5 topmost layers 
+        // only use mass from the 13 topmost layers 
         for (let i = this.layers.length - 1; i > Math.max(this.layers.length - 13, 0); i--) { 
             totalMass += this.layers[i].physicsImpostor.mass 
         }
@@ -211,6 +215,8 @@ export class Stack extends Emitter {
         layer.material = new StandardMaterial(uuid(), scene)
         layer.material.diffuseColor = new Color3(Math.random(), Math.random(), Math.random())
         layer.physicsImpostor = new PhysicsImpostor(layer, PhysicsImpostor.BoxImpostor, { mass: 0 })
+        layer.physicsImpostor.physicsBody.linearDamping = .5
+        layer.physicsImpostor.physicsBody.angularDamping = .1
 
         this.layers.push(layer)
         this.animate(layer)
@@ -233,6 +239,8 @@ export class Stack extends Emitter {
         layer.convertToFlatShadedMesh()
         layer.position.y = 0
         layer.physicsImpostor = new PhysicsImpostor(layer, PhysicsImpostor.BoxImpostor, { mass: 0 })
+        layer.physicsImpostor.physicsBody.linearDamping = .5
+        layer.physicsImpostor.physicsBody.angularDamping = .1
 
         this.layers.push(layer)
 
@@ -261,7 +269,7 @@ export class Stack extends Emitter {
     getMass(layer) {
         let boundingBox = layer.getBoundingInfo().boundingBox
 
-        return Math.min(10, boundingBox.extendSize.z * boundingBox.extendSize.x * boundingBox.extendSize.y)
+        return Math.max(.5, boundingBox.extendSize.z * boundingBox.extendSize.x * boundingBox.extendSize.y)
     }
 
     clean() {
