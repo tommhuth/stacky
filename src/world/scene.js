@@ -114,7 +114,7 @@ function lowerCamera(layerCount, totalMass) {
 
     gravitationalFieldEvent.enable()
 
-    setTimeout(() => camera.animation = scene.beginAnimation(camera, 0, 100), 250)
+    setTimeout(() => camera.animation = scene.beginAnimation(camera, 0, 100, false, .5), 150)
     setTimeout(() => gravitationalFieldEvent.disable(), 150)
 }
 
