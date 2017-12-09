@@ -1,5 +1,5 @@
 import { CannonJSPlugin, PhysicsRadialImpulseFalloff, PhysicsHelper } from "babylonjs"
-import { Engine, FreeCamera, Scene, DirectionalLight, Vector3, Camera, Color4 } from "babylonjs"
+import { Engine, FreeCamera, Scene, DirectionalLight, Vector3, Camera, Color4, Color3 } from "babylonjs"
 import { Animation, SineEase, EasingFunction } from "babylonjs"
 import { Settings as StackSettings } from "./Stack"
 import uuid from "uuid/v1"
@@ -16,6 +16,11 @@ const light = new DirectionalLight(uuid(), new Vector3(.2, -.81, .5), scene)
 let cameraHeight = camera.position.y
 
 scene.enablePhysics()
+
+scene.fogMode = Scene.FOGMODE_LINEAR
+scene.fogColor = Color3.Black()
+scene.fogStart = 20
+scene.fogEnd = 50
 scene.clearColor = new Color4(0, 0, 0, 0)
 
 camera.mode = Camera.ORTHOGRAPHIC_CAMERA
@@ -27,7 +32,7 @@ camera.orthoLeft = frustumSize * aspect / - 2
 camera.orthoRight = frustumSize * aspect / 2
 camera.setTarget(Vector3.Zero())
 
-light.intensity = .6;
+light.intensity = 1.5;
 
 window.addEventListener('resize', () => {
     const aspect = window.innerWidth / window.innerHeight

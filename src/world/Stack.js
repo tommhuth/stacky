@@ -1,5 +1,5 @@
 import Emitter from "../utils/Emitter"
-import { Vector3, Animation, MeshBuilder, CSG, PhysicsImpostor, StandardMaterial, Color3 } from "babylonjs"
+import { Vector3, Animation, MeshBuilder, CSG, PhysicsImpostor, StandardMaterial, Color3, SineEase, EasingFunction } from "babylonjs"
 import { scene, raiseCamera, lowerCamera } from "./scene"
 import uuid from "uuid/v1"
 
@@ -38,6 +38,7 @@ export class Stack extends Emitter {
 
     init() {
         this.makePillar()
+        this.animatePillar()
     }
 
     start() {
@@ -159,6 +160,30 @@ export class Stack extends Emitter {
         lowerCamera(this.layers.length, totalMass)
     }
 
+    animatePillar(){
+        let pillar = this.layers[0] 
+        let animation = new Animation(uuid(), "position.y", 60, Animation.ANIMATIONTYPE_FLOAT)
+        let ease = new SineEase()
+        let keys = [
+            {
+                frame: 0,
+                value: pillar.position.y
+            },
+            {
+                frame: 100,
+                value: -(Settings.PillarHeight / 2 + Settings.LayereHeight / 2)
+            }, 
+        ]
+
+        ease.setEasingMode(EasingFunction.EASINGMODE_EASEINOUT)
+    
+        animation.setEasingFunction(ease)
+        animation.setKeys(keys)
+
+        pillar.animations = [animation]
+        pillar.animation = scene.beginAnimation(pillar, 0, 100, undefined, 1.5)
+    }
+
     animate(layer) {
         let lefty = (this.layers.length - 1) % 2 === 0
         let flipped = (this.layers.length - 1) % 3 === 0
@@ -260,7 +285,9 @@ export class Stack extends Emitter {
         )
 
         pillar.convertToFlatShadedMesh()
-        pillar.position.y = -(Settings.PillarHeight / 2 + Settings.LayereHeight / 2)
+        pillar.material = new StandardMaterial(uuid(), scene)
+        pillar.material.diffuseColor = Color3.White()
+        pillar.position.y = -Settings.PillarHeight * 1.5
         pillar.physicsImpostor = new PhysicsImpostor(pillar, PhysicsImpostor.BoxImpostor, { mass: 0 })
 
         this.layers.push(pillar)

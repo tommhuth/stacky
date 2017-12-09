@@ -2,7 +2,7 @@ html(lang="no")
     head 
         meta(name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no")
         link(href="https://fonts.googleapis.com/css?family=Abril+Fatface|Open+Sans:100,300,700" rel="stylesheet") 
-        link(href="/style.css" rel="stylesheet")  
+        link(href=cacheBuster("/style.css") rel="stylesheet")  
         
         title Stacky
     body 
@@ -17,14 +17,12 @@ html(lang="no")
                     span.k k
                     span.y y
                 button.click-to-start 
-                    | press
-                    span.key Spacebar
+                    | touch or click 
                     | to start
             .ui-section.ended
                 .total-score.score 0
                 button.click-to-start 
-                    | press
-                    span.key Spacebar
+                    | touch or click 
                     | to restart
             .ui-section.running 
                 .running-score.score 0
