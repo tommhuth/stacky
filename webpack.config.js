@@ -1,6 +1,8 @@
 const path = require("path")
 const webpack = require("webpack")  
-const plugins = []
+const plugins = [
+    new webpack.optimize.ModuleConcatenationPlugin()
+]
 
 if (process.env.NODE_ENV === "production") {
     plugins.push(
@@ -29,32 +31,35 @@ if (process.env.NODE_ENV === "production") {
 }
 
 module.exports = {  
-        entry:  "./src/app.js",
-        output: { 
-            filename: "public/app.js"
-        },
-        devtool:  "source-map",
-        plugins,
-        module: {
-            rules: [
-                {
-                    test: /\.js$/, 
-                    use: [
-                        {
-                            loader: "babel-loader"
-                        }
-                    ]
-                }
-            ]
-        },
-        resolve: {
-            modules: [
-                path.resolve("./src"), 
-                path.resolve("./node_modules"),
-                path.resolve("./resources")
-            ],
-            alias: {
-                babylonjs$: path.resolve("./resources/babylon.custom") //"babylonjs" // path.resolve("./resources/babylon.custom") //"babylonjs" //path.resolve("./resources/babylon.custom") //"babylonjs"  ///path.resolve("./resources/babylon.custom") // process.env.NODE_ENV === "production" ? path.resolve("./resources/babylon.custom") : "babylonjs"
-            } 
-        }
-    } 
+    entry:  "./src/app.js",
+    output: { 
+        filename: "public/app.js"
+    },
+    devtool:  "source-map",
+    plugins,
+    stats: {
+        optimizationBailout: true
+    },
+    module: {
+        rules: [
+            {
+                test: /\.js$/, 
+                use: [
+                    {
+                        loader: "babel-loader"
+                    }
+                ]
+            }
+        ]
+    },
+    resolve: {
+        modules: [
+            path.resolve("./src"), 
+            path.resolve("./node_modules"),
+            path.resolve("./resources")
+        ],
+        alias: {
+            babylonjs$: path.resolve("./resources/babylon.custom")
+        } 
+    }
+} 
