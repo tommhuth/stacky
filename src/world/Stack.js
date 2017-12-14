@@ -9,7 +9,7 @@ export const Settings = {
     LayereHeight: 1,
     LayerSize: 5,
     AnimationOffset: 10,
-    ClosenessLeniency: .1
+    ClosenessLeniency: .2
 }
 
 export const StackEvent = {
@@ -68,6 +68,46 @@ export class Stack extends Emitter {
         this.makeFirstLayer()
     }
 
+    getSubstractionBox(a, b) {
+        let a1 = CSG.FromMesh(a)
+        let b2 = CSG.FromMesh(b)
+
+        let subtraction = a1.subtract(b2)
+
+        if (subtraction.polygons.length) {
+            let box = subtraction.toMesh(uuid(), a.material, scene, false)
+
+            box.convertToFlatShadedMesh()
+            box.physicsImpostor = new PhysicsImpostor(box, PhysicsImpostor.BoxImpostor, { mass: this.getMass(box) })
+            box.physicsImpostor.physicsBody.linearDamping = .5
+            box.physicsImpostor.physicsBody.angularDamping = .1
+
+            return box
+        } else {
+            return null
+        }
+    }
+
+    getIntersectionBox(a, b, material = a.material) {
+        let a1 = CSG.FromMesh(a)
+        let b2 = CSG.FromMesh(b)
+        let intersection = a1.intersect(b2)
+
+
+        if (intersection.polygons.length) {
+            let box = intersection.toMesh(uuid(), material, scene, false)
+
+            box.convertToFlatShadedMesh()
+            box.physicsImpostor = new PhysicsImpostor(box, PhysicsImpostor.BoxImpostor, { mass: 0 })
+            box.physicsImpostor.physicsBody.linearDamping = .5
+            box.physicsImpostor.physicsBody.angularDamping = .1
+
+            return box
+        } else {
+            return null
+        }
+    }
+
     match() {
         if (this.state !== StackState.Running) {
             return
@@ -78,59 +118,36 @@ export class Stack extends Emitter {
         let distance = Vector3.Distance(
             top.position,
             new Vector3(previous.position.x, previous.position.y + Settings.LayereHeight, previous.position.z)
-        )
-
-        top.animation.stop()
-        top.position.y -= Settings.LayereHeight
-
-        let a = CSG.FromMesh(top)
-        let b = CSG.FromMesh(previous)
-
+        ) 
         let intersection
         let subtraction
 
-        if (distance <= Settings.ClosenessLeniency) {
-            // count as hit in middle
-            intersection = b.intersect(b)
-            subtraction = b.subtract(b)
+        // move down for CSG 
+        top.position.y -= Settings.LayereHeight
+        top.animation.stop()
 
+        if (distance <= Settings.ClosenessLeniency) {
+            intersection = this.getIntersectionBox(previous, previous, top.material)
             console.info("bam")
         } else {
-            intersection = a.intersect(b)
-            subtraction = a.subtract(b)
+            intersection = this.getIntersectionBox(top, previous)
+            subtraction = this.getSubstractionBox(top, previous)
         }
 
-        if (subtraction.polygons.length) {
-            // if has leftover cutoff
-            let leftover = subtraction.toMesh(uuid(), top.material, scene, false)
-
-            // mesh has been lowered for intersection test, readjust 
-            leftover.convertToFlatShadedMesh()
-            leftover.position.y += Settings.LayereHeight
-            leftover.physicsImpostor = new PhysicsImpostor(leftover, PhysicsImpostor.BoxImpostor, { mass: this.getMass(leftover) })
-            leftover.physicsImpostor.physicsBody.linearDamping = .5
-            leftover.physicsImpostor.physicsBody.angularDamping = .1
-
-            this.leftovers.push(leftover)
+        if (subtraction) {
+            // move up after CSG 
+            subtraction.position.y += Settings.LayereHeight
+            this.leftovers.push(subtraction)
         }
 
-        if (intersection.polygons.length) {
-            // has intersection
-            let layer = intersection.toMesh(uuid(), top.material, scene, false)
-
-            // mesh has been lowered for intersection test, readjust
-            layer.convertToFlatShadedMesh()
-            layer.position.y += Settings.LayereHeight
-            layer.physicsImpostor = new PhysicsImpostor(layer, PhysicsImpostor.BoxImpostor, { mass: 0 })
-            layer.physicsImpostor.physicsBody.linearDamping = .5
-            layer.physicsImpostor.physicsBody.angularDamping = .1
-
-            this.layers.push(layer)
+        if (intersection) {
+            // move up after CSG 
+            intersection.position.y += Settings.LayereHeight
+            this.layers.push(intersection)
 
             this.broadcast(StackEvent.ScoreChange, { score: this.layers.length - 1 })
             this.makeLayer()
         } else {
-            // game over!
             this.gameOver()
         }
 
@@ -143,15 +160,15 @@ export class Stack extends Emitter {
         for (let i = 0; i < this.layers.length; i++) {
             if (i > 0) {
                 let layer = this.layers[i]
-                let mass = this.getMass(layer) 
+                let mass = this.getMass(layer)
 
                 layer.physicsImpostor.setMass(mass)
             }
         }
 
         // only use mass from the 13 topmost layers 
-        for (let i = this.layers.length - 1; i > Math.max(this.layers.length - 13, 0); i--) { 
-            totalMass += this.layers[i].physicsImpostor.mass 
+        for (let i = this.layers.length - 1; i > Math.max(this.layers.length - 13, 0); i--) {
+            totalMass += this.layers[i].physicsImpostor.mass
         }
 
         this.state = StackState.Ended
@@ -160,8 +177,8 @@ export class Stack extends Emitter {
         lowerCamera(this.layers.length, totalMass)
     }
 
-    animatePillar(){
-        let pillar = this.layers[0] 
+    animatePillar() {
+        let pillar = this.layers[0]
         let animation = new Animation(uuid(), "position.y", 60, Animation.ANIMATIONTYPE_FLOAT)
         let ease = new SineEase()
         let keys = [
@@ -172,16 +189,45 @@ export class Stack extends Emitter {
             {
                 frame: 100,
                 value: -(Settings.PillarHeight / 2 + Settings.LayereHeight / 2)
-            }, 
+            },
         ]
 
         ease.setEasingMode(EasingFunction.EASINGMODE_EASEINOUT)
-    
+
         animation.setEasingFunction(ease)
         animation.setKeys(keys)
 
         pillar.animations = [animation]
         pillar.animation = scene.beginAnimation(pillar, 0, 100, undefined, 1.5)
+    }
+
+    makeBox(
+        size = {
+            height: Settings.LayereHeight,
+            depth: Settings.LayerSize,
+            width: Settings.LayerSize
+        },
+        mass = false,
+        color = new Color3(Math.random(), Math.random(), Math.random())
+    ) {
+        let box = MeshBuilder.CreateBox(
+            uuid(),
+            {
+                ...size,
+                subdivisions: 1
+            },
+            scene
+        )
+
+        box.convertToFlatShadedMesh()
+        box.position.y = 0
+        box.material = new StandardMaterial(uuid(), scene)
+        box.material.diffuseColor = color
+        box.physicsImpostor = new PhysicsImpostor(box, PhysicsImpostor.BoxImpostor, { mass: mass ? this.getMass(box) : 0 })
+        box.physicsImpostor.physicsBody.linearDamping = .5
+        box.physicsImpostor.physicsBody.angularDamping = .1
+
+        return box
     }
 
     animate(layer) {
@@ -222,26 +268,16 @@ export class Stack extends Emitter {
     makeLayer() {
         let top = this.layers[this.layers.length - 1]
         let { extendSize, centerWorld } = top.getBoundingInfo().boundingBox
-        let layer = MeshBuilder.CreateBox(
-            uuid(),
+        let layer = this.makeBox(
             {
                 height: Settings.LayereHeight,
                 depth: extendSize.z * 2,
-                width: extendSize.x * 2,
-                subdivisions: 1
-            },
-            scene
+                width: extendSize.x * 2
+            }
         )
 
-        layer.convertToFlatShadedMesh()
         layer.position = centerWorld.clone()
         layer.position.y = (this.layers.length - 1) * Settings.LayereHeight
-
-        layer.material = new StandardMaterial(uuid(), scene)
-        layer.material.diffuseColor = new Color3(Math.random(), Math.random(), Math.random())
-        layer.physicsImpostor = new PhysicsImpostor(layer, PhysicsImpostor.BoxImpostor, { mass: 0 })
-        layer.physicsImpostor.physicsBody.linearDamping = .5
-        layer.physicsImpostor.physicsBody.angularDamping = .1
 
         this.layers.push(layer)
         this.animate(layer)
@@ -250,22 +286,7 @@ export class Stack extends Emitter {
     }
 
     makeFirstLayer() {
-        let layer = MeshBuilder.CreateBox(
-            uuid(),
-            {
-                height: Settings.LayereHeight,
-                depth: Settings.LayerSize,
-                width: Settings.LayerSize,
-                subdivisions: 1
-            },
-            scene
-        )
-
-        layer.convertToFlatShadedMesh()
-        layer.position.y = 0
-        layer.physicsImpostor = new PhysicsImpostor(layer, PhysicsImpostor.BoxImpostor, { mass: 0 })
-        layer.physicsImpostor.physicsBody.linearDamping = .5
-        layer.physicsImpostor.physicsBody.angularDamping = .1
+        let layer = this.makeBox(undefined, undefined, Color3.White())
 
         this.layers.push(layer)
 
@@ -273,22 +294,19 @@ export class Stack extends Emitter {
     }
 
     makePillar() {
-        let pillar = MeshBuilder.CreateBox(
-            uuid(),
+        let pillar = this.makeBox(
             {
                 height: Settings.PillarHeight,
                 depth: Settings.LayerSize,
-                width: Settings.LayerSize,
-                subdivisions: 1
+                width: Settings.LayerSize
             },
-            scene
+            undefined,
+            Color3.White()
+
         )
 
-        pillar.convertToFlatShadedMesh()
-        pillar.material = new StandardMaterial(uuid(), scene)
         pillar.material.diffuseColor = Color3.White()
         pillar.position.y = -Settings.PillarHeight * 1.5
-        pillar.physicsImpostor = new PhysicsImpostor(pillar, PhysicsImpostor.BoxImpostor, { mass: 0 })
 
         this.layers.push(pillar)
     }
