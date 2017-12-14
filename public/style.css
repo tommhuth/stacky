@@ -2,8 +2,7 @@ body {
     font-size: 1.5em;
     touch-action: none; 
     background-image: linear-gradient(rgba(255,255, 255, 0), rgba(255, 255, 255, .051));
-    background-color: #222;
-    transition: background-color 2.5s;
+    background-color: #222; 
     font-family: "Open Sans";
     font-weight: 300;
     color: #FFF;
@@ -18,7 +17,7 @@ body {
 body, html {
     height: 100vh;
     margin: 0;
-    width: 100wv;
+    width: 100vw;
     overflow: hidden; 
     padding: 0; 
 }
