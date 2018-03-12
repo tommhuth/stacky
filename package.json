@@ -9,6 +9,7 @@
   "main": "index.js",
   "scripts": {
     "start": "node server.js",
+    "ngrok": "ngrok http localhost:3000",
     "build": "webpack --watch",
     "run": "npm run build & npm run start",
     "test": "jest tests/ --watchAll src/",
@@ -45,10 +46,10 @@
     "webpack": "^3.8.1"
   },
   "devDependencies": {
-    "superstatic": "^5.0.1",
+    "babylonjs": "^3.1.0-beta6",
     "circular-dependency-plugin": "^4.2.1",
-    "ngrok": "^2.2.22",
-    "babylonjs": "^3.1.0-beta6"
+    "ngrok": "^2.3.0",
+    "superstatic": "^5.0.1"
   },
   "jest": {
     "transform": {
