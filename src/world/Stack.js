@@ -2,18 +2,20 @@ import Emitter from "../utils/Emitter"
 import { Vector3, Animation, MeshBuilder, CSG, PhysicsImpostor, StandardMaterial, Color3, SineEase, EasingFunction } from "babylonjs"
 import { scene, raiseCamera, lowerCamera } from "./scene"
 import uuid from "uuid/v1"
+import ColorMixer from "../utils/ColorMixer"
 
 export const Settings = {
     Colors: ["red", "green", "blue", "purple"],
     PillarHeight: 20,
-    LayereHeight: 1,
+    LayerHeight: 1,
     LayerSize: 5,
     AnimationOffset: 10,
-    ClosenessLeniency: .2
+    ClosenessLeniency: 5 * .005
 }
 
 export const StackEvent = {
     Running: "running",
+    ScoreBonus: "score-bonus",
     Ready: "ready",
     Ended: "ended",
     ScoreChange: "score-change"
@@ -29,6 +31,7 @@ export class Stack extends Emitter {
     layers = []
     leftovers = []
     state = StackState.Ready
+    score = 0
 
     constructor() {
         super()
@@ -59,9 +62,12 @@ export class Stack extends Emitter {
             this.leftovers[i].dispose()
         }
 
+        ColorMixer.reset()
+
         this.leftovers = []
         this.layers.splice(1, this.layers.length)
         this.state = StackState.Running
+        this.score = 0
 
         this.broadcast(StackEvent.Running)
         this.broadcast(StackEvent.ScoreChange, { score: 0 })
@@ -117,18 +123,20 @@ export class Stack extends Emitter {
         let previous = this.layers[this.layers.length - 1]
         let distance = Vector3.Distance(
             top.position,
-            new Vector3(previous.position.x, previous.position.y + Settings.LayereHeight, previous.position.z)
+            new Vector3(previous.position.x, previous.position.y + Settings.LayerHeight, previous.position.z)
         ) 
         let intersection
         let subtraction
+        let score = 1
 
         // move down for CSG 
-        top.position.y -= Settings.LayereHeight
+        top.position.y -= Settings.LayerHeight
         top.animation.stop()
 
         if (distance <= Settings.ClosenessLeniency) {
             intersection = this.getIntersectionBox(previous, previous, top.material)
             console.info("bam")
+            score = 100
         } else {
             intersection = this.getIntersectionBox(top, previous)
             subtraction = this.getSubstractionBox(top, previous)
@@ -136,16 +144,23 @@ export class Stack extends Emitter {
 
         if (subtraction) {
             // move up after CSG 
-            subtraction.position.y += Settings.LayereHeight
+            subtraction.position.y += Settings.LayerHeight
             this.leftovers.push(subtraction)
         }
 
         if (intersection) {
             // move up after CSG 
-            intersection.position.y += Settings.LayereHeight
+            intersection.position.y += Settings.LayerHeight
             this.layers.push(intersection)
 
-            this.broadcast(StackEvent.ScoreChange, { score: this.layers.length - 1 })
+            this.score += score
+
+            this.broadcast(StackEvent.ScoreChange, { score: this.score })
+
+            if(score > 1) { 
+                this.broadcast(StackEvent.ScoreBonus)
+            }
+
             this.makeLayer()
         } else {
             this.gameOver()
@@ -188,7 +203,7 @@ export class Stack extends Emitter {
             },
             {
                 frame: 100,
-                value: -(Settings.PillarHeight / 2 + Settings.LayereHeight / 2)
+                value: -(Settings.PillarHeight / 2 + Settings.LayerHeight / 2)
             },
         ]
 
@@ -203,12 +218,12 @@ export class Stack extends Emitter {
 
     makeBox(
         size = {
-            height: Settings.LayereHeight,
+            height: Settings.LayerHeight,
             depth: Settings.LayerSize,
             width: Settings.LayerSize
         },
         mass = false,
-        color = new Color3(Math.random(), Math.random(), Math.random())
+        color =  ColorMixer.next()
     ) {
         let box = MeshBuilder.CreateBox(
             uuid(),
@@ -270,23 +285,23 @@ export class Stack extends Emitter {
         let { extendSize, centerWorld } = top.getBoundingInfo().boundingBox
         let layer = this.makeBox(
             {
-                height: Settings.LayereHeight,
+                height: Settings.LayerHeight,
                 depth: extendSize.z * 2,
                 width: extendSize.x * 2
             }
         )
 
         layer.position = centerWorld.clone()
-        layer.position.y = (this.layers.length - 1) * Settings.LayereHeight
+        layer.position.y = (this.layers.length - 1) * Settings.LayerHeight
 
         this.layers.push(layer)
         this.animate(layer)
 
-        raiseCamera(Settings.LayereHeight)
+        raiseCamera(Settings.LayerHeight)
     }
 
     makeFirstLayer() {
-        let layer = this.makeBox(undefined, undefined, Color3.White())
+        let layer = this.makeBox(undefined, undefined)
 
         this.layers.push(layer)
 

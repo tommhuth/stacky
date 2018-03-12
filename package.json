@@ -9,9 +9,8 @@
   "main": "index.js",
   "scripts": {
     "start": "node server.js",
-    "build": "webpack --watch",
-    "serve": "superstatic public --port 3000 --host localhost",
-    "run": "npm run build & npm run serve",
+    "build": "webpack --watch", 
+    "run": "npm run build & npm run start",
     "test": "jest tests/ --watchAll src/",
     "postinstall": "webpack"
   },

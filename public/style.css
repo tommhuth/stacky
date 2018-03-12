@@ -4,8 +4,13 @@ body {
     background-image: linear-gradient(rgba(255,255, 255, 0), rgba(255, 255, 255, .051));
     background-color: #222; 
     font-family: "Open Sans";
+    transition: background-color 1s;
     font-weight: 300;
     color: #FFF;
+}
+
+html {
+    background-color: #222;  
 }
 
 @media (max-width: 50em) {
@@ -83,10 +88,16 @@ canvas {
 .running-score {
     font-size: 4em;
     margin-right: .5em;
-    opacity: .75;
+    opacity: .5;
     font-weight: 100;
     color: #FFF;
-    text-shadow: 0 0 1em rgba(0,0,0, .2);
+    transition: all .35s; 
+}
+
+.running-score.pow { 
+    opacity: 1;
+    transition: none;
+    text-shadow:  -1px -1px 0 #FFF,  1px -1px 0 #FFF,  -1px 1px 0 #FFF,  1px 1px 0 #FFF;
 }
 
 @media (max-width: 50em) {
@@ -97,12 +108,12 @@ canvas {
 }
 
 .total-score {
-    font-size: 7em;
+    font-size: 6em;
     display: inline-block;
     font-family: "Abril Fatface";
     font-weight: 100;
-    line-height: 2em;
-    width: 2em;
+    line-height: 3em;
+    width: 3em;
     text-shadow: 0 0 1em rgba(0,0,0, .35);
     background: #FFF;
     color: #222;
@@ -127,6 +138,7 @@ canvas {
         font-size: 22vw;
     }
 }
+ 
 
 .title span {
     display: inline-block;
