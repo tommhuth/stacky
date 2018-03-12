@@ -1,5 +1,6 @@
 import Emitter from "../utils/Emitter"
-import { Vector3, Animation, MeshBuilder, CSG, PhysicsImpostor, StandardMaterial, Color3, SineEase, EasingFunction } from "babylonjs"
+import { Vector3, MeshBuilder, CSG, PhysicsImpostor, StandardMaterial, Color3, Angle } from "babylonjs"
+import { SineEase, EasingFunction, Animation } from "babylonjs"
 import { scene, raiseCamera, lowerCamera } from "./scene"
 import uuid from "uuid/v1"
 import ColorMixer from "../utils/ColorMixer"
@@ -10,7 +11,7 @@ export const Settings = {
     LayerHeight: 1,
     LayerSize: 5,
     AnimationOffset: 10,
-    ClosenessLeniency: 5 * .005
+    ClosenessLeniency: 5 * .025
 }
 
 export const StackEvent = {
@@ -113,7 +114,53 @@ export class Stack extends Emitter {
             return null
         }
     }
+    makeHitSplash(box) {
+        let { boundingBox: { centerWorld, extendSize } } = box.getBoundingInfo()
+        let plane = MeshBuilder.CreatePlane(uuid(), { width: extendSize.x * 2 + .65, height: extendSize.z * 2 + .65 }, scene)
 
+        plane.position.x = centerWorld.x
+        plane.position.z = centerWorld.z
+        plane.position.y = centerWorld.y + Settings.LayerHeight / 2
+        plane.rotate(new Vector3(1, 0, 0), Angle.FromDegrees(90).radians())
+        plane.material = new StandardMaterial(uuid(), scene)
+        plane.material.diffuseColor = Color3.White() 
+        plane.material.fogEnabled = false
+
+        let animationOpacity = new Animation(uuid(), "visibility", 60, Animation.ANIMATIONTYPE_FLOAT, Animation.ANIMATIONLOOPMODE_CONSTANT)
+        let animationScale = new Animation(uuid(), "scaling", 60, Animation.ANIMATIONTYPE_VECTOR3, Animation.ANIMATIONLOOPMODE_CONSTANT)
+        let animationOpacityKeys = [
+            {
+                frame: 0,
+                value: 1
+            },
+            {
+                frame: 50,
+                value: 0
+            }
+        ]
+        let animationScaleKeys = [
+            {
+                frame: 0,
+                value: new Vector3(1, 1, 1)
+            },
+            {
+                frame: 150,
+                value: new Vector3(.1, .1, .1)
+            }
+        ]
+        let ease = new SineEase()
+
+        ease.setEasingMode(EasingFunction.EASINGMODE_EASEINOUT)
+
+        animationOpacity.setEasingFunction(ease)
+        animationOpacity.setKeys(animationOpacityKeys)
+
+        animationScale.setEasingFunction(ease)
+        animationScale.setKeys(animationScaleKeys)
+
+        plane.animations = [animationOpacity, animationScale]
+        plane.animation = scene.beginAnimation(plane, 0, 150, false, 1, () => plane.dispose())
+    }
     match() {
         if (this.state !== StackState.Running) {
             return
@@ -124,7 +171,7 @@ export class Stack extends Emitter {
         let distance = Vector3.Distance(
             top.position,
             new Vector3(previous.position.x, previous.position.y + Settings.LayerHeight, previous.position.z)
-        ) 
+        )
         let intersection
         let subtraction
         let score = 1
@@ -135,8 +182,11 @@ export class Stack extends Emitter {
 
         if (distance <= Settings.ClosenessLeniency) {
             intersection = this.getIntersectionBox(previous, previous, top.material)
-            console.info("bam")
             score = 100
+
+            this.makeHitSplash(intersection)
+
+            console.info("bam")
         } else {
             intersection = this.getIntersectionBox(top, previous)
             subtraction = this.getSubstractionBox(top, previous)
@@ -157,7 +207,7 @@ export class Stack extends Emitter {
 
             this.broadcast(StackEvent.ScoreChange, { score: this.score })
 
-            if(score > 1) { 
+            if (score > 1) {
                 this.broadcast(StackEvent.ScoreBonus)
             }
 
@@ -223,7 +273,7 @@ export class Stack extends Emitter {
             width: Settings.LayerSize
         },
         mass = false,
-        color =  ColorMixer.next()
+        color = ColorMixer.next()
     ) {
         let box = MeshBuilder.CreateBox(
             uuid(),
