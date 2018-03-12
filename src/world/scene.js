@@ -4,7 +4,7 @@ import { Animation, SineEase, EasingFunction } from "babylonjs"
 import { Settings as StackSettings } from "./Stack"
 import uuid from "uuid/v1"
 
-const frustumSize = 13
+const frustumSize = window.matchMedia("(max-width: 400px)").matches ? 20 : 13
 const aspect = window.innerWidth / window.innerHeight
 
 const canvas = document.getElementById("app")
