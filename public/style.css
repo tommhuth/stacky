@@ -118,13 +118,22 @@ canvas {
     font-weight: 100;
     line-height: 3em;
     width: 3em;
-    text-shadow: 0 0 1em rgba(0,0,0, .35);
-    background: #FFF;
+    text-shadow: 0 0 1em rgba(0,0,0, .35); 
+    background: rgba(255,255,255, .95);
     color: #222;
     text-align: center; 
     border-radius: 50%;  
     margin-top: .5em;
     margin-bottom: .5em;
+}
+
+@supports (-webkit-backdrop-filter: blur(20px)) {
+    .total-score {
+        -webkit-backdrop-filter: blur(20px);
+        background: rgba(255,255,255, .125);
+        box-shadow: none;
+        color: #FFF;
+    }
 }
 
 .title {
