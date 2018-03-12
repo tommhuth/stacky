@@ -7,6 +7,8 @@ html(lang="no")
         title Stacky
     body 
         canvas#app
+        .loading 
+            span.visually-hidden Loading
         .ui-wrapper 
             .ui-section.ui-section--active.ready
                 h1.title 
@@ -17,13 +19,11 @@ html(lang="no")
                     span.k k
                     span.y y
                 button.click-to-start 
-                    | touch or click 
-                    | to start
+                    | tap to start
             .ui-section.ended
                 .total-score.score 0
                 button.click-to-start 
-                    | touch or click 
-                    | to restart
+                    | tap to restart
             .ui-section.running 
                 .running-score.score 0
   

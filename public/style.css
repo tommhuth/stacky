@@ -50,6 +50,17 @@ canvas {
     z-index: 2;
 }
 
+.visually-hidden { 
+    position: absolute; 
+    overflow: hidden; 
+    clip: rect(0 0 0 0); 
+    height: 1px; 
+    width: 1px; 
+    margin: -1px; 
+    padding: 0; 
+    border: 0; 
+  }
+
 .click-to-start {
     white-space: nowrap;
     padding-top: 4px;
@@ -64,6 +75,27 @@ canvas {
     position: relative;
     z-index: 3; 
     text-align: center;
+    display: none;
+}
+
+.loading {
+    display: block;
+    position: fixed;
+    transform: translate(-50%, -50%);
+    top: 50%;
+    left: 50%;
+} 
+
+.loading::after {
+    content: "";
+    display: block;
+    width: 2em;
+    opacity: .4;
+    height: 2em;
+    border: .2em solid #FFF;
+    border-right: .2em solid transparent; 
+    border-radius: 2em;
+    animation: spin infinite 1s linear;
 }
 
 .ready,
@@ -202,5 +234,15 @@ canvas {
     to {
         transform: translateY(0);
         opacity: 1;
+    }
+}
+
+@keyframes spin {
+    from {
+        transform: rotate(0deg);
+    }
+
+    to {
+        transform: rotate(360deg);
     }
 }

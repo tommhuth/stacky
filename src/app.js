@@ -1,6 +1,6 @@
 import { Stack, StackState, StackEvent } from "./world/Stack"
 import { scene, engine } from "./world/scene"
-import { setScore, setReady, setEnded, setRunning, setScoreBonus } from "./ui"
+import { setScore, setReady, setEnded, setRunning, setScoreBonus, init } from "./ui"
  
 const stack = new Stack()
 
@@ -34,3 +34,5 @@ engine.runRenderLoop(() => {
     stack.clean()
     scene.render()
 })
+
+init()

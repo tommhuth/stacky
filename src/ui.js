@@ -3,6 +3,11 @@ const ui = document.querySelector(".ui-wrapper")
 const sections = document.querySelectorAll(".ui-section")
 const mainScore = ui.querySelector(".running-score")
 
+export function init(){ 
+    document.querySelector(".loading").style.display = "none"
+    ui.style.display = "block"
+}
+
 export function setEnded() {
     sections.forEach(i => i.classList.remove("ui-section--active"))
 
