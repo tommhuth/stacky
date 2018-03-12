@@ -39,6 +39,10 @@ body, html {
     -webkit-touch-callout: none;
 } 
 
+*:focus {
+    box-shadow: none !important;
+}
+
 canvas {
     width: 100vw !important;  
     height: 100vh !important;
