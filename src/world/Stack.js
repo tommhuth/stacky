@@ -11,7 +11,7 @@ export const Settings = {
     LayerHeight: 1,
     LayerSize: 5,
     AnimationOffset: 10,
-    ClosenessLeniency: .4
+    ClosenessLeniency: .25
 }
 
 export const StackEvent = {
@@ -123,7 +123,7 @@ export class Stack extends Emitter {
         plane.position.y = centerWorld.y + Settings.LayerHeight / 2
         plane.rotate(new Vector3(1, 0, 0), Angle.FromDegrees(90).radians())
         plane.material = new StandardMaterial(uuid(), scene)
-        plane.material.diffuseColor = Color3.White() 
+        plane.material.diffuseColor = Color3.White()
         plane.material.fogEnabled = false
 
         let animationOpacity = new Animation(uuid(), "visibility", 60, Animation.ANIMATIONTYPE_FLOAT, Animation.ANIMATIONLOOPMODE_CONSTANT)
@@ -173,18 +173,17 @@ export class Stack extends Emitter {
             new Vector3(previous.position.x, previous.position.y + Settings.LayerHeight, previous.position.z)
         )
         let intersection
-        let subtraction
-        let score = 1
+        let subtraction 
 
         // move down for CSG 
         top.position.y -= Settings.LayerHeight
         top.animation.stop()
 
         if (distance <= Settings.ClosenessLeniency) {
-            intersection = this.getIntersectionBox(previous, previous, top.material)
-            score = 100
+            intersection = this.getIntersectionBox(previous, previous, top.material) 
 
-            this.makeHitSplash(intersection) 
+            this.makeHitSplash(intersection)
+            this.broadcast(StackEvent.ScoreBonus)
         } else {
             intersection = this.getIntersectionBox(top, previous)
             subtraction = this.getSubstractionBox(top, previous)
@@ -201,14 +200,9 @@ export class Stack extends Emitter {
             intersection.position.y += Settings.LayerHeight
             this.layers.push(intersection)
 
-            this.score += score
+            this.score += 1
 
-            this.broadcast(StackEvent.ScoreChange, { score: this.score })
-
-            if (score > 1) {
-                this.broadcast(StackEvent.ScoreBonus)
-            }
-
+            this.broadcast(StackEvent.ScoreChange, { score: this.score })  
             this.makeLayer()
         } else {
             this.gameOver()
