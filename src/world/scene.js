@@ -10,7 +10,7 @@ const aspect = window.innerWidth / window.innerHeight
 const canvas = document.getElementById("app")
 const engine = new Engine(canvas, true, undefined, true)
 const scene = new Scene(engine)
-const camera = new FreeCamera(uuid(), new Vector3(-15, 15, -15), scene)
+const camera = new FreeCamera(uuid(), new Vector3(-15, 20, -15), scene)
 const light = new DirectionalLight(uuid(), new Vector3(.2, -.81, .5), scene)
 
 let cameraHeight = camera.position.y
@@ -79,7 +79,7 @@ function lowerCamera(layerCount, totalMass) {
         camera.animation.stop()
     }
 
-    cameraHeight = 15
+    cameraHeight = 20
 
     const physicsHelper = new PhysicsHelper(scene)
     const gravitationalFieldEvent = physicsHelper.gravitationalField(
