@@ -3,7 +3,7 @@ const ui = document.querySelector(".ui-wrapper")
 const sections = document.querySelectorAll(".ui-section")
 const mainScore = ui.querySelector(".running-score")
 
-export function init(){ 
+export function init() {
     document.querySelector(".loading").style.display = "none"
     ui.style.display = "block"
 }
@@ -12,6 +12,8 @@ export function setEnded() {
     sections.forEach(i => i.classList.remove("ui-section--active"))
 
     ui.querySelector(".ended").classList.add("ui-section--active")
+
+    document.body.style.backgroundColor = "rgba(255, 255, 255, 0.4)"
 }
 
 export function setRunning() {
@@ -26,11 +28,11 @@ export function setReady() {
     ui.querySelector(".ready").classList.add("ui-section--active")
 }
 
-export function setScore({ score }) { 
+export function setScore({ score }) {
     scores.forEach(i => i.innerText = score)
 }
 
-export function setScoreBonus() { 
+export function setScoreBonus() {
     mainScore.classList.add("pow")
 
     setTimeout(() => mainScore.classList.remove("pow"), 500)
