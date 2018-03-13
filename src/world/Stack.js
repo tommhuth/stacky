@@ -11,7 +11,7 @@ export const Settings = {
     LayerHeight: 1,
     LayerSize: 5,
     AnimationOffset: 10,
-    ClosenessLeniency: 5 * .025
+    ClosenessLeniency: .4
 }
 
 export const StackEvent = {
@@ -184,9 +184,7 @@ export class Stack extends Emitter {
             intersection = this.getIntersectionBox(previous, previous, top.material)
             score = 100
 
-            this.makeHitSplash(intersection)
-
-            console.info("bam")
+            this.makeHitSplash(intersection) 
         } else {
             intersection = this.getIntersectionBox(top, previous)
             subtraction = this.getSubstractionBox(top, previous)
@@ -327,7 +325,7 @@ export class Stack extends Emitter {
         animation.setKeys(keys)
 
         layer.animations = [animation]
-        layer.animation = scene.beginAnimation(layer, 0, 200, true, .9)
+        layer.animation = scene.beginAnimation(layer, 0, 200, true, 1.1)
     }
 
     makeLayer() {
