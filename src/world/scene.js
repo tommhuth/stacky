@@ -32,7 +32,7 @@ camera.orthoLeft = frustumSize * aspect / - 2
 camera.orthoRight = frustumSize * aspect / 2
 camera.setTarget(Vector3.Zero())
 
-light.intensity = 1.5;
+light.intensity = 1.85;
 
 window.addEventListener('resize', () => {
     const aspect = window.innerWidth / window.innerHeight
