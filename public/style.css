@@ -72,8 +72,7 @@ canvas {
 } 
 
 .ui-wrapper {
-    position: relative;
-    z-index: 3; 
+    position: relative; 
     text-align: center;
     display: none;
 }
@@ -109,8 +108,9 @@ canvas {
 
 .running { 
     position: fixed;
-    top: 2.5em;
-    right: 2em; 
+    top: 8vh;
+    right: 0; 
+    left: 0;
 }
 
 .ui-section {
@@ -122,9 +122,8 @@ canvas {
 }
 
 .running-score {
-    font-size: 4em;
-    margin-right: .5em;
-    opacity: .5;
+    font-size: 7em; 
+    opacity: .65;
     font-weight: 100;
     color: #FFF;
     transition: all .35s; 
@@ -135,13 +134,7 @@ canvas {
     transition: none;
     text-shadow:  -1px -1px 0 #FFF,  1px -1px 0 #FFF,  -1px 1px 0 #FFF,  1px 1px 0 #FFF;
 }
-
-@media (max-width: 50em) {
-    .running-score {
-        margin-right: .1em;
-        margin-top: -.25em;
-    }
-}
+ 
 
 .total-score {
     font-size: 6em;
