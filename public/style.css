@@ -159,9 +159,9 @@ canvas {
     margin-bottom: .5em;
 }
 
-@supports (-webkit-backdrop-filter: blur(20px)) {
+@supports (-webkit-backdrop-filter: blur(30px)) {
     .total-score {
-        -webkit-backdrop-filter: blur(20px);
+        -webkit-backdrop-filter: blur(35px);
         background: rgba(255,255,255, .125);
         box-shadow: none;
         color: #FFF;
