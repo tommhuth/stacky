@@ -1,5 +1,8 @@
 
 import { Color3 as Color } from "babylonjs"
+import { scene} from "../world/scene"
+import { SineEase, EasingFunction, Animation } from "babylonjs"
+import uuid from "uuid"
 
 export default class ColorMixer {
     static maxShades = 8
@@ -34,7 +37,7 @@ export default class ColorMixer {
         let blend = this.mix(right, left, this.j / this.maxShades)
 
         if(this.j % 2 === 0){ 
-            this.setBackground(blend)
+            this.setEnvironment(blend)
         }
 
         this.j++
@@ -54,10 +57,32 @@ export default class ColorMixer {
 
     static reset() {
         this.i = 0
-        this.j = 0
+        this.j = 2
     }
 
-    static setBackground(color) {  
-        document.body.style.backgroundColor = `rgba(${Math.round(color.r * 255)}, ${Math.round(color.g * 255)}, ${Math.round(color.b * 255)}, .4)`
+    static setEnvironment(color) {   
+        let animation= new Animation(uuid(), "fogColor", 60, Animation.ANIMATIONTYPE_COLOR3, Animation.ANIMATIONLOOPMODE_CONSTANT)
+        let animationKeys = [
+            {
+                frame: 0,
+                value: scene.fogColor
+            },
+            {
+                frame: 150,
+                value: color.clone().multiply(new Color(.5, .5, .5))
+            }
+        ] 
+        let ease = new SineEase()
+        
+        ease.setEasingMode(EasingFunction.EASINGMODE_EASEINOUT)
+
+        animation.setEasingFunction(ease)
+        animation.setKeys(animationKeys) 
+
+        scene.animations = [animation]
+        scene.animation = scene.beginAnimation(scene, 0, 150, false, 1)
+
+
+        document.body.style.backgroundColor =   `rgba(${Math.round(color.r * 255)}, ${Math.round(color.g * 255)}, ${Math.round(color.b * 255)}, .3)`
     }
 }

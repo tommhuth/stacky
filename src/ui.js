@@ -11,9 +11,7 @@ export function init() {
 export function setEnded() {
     sections.forEach(i => i.classList.remove("ui-section--active"))
 
-    ui.querySelector(".ended").classList.add("ui-section--active")
-
-    document.body.style.backgroundColor = "rgba(255, 255, 255, 0.4)"
+    ui.querySelector(".ended").classList.add("ui-section--active") 
 }
 
 export function setRunning() {

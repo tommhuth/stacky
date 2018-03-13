@@ -252,6 +252,9 @@ export class Stack extends Emitter {
         this.broadcast(StackEvent.Ended)
 
         lowerCamera(this.layers.length, totalMass)
+
+        ColorMixer.reset()
+        ColorMixer.next() 
     }
 
     animatePillar() {
