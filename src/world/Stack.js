@@ -11,7 +11,9 @@ export const Settings = {
     LayerHeight: 1,
     LayerSize: 5,
     AnimationOffset: 10,
-    ClosenessLeniency: .25
+    ClosenessLeniency: .25,
+    BonusScalingAddition: .1,
+    PerfectHitsForBonus: 4
 }
 
 export const StackEvent = {
@@ -33,6 +35,7 @@ export class Stack extends Emitter {
     leftovers = []
     state = StackState.Ready
     score = 0
+    perfectHits = 0
 
     constructor() {
         super()
@@ -114,9 +117,15 @@ export class Stack extends Emitter {
             return null
         }
     }
-    makeHitSplash(box) {
+    makeHitSplash(box, bonusScaling = 1) { 
         let { boundingBox: { centerWorld, extendSize } } = box.getBoundingInfo()
-        let plane = MeshBuilder.CreatePlane(uuid(), { width: extendSize.x * 2 + .65, height: extendSize.z * 2 + .65 }, scene)
+        let plane = MeshBuilder.CreatePlane(
+            uuid(), {
+                width: (extendSize.x * 2 + .65) * bonusScaling,
+                height: (extendSize.z * 2 + .65) * bonusScaling
+            },
+            scene
+        )
 
         plane.position.x = centerWorld.x
         plane.position.z = centerWorld.z
@@ -180,13 +189,25 @@ export class Stack extends Emitter {
         top.animation.stop()
 
         if (distance <= Settings.ClosenessLeniency) {
-            intersection = this.getIntersectionBox(previous, previous, top.material) 
+            intersection = this.getIntersectionBox(previous, previous, top.material)
 
-            this.makeHitSplash(intersection)
+            this.perfectHits++
+
+            if (this.perfectHits >= Settings.PerfectHitsForBonus) { 
+                this.perfectHits = 0
+
+                intersection.scaling = intersection.scaling.add(
+                    new Vector3(Settings.BonusScalingAddition, 0, Settings.BonusScalingAddition)
+                )
+            }
+
+            this.makeHitSplash(intersection, intersection.scaling.x)
             this.broadcast(StackEvent.ScoreBonus)
         } else {
             intersection = this.getIntersectionBox(top, previous)
             subtraction = this.getSubstractionBox(top, previous)
+
+            this.perfectHits = 0
         }
 
         if (subtraction) {
@@ -198,11 +219,10 @@ export class Stack extends Emitter {
         if (intersection) {
             // move up after CSG 
             intersection.position.y += Settings.LayerHeight
+
             this.layers.push(intersection)
-
-            this.score += 1
-
-            this.broadcast(StackEvent.ScoreChange, { score: this.score })  
+            this.score += 1 
+            this.broadcast(StackEvent.ScoreChange, { score: this.score })
             this.makeLayer()
         } else {
             this.gameOver()
@@ -328,8 +348,8 @@ export class Stack extends Emitter {
         let layer = this.makeBox(
             {
                 height: Settings.LayerHeight,
-                depth: extendSize.z * 2,
-                width: extendSize.x * 2
+                depth: extendSize.z * 2 * top.scaling.x,
+                width: extendSize.x * 2 * top.scaling.z
             }
         )
 
