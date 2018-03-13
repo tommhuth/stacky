@@ -59,7 +59,7 @@ module.exports = {
             path.resolve("./resources")
         ],
         alias: {
-            babylonjs$: path.resolve("./resources/babylon.custom")
+            babylonjs$: path.resolve("./resources/babylon.custom.max")
         } 
     }
 } 
