@@ -4,7 +4,7 @@ body {
     background-image: linear-gradient(rgba(255,255, 255, 0), rgba(255, 255, 255, .051));
     background-color: #222; 
     font-family: "Open Sans";
-    transition: background-color 1s;
+    transition: background-color 1.75s;
     font-weight: 300;
     color: #FFF;
 }
