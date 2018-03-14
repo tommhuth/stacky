@@ -23,6 +23,10 @@ app.locals.cacheBuster = function (path) {
     return `${path}?=v${version}`
 }
 
+app.get("/flare.png", (req, res) => {
+    res.sendFile("/flare.png")
+})
+
 app.get("/", (req, res) => {
     res.render("index")
 })

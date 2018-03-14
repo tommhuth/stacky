@@ -1,5 +1,5 @@
 import { CannonJSPlugin, PhysicsRadialImpulseFalloff, PhysicsHelper } from "babylonjs"
-import { Engine, FreeCamera, Scene, DirectionalLight, Vector3, Camera, Color4, Color3 } from "babylonjs"
+import { Engine, FreeCamera, Scene, DirectionalLight, Vector3, Camera, Color4, Color3, ParticleSystem, Texture } from "babylonjs"
 import { Animation, SineEase, EasingFunction } from "babylonjs"
 import { Settings as StackSettings } from "./Stack"
 import uuid from "uuid/v1"
@@ -12,6 +12,7 @@ const engine = new Engine(canvas, true, undefined, true)
 const scene = new Scene(engine)
 const camera = new FreeCamera(uuid(), new Vector3(-15, 20, -15), scene)
 const light = new DirectionalLight(uuid(), new Vector3(.2, -.81, .5), scene)
+const particleSystem = new ParticleSystem(uuid(), 2000, scene)
 
 let cameraHeight = camera.position.y
 
@@ -23,6 +24,42 @@ scene.fogStart = 20
 scene.fogEnd = 50
 scene.clearColor = new Color4(0, 0, 0, 0)
 
+particleSystem.particleTexture = new Texture("flare.png", scene)
+particleSystem.textureMask = new Color4(0, 0, 0, 1)
+particleSystem.emitter = new Vector3(0, 4, 0)
+particleSystem.minEmitBox = new Vector3(-5, -17, -8)
+particleSystem.maxEmitBox = new Vector3(8, -10, 15)
+particleSystem.color1 = new Color4(1, 1, 1, .1)
+particleSystem.color2 = new Color4(1, 1, 1, .85)
+particleSystem.colorDead = new Color4(1, 1, 1, 0.0)
+particleSystem.minSize = 0.075
+particleSystem.maxSize = .2
+particleSystem.minLifeTime = 1
+particleSystem.maxLifeTime = 12
+particleSystem.emitRate = 6
+particleSystem.gravity = new Vector3(0, 6.81, 0)
+particleSystem.blendMode = ParticleSystem.BLENDMODE_STANDARD
+
+particleSystem.direction1 = new Vector3(-1, 1, .5)
+particleSystem.direction2 = new Vector3(.5, 2, -1)
+particleSystem.minAngularSpeed = 0
+particleSystem.maxAngularSpeed = Math.PI * 2 
+particleSystem.minEmitPower = .51
+particleSystem.maxEmitPower = 2
+particleSystem.updateSpeed = 0.005
+
+particleSystem.start()
+
+// fake random movement
+setInterval(
+    () => particleSystem.gravity = new Vector3(
+        Math.random() * 15 * Math.random() > .5 ? -1 : 1,
+        Math.random() * 12 * Math.random() > .55 ? -1 : 1,
+        Math.random() * 15 * Math.random() > .5 ? -1 : 1
+    ),
+    500
+)
+
 camera.mode = Camera.ORTHOGRAPHIC_CAMERA
 camera.maxZ = 1000
 camera.minZ = -1000
@@ -32,7 +69,7 @@ camera.orthoLeft = frustumSize * aspect / - 2
 camera.orthoRight = frustumSize * aspect / 2
 camera.setTarget(Vector3.Zero())
 
-light.intensity = 1.85;
+light.intensity = 1.85
 
 window.addEventListener('resize', () => {
     const aspect = window.innerWidth / window.innerHeight
@@ -72,6 +109,8 @@ function raiseCamera(increment) {
 
     camera.animations = [animation]
     camera.animation = scene.beginAnimation(camera, 0, 100, false, 1)
+
+    particleSystem.emitter.y += increment
 }
 
 function lowerCamera(layerCount, totalMass) {
@@ -116,6 +155,8 @@ function lowerCamera(layerCount, totalMass) {
 
     setTimeout(() => camera.animation = scene.beginAnimation(camera, 0, 100, false, .5), 150)
     setTimeout(() => gravitationalFieldEvent.disable(), 150)
+
+    particleSystem.emitter.y = 4
 }
 
 export { scene, engine, raiseCamera, lowerCamera }
