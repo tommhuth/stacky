@@ -10,7 +10,7 @@
   "scripts": {
     "start": "node server.js",
     "ngrok": "ngrok http localhost:3000",
-    "build": "webpack --watch",
+    "build": "webpack --watch --progress",
     "run": "npm run build & npm run start",
     "test": "jest tests/ --watchAll src/",
     "postinstall": "webpack"
