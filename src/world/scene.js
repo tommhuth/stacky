@@ -26,39 +26,72 @@ scene.clearColor = new Color4(0, 0, 0, 0)
 
 particleSystem.particleTexture = new Texture("flare.png", scene)
 particleSystem.textureMask = new Color4(0, 0, 0, 1)
-particleSystem.emitter = new Vector3(0, 4, 0)
-particleSystem.minEmitBox = new Vector3(-5, -17, -8)
-particleSystem.maxEmitBox = new Vector3(8, -10, 15)
-particleSystem.color1 = new Color4(1, 1, 1, .1)
-particleSystem.color2 = new Color4(1, 1, 1, .85)
-particleSystem.colorDead = new Color4(1, 1, 1, 0.0)
+particleSystem.emitter = new Vector3(0, -10, 0)
+particleSystem.minEmitBox = new Vector3(-5, -8, -5)
+particleSystem.maxEmitBox = new Vector3(12, 2, 12)
+particleSystem.color1 = new Color4(1, 1, 1, 0)
+particleSystem.color2 = new Color4(1, 1, 1, 0)
 particleSystem.minSize = 0.075
 particleSystem.maxSize = .2
 particleSystem.minLifeTime = 1
-particleSystem.maxLifeTime = 12
-particleSystem.emitRate = 6
+particleSystem.maxLifeTime = 13
+particleSystem.emitRate = 4
 particleSystem.gravity = new Vector3(0, 6.81, 0)
 particleSystem.blendMode = ParticleSystem.BLENDMODE_STANDARD
 
 particleSystem.direction1 = new Vector3(-1, 1, .5)
 particleSystem.direction2 = new Vector3(.5, 2, -1)
 particleSystem.minAngularSpeed = 0
-particleSystem.maxAngularSpeed = Math.PI * 2 
-particleSystem.minEmitPower = .51
+particleSystem.maxAngularSpeed = Math.PI * 2
+particleSystem.minEmitPower = .1
 particleSystem.maxEmitPower = 2
 particleSystem.updateSpeed = 0.005
+particleSystem.updateFunction = function (particles) {
+    for (var index = 0; index < particles.length; index++) {
+        var particle = particles[index];
+
+        if (particle.age > particle.lifeTime) { // Recycle
+            particles.splice(index, 1);
+            this._stockParticles.push(particle);
+            index--;
+            continue;
+        } else {
+            if (!particle.targetAlpha) {
+                particle.targetAlpha = Math.random()
+            }
+
+            if (particle.age < particle.lifeTime * .35) {
+                particle.color.a = particle.age / (particle.lifeTime * .35) * particle.targetAlpha
+            }
+
+            if (particle.age > particle.lifeTime * .7) {
+                let x = (particle.age - particle.lifeTime * .7) / particle.lifeTime * .3 * 10
+                particle.color.a = particle.targetAlpha - x
+            }
+
+            particle.angle += particle.angularSpeed * this._scaledUpdateSpeed;
+
+            particle.direction.scaleToRef(this._scaledUpdateSpeed, this._scaledDirection);
+            particle.position.addInPlace(this._scaledDirection);
+
+            this.gravity.scaleToRef(this._scaledUpdateSpeed, this._scaledGravity);
+            particle.direction.addInPlace(this._scaledGravity);
+
+            particle.age += this._scaledUpdateSpeed;
+        }
+    }
+}
 
 particleSystem.start()
-
+let x
 // fake random movement
-setInterval(
-    () => particleSystem.gravity = new Vector3(
+x = setInterval(function () {
+    particleSystem.gravity = new Vector3(
         Math.random() * 15 * Math.random() > .5 ? -1 : 1,
         Math.random() * 12 * Math.random() > .55 ? -1 : 1,
         Math.random() * 15 * Math.random() > .5 ? -1 : 1
-    ),
-    500
-)
+    )
+}, 800)
 
 camera.mode = Camera.ORTHOGRAPHIC_CAMERA
 camera.maxZ = 1000
@@ -125,7 +158,7 @@ function lowerCamera(layerCount, totalMass) {
         // position 5 leves above top layer
         new Vector3(0, (layerCount + 5) * StackSettings.LayerHeight, 0),
         // let it reach 18 leves down  
-        StackSettings.LayerHeight * 18,  
+        StackSettings.LayerHeight * 18,
         // base force on totalmass 
         totalMass,
         PhysicsRadialImpulseFalloff.Linear
@@ -156,7 +189,19 @@ function lowerCamera(layerCount, totalMass) {
     setTimeout(() => camera.animation = scene.beginAnimation(camera, 0, 100, false, .5), 150)
     setTimeout(() => gravitationalFieldEvent.disable(), 150)
 
-    particleSystem.emitter.y = 4
+    particleSystem.emitter.y = -10
+    particleSystem.gravity = new Vector3(0, Math.random() * 35, 0)
+    clearInterval(x)
+    setTimeout(() => {
+        particleSystem.gravity = new Vector3(0, 7.81, 0)
+        x = setInterval(function () {
+            particleSystem.gravity = new Vector3(
+                Math.random() * 15 * Math.random() > .5 ? -1 : 1,
+                Math.random() * 12 * Math.random() > .55 ? -1 : 1,
+                Math.random() * 15 * Math.random() > .5 ? -1 : 1
+            )
+        }, 800)
+    }, 800)
 }
 
 export { scene, engine, raiseCamera, lowerCamera }
