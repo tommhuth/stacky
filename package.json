@@ -1,6 +1,6 @@
 {
   "name": "stacky",
-  "version": "2.4.0",
+  "version": "2.4.1",
   "engines": {
     "node": "8.9.1",
     "npm": "5.5.1"
