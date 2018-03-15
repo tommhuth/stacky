@@ -6,4 +6,4 @@ This was initially made with ThreeJS alone (see own branch) and then ported over
 Todo
 * Add sound
 * Personal best score saved locally
-* Background particles (synced with sounds?)
+* --Background particles--
