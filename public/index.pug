@@ -5,10 +5,12 @@ html(lang="no")
         link(href=cacheBuster("/style.css") rel="stylesheet")  
         
         title Stacky
-    body 
-        canvas#app
+    body  
+        canvas#app 
         .loading 
             span.visually-hidden Loading
+        button.fullscreen-button
+            span.visually-hidden Go fullscreen 
         .ui-wrapper 
             .ui-section.ui-section--active.ready
                 h1.title 
@@ -19,12 +21,12 @@ html(lang="no")
                     span.k k
                     span.y y
                 button.click-to-start 
-                    | tap to start
+                    | tap to start 
             .ui-section.ended
                 .total-score.score 0
                 button.click-to-start 
                     | tap to restart
             .ui-section.running 
                 .running-score.score 0
-  
+    
         script(src=cacheBuster("/app.js"))

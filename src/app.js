@@ -24,6 +24,11 @@ document.addEventListener("click", () => {
     }
 })
 
+document.querySelector(".fullscreen-button").addEventListener("click", (e) => {
+    e.stopPropagation()
+    document.body.webkitRequestFullscreen()
+})
+
 engine.runRenderLoop(() => {
     stack.clean()
     scene.render()
