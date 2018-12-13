@@ -1,5 +1,7 @@
 html(lang="no")
     head
+        meta(name="apple-mobile-web-app-status-bar-style" content="black-translucent")
+        meta(name="apple-mobile-web-app-capable" content="yes")
         meta(name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no")
         link(href="//fonts.googleapis.com/css?family=Abril+Fatface|Open+Sans:300" rel="stylesheet") 
         link(href=cacheBuster("/style.css") rel="stylesheet")  
@@ -8,9 +10,7 @@ html(lang="no")
     body  
         canvas#app 
         .loading 
-            span.visually-hidden Loading
-        button.fullscreen-button
-            span.visually-hidden Go fullscreen 
+            span.visually-hidden Loading 
         .ui-wrapper 
             .ui-section.ui-section--active.ready
                 h1.title 

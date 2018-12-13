@@ -9,7 +9,7 @@
   "main": "index.js",
   "scripts": {
     "start": "node server.js",
-    "ngrok": "ngrok http localhost:3000",
+    "ngrok": "ngrok http localhost:3001",
     "build": "webpack --watch --progress",
     "run": "npm run build & npm run start",
     "test": "jest tests/ --watchAll src/",
