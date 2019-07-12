@@ -1,65 +1,70 @@
+ 
+const webpack = require("webpack")
 const path = require("path")
-const webpack = require("webpack")  
-const plugins = [
-    new webpack.optimize.ModuleConcatenationPlugin()
+const HtmlWebpackPlugin = require("html-webpack-plugin")
+const CopyWebpackPlugin = require("copy-webpack-plugin")
+const MiniCssExtractPlugin = require("mini-css-extract-plugin")
+const { CleanWebpackPlugin } = require("clean-webpack-plugin")  
+
+let plugins = [
+    new CleanWebpackPlugin(),
+    new webpack.DefinePlugin({   }), 
+    new MiniCssExtractPlugin({
+        filename: "css/[name].[hash:6].css"
+    }),
+    new HtmlWebpackPlugin({
+        template: path.join(__dirname, "assets/views", "index.html"),
+        filename: "index.html"
+    }),  
+    //new BundleAnalyzerPlugin()
 ]
 
-if (process.env.NODE_ENV === "production") {
-    plugins.push(
-        new webpack.LoaderOptionsPlugin({
-            minimize: true,
-            debug: false
-        }),
-        new webpack.optimize.UglifyJsPlugin({
-            compress: {
-                warnings: false,
-                screw_ie8: true,
-                conditionals: true,
-                unused: true,
-                comparisons: true,
-                sequences: true,
-                dead_code: true,
-                evaluate: true,
-                if_return: true,
-                join_vars: true,
-            },
-            output: {
-                comments: false,
-            }
-        })
-    )
-}
-
-module.exports = {  
-    entry:  "./src/app.js",
-    output: { 
-        filename: "public/app.js"
+module.exports = {
+    entry: { app: "./src/app.js" },
+    output: {
+        path: path.resolve(__dirname, "public"),
+        filename: `[name].bundle.[hash:6].js`,
+        publicPath: "/"
     },
-    devtool:  "source-map",
-    plugins,
     stats: {
-        optimizationBailout: true
+        hash: false,
+        version: false,
+        timings: false,
+        children: false,
+        errors: true,
     },
     module: {
         rules: [
+            { test: /\.json$/, loader: "json" },
             {
-                test: /\.js$/, 
+                test: /\.js$/,
+                exclude: /(node_modules)/,
+                loader: "babel-loader"
+            },
+            {
+                test: /\.scss$/,
                 use: [
                     {
-                        loader: "babel-loader"
-                    }
+                        loader: MiniCssExtractPlugin.loader
+                    },
+                    "css-loader", // translates CSS into CommonJS
+                    "sass-loader" // compiles Sass to CSS, using Node Sass by default
                 ]
-            }
+            },
+            {
+                test: /\.(woff(2)?|ttf|eot)(\?v=\d+\.\d+\.\d+)?$/,
+                use: [{
+                    loader: "file-loader",
+                    options: {
+                        name: "[name].[ext]",
+                        outputPath: "fonts/"
+                    }
+                }]
+            },
         ]
     },
     resolve: {
-        modules: [
-            path.resolve("./src"), 
-            path.resolve("./node_modules"),
-            path.resolve("./resources")
-        ],
-        alias: {
-            babylonjs$: path.resolve("./resources/babylon.custom.max")
-        } 
-    }
-} 
+        extensions: [".js"]
+    }, 
+    plugins,
+}

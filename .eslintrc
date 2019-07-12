@@ -1,0 +1,41 @@
+{
+    "env": {
+        "browser": true,
+        "es6": true,
+        "node": true,
+        "mocha": true,
+        "serviceworker": true
+    },
+    "globals": { 
+        "workbox": true
+    },
+    "parser": "babel-eslint",
+    "extends": "eslint:recommended",
+    "parserOptions": {
+        "ecmaVersion": 9,
+        "sourceType": "module"
+    },
+    "rules": {
+        "no-unused-vars": ["error", { "argsIgnorePattern": "^_", "varsIgnorePattern": "^_" }],
+        "indent": [
+            "error",
+            4,
+            {"SwitchCase": 1}
+        ], 
+        "eol-last": ["error", "always"],
+        "quotes": [
+            "error",
+            "double"
+        ],
+        "semi": [
+            "error",
+            "never"
+        ], 
+        "react/jsx-uses-react": 2,
+        "react/jsx-uses-vars": 2
+    },
+    "plugins": [
+        "babel",
+        "react"
+    ]
+}

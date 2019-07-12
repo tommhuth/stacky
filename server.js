@@ -11,25 +11,13 @@ const USE_CACHE_BUST = process.env.NO_CACHE_BUST !== "true" && NODE_ENV === "pro
 const app = express()
 
 app.use(compression())
-app.use(serveStatic(path.join(__dirname, "public"), { maxAge: USE_CACHE_BUST ? "1 year" : 0 }))
-app.set("views", path.join(__dirname, "public"))
-app.set("view engine", "pug")
-
-app.locals.cacheBuster = function (path) {
-    if (NODE_ENV !== "production") {
-        return path
-    }
-
-    return `${path}?=v${version}`
-}
-
-app.get("/flare.png", (req, res) => {
-    res.sendFile("/flare.png")
-})
 
 app.get("/", (req, res) => {
-    res.render("index")
+    res.sendFile(path.join(__dirname, "public/index.html"))
 })
+
+app.use(serveStatic(path.join(__dirname, "public"), { maxAge: USE_CACHE_BUST ? "1 year" : 0 }))
+
 
 app.listen(PORT, () => {
     console.log(`[${NODE_ENV}] Server ready @ ${PORT}`)

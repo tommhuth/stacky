@@ -1,32 +1,22 @@
-import { Stack, StackState, StackEvent } from "./world/Stack"
-import { scene, engine } from "./world/scene"
-import { setScore, setReady, setEnded, setRunning, setScoreBonus, init } from "./ui"
- 
-const stack = new Stack()
+import React from "react"
+import ReactDOM from "react-dom"
+import Stack from "./Stack"  
+import { Canvas } from "react-three-fiber"
+import { CannonProvider } from "./cannon" 
 
-stack.on(StackEvent.ScoreChange, setScore)
-stack.on(StackEvent.ScoreBonus, setScoreBonus)
-stack.on(StackEvent.Ready, setReady)
-stack.on(StackEvent.Ended, setEnded)
-stack.on(StackEvent.Running, setRunning)
-
-document.addEventListener("click", () => {
-    switch (stack.state) {
-        case StackState.Ended:
-            stack.restart()
-            break
-        case StackState.Ready:
-            stack.start()
-            break
-        case StackState.Running:
-            stack.match()
-            break
-    }
-})
-
-engine.runRenderLoop(() => {
-    stack.clean()
-    scene.render()
-})
-
-init()
+ReactDOM.render(
+    <div style={{ height: "100vh", width: "100vw" }}>
+        <Canvas>
+            <ambientLight color={0xFFFFFF} intensity={.35} />
+            <directionalLight 
+                castShadow 
+                position={[-2, 3, 2]} 
+                target-position={[0, 0, 0]} 
+            />
+            <CannonProvider>
+                <Stack />
+            </CannonProvider>
+        </Canvas>
+    </div>,
+    document.getElementById("root")
+)
