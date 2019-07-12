@@ -5,20 +5,33 @@ import Slice from "./Slice"
 import { useRender } from "react-three-fiber"
 import Camera from "./Camera"
 
+function getPositionWithOffset(x, y, z, offset, axis) {
+    return [
+        x + (getOffset(offset) * (axis === "x" ? 1 : 0)),
+        y,
+        z + (getOffset(offset) * (axis === "z" ? 1 : 0))
+    ]
+}
+
+function getOffset(offset) {
+    return Math.cos(offset) * 14
+}
+
 export default function Stack() {
     const [slices, setSlices] = useState([
         { position: [0, -14, 0], size: [10, 30, 10], mass: 0 }
     ])
     const [leftovers, setLeftovers] = useState([])
-    const [xOffset, setXOffset] = useState(0)
+    const [sliceOffset, setSliceOffset] = useState(0)
+    const [offsetAxis, setOffsetAxis] = useState("x")
     const [gameOver, setGameOver] = useState(false)
     const prev = slices[slices.length - 1]
 
     useRender(() => {
-        setXOffset(prev => {
+        setSliceOffset(prev => {
             return prev + .0125
         })
-    }, false, [xOffset])
+    }, false, [sliceOffset])
 
     useEffect(() => {
         const handleClick = () => {
@@ -35,7 +48,9 @@ export default function Stack() {
                     prev.position[2] + prev.size[2] / 2
                 )
             )
-            let top = bottom.clone().translate(new Vector3(Math.cos(xOffset - .025) * 14, 0, 0))
+            let top = bottom.clone().translate(
+                new Vector3(offsetAxis === "x" ? getOffset(sliceOffset - .025) : 0, 0, offsetAxis === "z" ? getOffset(sliceOffset - .025) : 0)
+            )
             let bottomSize = bottom.getSize(new Vector3())
             let y = slices.length * 2
 
@@ -53,8 +68,10 @@ export default function Stack() {
                     }
                 ])
 
-                for (let offset of [bottomSize.x, -bottomSize.x]) {
-                    let offsetBottom = bottom.clone().translate(new Vector3(offset, 0, 0))
+                for (let offset of offsetAxis === "x" ? [bottomSize.x, -bottomSize.x] : [bottomSize.z, -bottomSize.z]) {
+                    let offsetBottom = bottom.clone().translate(
+                        new Vector3(offsetAxis === "x" ? offset : 0, 0, offsetAxis === "z" ? offset : 0)
+                    )
 
                     if (offsetBottom.intersectsBox(top)) {
                         let offsetLeft = offsetBottom.clone().intersect(top)
@@ -79,20 +96,21 @@ export default function Stack() {
                 setSlices(p => [
                     ...p,
                     {
-                        position: [center.x + Math.cos(xOffset - .025) * 14, y, center.z],
+                        position: getPositionWithOffset(center.x, y, center.z, sliceOffset, offsetAxis),
                         size: [size.x, 2, size.z],
                         mass: size.x * 2 * size.z
                     }
                 ])
             }
 
-            setXOffset(0)
+            setSliceOffset(0)
+            setOffsetAxis(offsetAxis === "x" ? "z" : "x")
         }
 
         window.addEventListener("click", handleClick)
 
         return () => window.removeEventListener("click", handleClick)
-    }, [xOffset, slices])
+    }, [sliceOffset, slices, offsetAxis])
 
     return (
         <>
@@ -102,9 +120,9 @@ export default function Stack() {
                 <Slice key={slices.length}
                     size={[prev.size[0], 2, prev.size[2]]}
                     mass={0}
-                    position={[prev.position[0] + Math.cos(xOffset) * 14, slices.length * 2, prev.position[2]]}
+                    position={getPositionWithOffset(prev.position[0], slices.length * 2, prev.position[2], sliceOffset, offsetAxis)}
                 />
-            </Only> 
+            </Only>
 
             {slices.map((i, index) => {
                 return <Slice key={index} position={i.position} mass={i.mass} size={i.size} />
