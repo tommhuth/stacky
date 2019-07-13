@@ -1,7 +1,7 @@
 
 import React, { useState, useEffect } from "react" 
 import { Box, Vec3 } from "cannon"
-import { useCannon } from "./cannon" 
+import { useCannon } from "../utils/cannon" 
 
 export default function Slice({ position, mass = 0, size = [1, 1, 1] }) { 
     const [color, setColor] = useState("red")
@@ -24,9 +24,8 @@ export default function Slice({ position, mass = 0, size = [1, 1, 1] }) {
     }, [body, position])
 
     useEffect(() => {
-        setColor(0x888888)
-    }, [])
- 
+        setColor(0x555555)
+    }, []) 
 
     return (
         <mesh ref={ref} castShadow receiveShadow>
@@ -35,5 +34,3 @@ export default function Slice({ position, mass = 0, size = [1, 1, 1] }) {
         </mesh>
     )
 }
-
-// random.pick(["red", "blue", "orange", "green", "yellow", "gray", "black"])

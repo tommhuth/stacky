@@ -16,7 +16,7 @@ export function CannonProvider({ children }) {
     }, [world])
 
     // Run world stepper every frame
-    useRender(() => world.step(1 / 60))
+    useRender(() => world.step(1 / 45))
 
     // Distribute world via context
     return <context.Provider value={world} children={children} />
