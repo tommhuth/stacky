@@ -22,7 +22,7 @@ export default function TopSlice() {
     })  
 
     return ( 
-        <Only if={state !== Config.STATE_GAME_OVER}>
+        <Only if={state === Config.STATE_ACTIVE}>
             <Slice
                 key={slices.length}
                 size={[prev.size[0], Config.SLICE_HEIGHT, prev.size[2]]}

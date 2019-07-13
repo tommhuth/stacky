@@ -1,4 +1,3 @@
-// Cannon-world context provider
 import { World, NaiveBroadphase, Body } from "cannon" 
 import React, {  useRef, useEffect, useState, useContext } from "react"
 import { useRender } from "react-three-fiber"
@@ -16,7 +15,7 @@ export function CannonProvider({ children }) {
     }, [world])
 
     // Run world stepper every frame
-    useRender(() => world.step(1 / 45))
+    useRender(() => world.step(1 / 40))
 
     // Distribute world via context
     return <context.Provider value={world} children={children} />

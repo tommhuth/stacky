@@ -1,6 +1,6 @@
 import { StackAction } from "../actions/creators/stack"
 import Config from "../../Config"
- 
+
 const init = {
     sliceOffset: 0,
     offsetAxis: "x",
@@ -15,8 +15,10 @@ const init = {
     fragments: []
 }
 
-export default function (state = init, { type, payload }) {
+export default function (state = { ...init }, { type, payload }) {
     switch (type) {
+        case StackAction.RESET:
+            return { ...init }
         case StackAction.ADD_SLICE:
             return {
                 ...state,

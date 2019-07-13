@@ -4,7 +4,8 @@ export const StackAction = {
     INCREMENT_OFFSET: "stack:increment-offset",
     RESET_OFFSET: "stack:reset-offset",
     INVERT_OFFSET_AXIS: "stack:invert-offset-axis",
-    SET_STATE: "stack:set-state"
+    SET_STATE: "stack:set-state",
+    RESET: "stack:reset"
 }
 
 export function addSlice(slice) {
@@ -24,6 +25,11 @@ export function addFragment(fragment) {
 export function incrementOffset() {
     return {
         type: StackAction.INCREMENT_OFFSET
+    }
+}
+export function reset() {
+    return {
+        type: StackAction.RESET
     }
 }
 
