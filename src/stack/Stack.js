@@ -12,29 +12,29 @@ import { getPositionWithOffset, getOffset } from "../utils/helpers"
 import { bindActionCreators } from "redux"
 import { useMemo } from "react"
 
-export function useActions(actions = [], deps = []) {
+export function useActions(actions = {}, deps = []) {
     const dispatch = useDispatch()
 
     return useMemo(() => {
         let result = {}
 
-        for (let action of actions) {
-            result[action.name] = bindActionCreators(action, dispatch)
-        }
-
+        for (let action of Object.keys(actions)) {
+            result[action] = bindActionCreators(actions[action], dispatch)
+        } 
+        
         return result
     }, [dispatch, ...deps])
 }
 
 export default function Stack() {
     let store = useStore()
-    let actions = useActions([
+    let actions = useActions({
         addSlice,
         addFragment,
         setState,
         resetOffset,
         invertOffsetAxis
-    ])
+    })
 
     useEffect(() => {
         const handleClick = () => {
