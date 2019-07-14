@@ -10,7 +10,7 @@ export default function Fragments() {
     return (
         <>
             {fragments.map((i, index) => {
-                return <Slice key={index} position={i.position} mass={i.mass} size={i.size} />
+                return <Slice color={i.color} key={index} position={i.position} mass={i.mass} size={i.size} />
             })}
         </>
     )

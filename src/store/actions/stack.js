@@ -3,6 +3,7 @@ import { Box3, Vector3 } from "three"
 import { getSlices, getOffsetAxis, getSliceOffset } from "../../store/selectors/stack"
 import { getPositionWithOffset, getOffset } from "../../utils/helpers"
 import Config from "../../Config"
+import ColorMixer from "../../utils/ColorMixer" 
 
 export function incrementOffset() {
     return async function (dispatch) {
@@ -12,6 +13,7 @@ export function incrementOffset() {
 
 export function reset() {
     return async function (dispatch) {
+        ColorMixer.reset()
         dispatch(stackActions.reset())
     }
 }
@@ -74,7 +76,8 @@ export function match() {
                     dispatch(stackActions.addFragment({
                         position: [center.x, y, center.z],
                         size: [size.x, Config.SLICE_HEIGHT, size.z],
-                        mass: size.x * Config.SLICE_HEIGHT * size.z
+                        mass: size.x * Config.SLICE_HEIGHT * size.z,
+                        color: ColorMixer.previous()
                     }))
                 }
             }
@@ -82,7 +85,8 @@ export function match() {
             dispatch(stackActions.addSlice({
                 position: [center.x, y, center.z],
                 size: [size.x, Config.SLICE_HEIGHT, size.z],
-                mass: 0
+                mass: 0,
+                color: ColorMixer.previous()
             }))
         } else {
             let size = bottom.getSize(new Vector3())
@@ -92,7 +96,8 @@ export function match() {
             dispatch(stackActions.addFragment({
                 position: getPositionWithOffset(center.x, y, center.z, sliceOffset, offsetAxis),
                 size: [size.x, Config.SLICE_HEIGHT, size.z],
-                mass: size.x * Config.SLICE_HEIGHT * size.z
+                mass: size.x * Config.SLICE_HEIGHT * size.z,
+                color: ColorMixer.previous()
             }))
         }
 

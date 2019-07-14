@@ -4,35 +4,77 @@ import { useSelector } from "react-redux"
 import { useThree, useRender } from "react-three-fiber"
 import { Vector3 } from "three"
 import Config from "./Config"
-import { getStackSize } from "./store/selectors/stack"
+import { getStackSize, getState } from "./store/selectors/stack"
+
+const breakpoints = [
+    {
+        breakpoint: "(max-width: 30em)",
+        zoom: 50
+    },
+    {
+        breakpoint: "(max-width: 40em)",
+        zoom: 60
+    },
+    {
+        breakpoint: "(max-width: 45em)", 
+        zoom: 65
+    },
+    {
+        breakpoint: "(max-width: 65em)", 
+        zoom: 85
+    },
+    {
+        breakpoint: "(min-width: 80em)", 
+        zoom: 100
+    },
+
+]
+
+
+function getZoom() {
+    for (let { zoom, breakpoint } of breakpoints) {
+        if (window.matchMedia(breakpoint).matches) {
+            return zoom
+        }
+    }
+
+    return 100
+}
 
 export default function Camera() {
     const ref = createRef()
     const { setDefaultCamera } = useThree()
     const stackSize = useSelector(getStackSize)
-    const targetY = stackSize * Config.SLICE_HEIGHT + 10
-    const [intermediateY, setY] = useState(targetY)
+    const state = useSelector(getState)
+    const [intermediateY, setIntermediateY] = useState(5)
+    const [zoom, setZoom] = useState(getZoom())
     const x = Config.SLICE_SIZE
     const z = Config.SLICE_SIZE
-    const target = [0, 0, 0]
+    const target = [0, 0, 0] 
 
     useEffect(() => {
         ref.current.lookAt(new Vector3(...target))
+
+        window.addEventListener("resize", () => {
+            setZoom(getZoom())
+        })
     }, [])
 
     useRender(() => {
-        setY(prev => prev + ((targetY - prev) / 120))
-    }, false, [targetY])
-     
+        const targetY = state === Config.STATE_ACTIVE ? stackSize * Config.SLICE_HEIGHT + 5 : 5
+
+        setIntermediateY(prev => prev + ((targetY - prev) / 120))
+    }, false, [stackSize, state])
+
     return (
         <orthographicCamera
             left={-10}
             right={10}
             top={10}
             bottom={-10}
-            near={.1}
+            near={-10}
             far={100}
-            zoom={100}
+            zoom={zoom}
             position={[x, intermediateY, z]}
             ref={ref}
             onUpdate={self => {

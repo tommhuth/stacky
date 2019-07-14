@@ -23,7 +23,7 @@ module.exports = {
     entry: { app: "./src/app.js" },
     output: {
         path: path.resolve(__dirname, "public"),
-        filename: `[name].bundle.[hash:6].js`,
+        filename: "[name].bundle.[hash:6].js",
         publicPath: "/"
     },
     stats: {

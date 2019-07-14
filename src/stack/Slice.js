@@ -3,9 +3,8 @@ import React, { useState, useEffect } from "react"
 import { Box, Vec3 } from "cannon"
 import { useCannon } from "../utils/cannon" 
 
-export default function Slice({ position, mass = 0, size = [1, 1, 1] }) { 
-    const [color, setColor] = useState("red")
-    const [body, setBody] = useState(null)
+export default function Slice({ position, mass = 0, size = [1, 1, 1], color }) {  
+    const [body, setBody] = useState(null) 
 
     const ref = useCannon(
         { mass },
@@ -21,11 +20,7 @@ export default function Slice({ position, mass = 0, size = [1, 1, 1] }) {
         if (body) {
             body.position.set(...position)
         }
-    }, [body, position])
-
-    useEffect(() => {
-        setColor(0x555555)
-    }, []) 
+    }, [body, position]) 
 
     return (
         <mesh ref={ref} castShadow receiveShadow>

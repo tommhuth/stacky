@@ -1,5 +1,6 @@
 import { StackAction } from "../actions/creators/stack"
 import Config from "../../Config"
+import ColorMixer from "../../utils/ColorMixer"
 
 const init = {
     sliceOffset: 0,
@@ -9,7 +10,8 @@ const init = {
         {
             position: [0, -(15 - Config.SLICE_HEIGHT / 2), 0],
             size: [Config.SLICE_SIZE, 30, Config.SLICE_SIZE],
-            mass: 0
+            mass: 0,
+            color: ColorMixer.next()
         }
     ],
     fragments: []
@@ -18,7 +20,7 @@ const init = {
 export default function (state = { ...init }, { type, payload }) {
     switch (type) {
         case StackAction.RESET:
-            return { ...init }
+            return { ...init, state: Config.STATE_ACTIVE }
         case StackAction.ADD_SLICE:
             return {
                 ...state,
