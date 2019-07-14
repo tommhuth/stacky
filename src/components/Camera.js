@@ -3,8 +3,8 @@ import React, { useState, useEffect, createRef } from "react"
 import { useSelector } from "react-redux"
 import { useThree, useRender } from "react-three-fiber"
 import { Vector3 } from "three"
-import Config from "./Config"
-import { getStackSize, getState } from "./store/selectors/stack"
+import Config from "../Config"
+import { getStackSize, getState } from "../store/selectors/stack"
 
 const breakpoints = [
     {
