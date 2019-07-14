@@ -1,17 +1,18 @@
-import { World, NaiveBroadphase, Body } from "cannon" 
-import React, {  useRef, useEffect, useState, useContext } from "react"
+import { World, NaiveBroadphase, Body } from "cannon"
+import React, { useRef, useEffect, useState, useContext } from "react"
 import { useRender } from "react-three-fiber"
 
 const context = React.createContext()
 
-export function CannonProvider({ children }) {
-    // Set up physics
+export function CannonProvider({ children }) { 
     const [world] = useState(() => new World())
 
     useEffect(() => {
         world.broadphase = new NaiveBroadphase()
-        world.solver.iterations = 10
-        world.gravity.set(0, -10,0)
+        world.solver.iterations = 8
+        world.defaultContactMaterial.friction = 10
+        world.defaultContactMaterial.restitution = .3
+        world.gravity.set(0, -9.8, 0)
     }, [world])
 
     // Run world stepper every frame
