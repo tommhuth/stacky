@@ -5,33 +5,31 @@ import { useThree, useRender } from "react-three-fiber"
 import { Vector3 } from "three"
 import Config from "../Config"
 import { getStackSize, getState } from "../store/selectors/stack"
-
-const breakpoints = [
-    {
-        breakpoint: "(max-width: 30em)",
-        zoom: 50
-    },
-    {
-        breakpoint: "(max-width: 40em)",
-        zoom: 60
-    },
-    {
-        breakpoint: "(max-width: 45em)", 
-        zoom: 65
-    },
-    {
-        breakpoint: "(max-width: 65em)", 
-        zoom: 85
-    },
-    {
-        breakpoint: "(min-width: 80em)", 
-        zoom: 100
-    },
-
-]
-
-
+ 
 function getZoom() {
+    const breakpoints = [
+        {
+            breakpoint: "(max-width: 30em)",
+            zoom: 50
+        },
+        {
+            breakpoint: "(max-width: 40em)",
+            zoom: 60
+        },
+        {
+            breakpoint: "(max-width: 45em)", 
+            zoom: 65
+        },
+        {
+            breakpoint: "(max-width: 65em)", 
+            zoom: 85
+        },
+        {
+            breakpoint: "(min-width: 80em)", 
+            zoom: 100
+        },
+    ]
+
     for (let { zoom, breakpoint } of breakpoints) {
         if (window.matchMedia(breakpoint).matches) {
             return zoom
