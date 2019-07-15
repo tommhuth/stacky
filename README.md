@@ -1,2 +1,2 @@
 # Stacky
-Stack clone made  with React Three Fiber, for the browser. (There's also a Babylonjs version, and maybe a raw Three version somewhere.)
+Stack clone made  with `react-three-fiber`, for the browser. (There's also a Babylonjs version, and maybe a raw Three version somewhere.)
