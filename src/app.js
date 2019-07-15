@@ -12,6 +12,7 @@ import Only from "./components/Only"
 import { useSelector } from "react-redux"
 import { getState, getStackSize } from "./store/selectors/stack"
 import Config from "./Config"
+import Lights from "./components/Lights"
 
 function UI() {
     let state = useSelector(getState)
@@ -56,14 +57,7 @@ ReactDOM.render(
                 <Provider store={store}>
                     <CannonProvider defaultFriction={1} defaultRestitution={.2}>
                         <Camera />
-                        <ambientLight color={0xFFFFFF} intensity={.6} />
-                        <directionalLight
-                            shadow-radius={10}
-                            castShadow
-                            position={[6, 10, 2]}
-                            intensity={.55}
-                            target-position={[0, 0, 0]}
-                        />
+                        <Lights />
                         <Stack />
                     </CannonProvider>
                 </Provider>

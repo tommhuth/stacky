@@ -2,10 +2,10 @@
 import React, { useState, useEffect, createRef } from "react"
 import { useSelector } from "react-redux"
 import { useThree, useRender } from "react-three-fiber"
-import { Vector3 } from "three"
+import { Vector3, Fog, PCFSoftShadowMap } from "three"
 import Config from "../Config"
 import { getStackSize, getState } from "../store/selectors/stack"
- 
+
 function getZoom() {
     const breakpoints = [
         {
@@ -17,15 +17,15 @@ function getZoom() {
             zoom: 60
         },
         {
-            breakpoint: "(max-width: 45em)", 
+            breakpoint: "(max-width: 45em)",
             zoom: 65
         },
         {
-            breakpoint: "(max-width: 65em)", 
+            breakpoint: "(max-width: 65em)",
             zoom: 85
         },
         {
-            breakpoint: "(min-width: 80em)", 
+            breakpoint: "(min-width: 80em)",
             zoom: 100
         },
     ]
@@ -41,14 +41,14 @@ function getZoom() {
 
 export default function Camera() {
     const ref = createRef()
-    const { setDefaultCamera } = useThree()
+    const { setDefaultCamera, scene } = useThree()
     const stackSize = useSelector(getStackSize)
     const state = useSelector(getState)
     const [intermediateY, setIntermediateY] = useState(5)
     const [zoom, setZoom] = useState(getZoom())
     const x = Config.SLICE_SIZE
     const z = Config.SLICE_SIZE
-    const target = [0, 0, 0] 
+    const target = [0, 0, 0]
 
     useEffect(() => {
         ref.current.lookAt(new Vector3(...target))
@@ -56,6 +56,8 @@ export default function Camera() {
         window.addEventListener("resize", () => {
             setZoom(getZoom())
         })
+
+        scene.fog = new Fog(0x535f73, 8, 16)
     }, [])
 
     useRender(() => {
