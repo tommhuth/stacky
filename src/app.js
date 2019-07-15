@@ -30,7 +30,7 @@ function UI() {
 
             <Only if={state === Config.STATE_GAME_OVER}>
                 <div className="panel panel--game-over">
-                    Game over 
+                    Game over
                     <div className="panel__subtitle">Tap to restart</div>
                 </div>
             </Only>
@@ -54,16 +54,16 @@ ReactDOM.render(
         <div style={{ height: "100vh", width: "100vw" }}>
             <Canvas>
                 <Provider store={store}>
-                    <Camera />
-                    <ambientLight color={0xFFFFFF} intensity={.6} />
-                    <directionalLight
-                        shadow-radius={10}
-                        castShadow
-                        position={[6, 10, 2]}
-                        intensity={.55}
-                        target-position={[0, 0, 0]}
-                    />
                     <CannonProvider defaultFriction={1} defaultRestitution={.2}>
+                        <Camera />
+                        <ambientLight color={0xFFFFFF} intensity={.6} />
+                        <directionalLight
+                            shadow-radius={10}
+                            castShadow
+                            position={[6, 10, 2]}
+                            intensity={.55}
+                            target-position={[0, 0, 0]}
+                        />
                         <Stack />
                     </CannonProvider>
                 </Provider>
