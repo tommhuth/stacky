@@ -1,0 +1,49 @@
+.panel {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    text-align: center;
+    text-shadow: 0 0 4.5rem rgba(#000, .5);
+    pointer-events: none;
+
+    &__subtitle {
+        font-size: 1.85rem;
+        margin-top: 2rem;
+        opacity: .7;
+        font-family: "Open Sans";
+        text-transform: uppercase;
+    }
+
+    &--score {
+        font-size: 8em;
+        line-height: .85;
+        transform: translate(-50%, -180%);
+
+        @media (max-width: 50em) {
+            font-size: 6em;
+        }
+    }
+
+    &--intro {
+        font-size: 8em;
+        z-index: 1;
+        font-family: "Abril Fatface";
+        text-transform: lowercase;
+
+        @media (max-width: 24em) {
+            font-size: 5em;
+        }
+    }
+
+    &--game-over {
+        font-size: 3em;
+        z-index: 1;
+        line-height: 1;
+        text-transform: lowercase;
+
+        @media (max-width: 50em) {
+            font-size: 2.25em;
+        }
+    }
+}

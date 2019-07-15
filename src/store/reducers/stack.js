@@ -40,7 +40,7 @@ export default function (state = { ...init }, { type, payload }) {
         case StackAction.INCREMENT_OFFSET:
             return {
                 ...state,
-                sliceOffset: state.sliceOffset + .035
+                sliceOffset: state.sliceOffset + .03
             }
         case StackAction.RESET_OFFSET:
             return {
