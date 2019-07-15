@@ -57,7 +57,7 @@ export default function Camera() {
             setZoom(getZoom())
         })
 
-        scene.fog = new Fog(0x535f73, 7, 16)
+        scene.fog = new Fog(0x535f73, 8, 16)
     }, [])
 
     useRender(() => {

@@ -28,8 +28,8 @@ body {
 
 body {
     background-color: #222;
-    background-image: linear-gradient(rgba(255, 255, 255, 0), rgba(255, 255, 255, .05));
-    transition: background-color .9s;
+    background-image: linear-gradient(rgba(255, 255, 255, .125), rgba(255, 255, 255, 0));
+    transition: background-color 1.5s;
     color: #FFF;
 }
 

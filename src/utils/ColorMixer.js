@@ -21,7 +21,7 @@ export default class ColorMixer {
         let blend = left.clone().lerp(right, this.j / this.shades)
 
         this.j++
-        this._previous = blend 
+        this._previous = blend
 
         if (this.j > this.shades - 1) {
             this.j = 0
@@ -40,15 +40,13 @@ export default class ColorMixer {
         this.j = 2
     }
     static setEnvironment() {
-        if (this.j % 2 === 0) {
-            let color = this.previous()
+        let color = this.previous()
 
-            document.body.style.backgroundColor = `rgba(
-                ${Math.round(color.r * 255)}, 
-                ${Math.round(color.g * 255)}, 
-                ${Math.round(color.b * 255)}, 
-                .3
-            )`
-        }
+        document.body.style.backgroundColor = `rgba(
+            ${Math.round(color.r * 255)}, 
+            ${Math.round(color.g * 255)}, 
+            ${Math.round(color.b * 255)}, 
+            .3
+        )`
     }
 }
