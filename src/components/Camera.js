@@ -2,7 +2,7 @@
 import React, { useState, useEffect, createRef } from "react"
 import { useSelector } from "react-redux"
 import { useThree, useRender } from "react-three-fiber"
-import { Vector3, Fog, PCFSoftShadowMap } from "three"
+import { Vector3, Fog } from "three"
 import Config from "../Config"
 import { getStackSize, getState } from "../store/selectors/stack"
 
@@ -10,7 +10,7 @@ function getZoom() {
     const breakpoints = [
         {
             breakpoint: "(max-width: 30em)",
-            zoom: 50
+            zoom: 65
         },
         {
             breakpoint: "(max-width: 40em)",
