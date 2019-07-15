@@ -9,5 +9,5 @@ export function getPositionWithOffset(x, y, z, offset, axis) {
 }
 
 export function getOffset(offset) {
-    return Math.cos(offset) * Config.SLICE_SIZE * 1.5
+    return Math.cos(offset) * Config.SLICE_SIZE * 1.25
 }
