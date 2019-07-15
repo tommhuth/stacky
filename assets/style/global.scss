@@ -65,9 +65,9 @@ button {
     }
 
     &--score {
-        font-size: 10em;
+        font-size: 8em;
         line-height: .85;
-        transform: translate(-50%, -120%);
+        transform: translate(-50%, -180%);
 
         @media (max-width: 50em) {
             font-size: 6em;
