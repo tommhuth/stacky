@@ -6,12 +6,18 @@ import Fragments from "./Fragments"
 import TopSlice from "./TopSlice"
 import Slices from "./Slices"
 import useActions from "../utils/useActions"
-import { getState } from "../store/selectors/stack"
+import { getState, getStackSize } from "../store/selectors/stack"
 import Config from "../Config"
+import { useThree } from "react-three-fiber"
+import ColorMixer from "../utils/ColorMixer"
+import { Color } from "three"
+import anime from "animejs"
 
 export default function Stack() {
     let actions = useActions({ match, reset, start })
     let state = useSelector(getState)
+    let stackSize = useSelector(getStackSize)
+    let { scene } = useThree()
 
     useEffect(() => {
         function onClick() {
@@ -29,6 +35,22 @@ export default function Stack() {
 
         return () => window.removeEventListener("click", onClick)
     }, [state])
+
+    useEffect(() => {
+        let next = ColorMixer.previous().multiply(new Color(.5, .5, .5))
+
+        anime({
+            targets: scene.fog.color,
+            r: next.r,
+            g: next.g,
+            b: next.b,
+            duration: 500,
+            easing: "easeOutCubic",
+            autoplay: true
+        }) 
+
+        ColorMixer.setEnvironment()
+    }, [stackSize])
 
     return (
         <>
