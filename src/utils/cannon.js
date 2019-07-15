@@ -4,15 +4,21 @@ import { useRender } from "react-three-fiber"
 
 const context = React.createContext()
 
-export function CannonProvider({ children }) { 
+export function CannonProvider({
+    children,
+    iterations = 8,
+    defaultRestitution = 0,
+    defaultFriction = .1,
+    gravity = [0, -9.8, 0]
+}) {
     const [world] = useState(() => new World())
 
     useEffect(() => {
         world.broadphase = new NaiveBroadphase()
-        world.solver.iterations = 8
-        world.defaultContactMaterial.friction = 10
-        world.defaultContactMaterial.restitution = .3
-        world.gravity.set(0, -9.8, 0)
+        world.solver.iterations = iterations
+        world.defaultContactMaterial.friction = defaultFriction
+        world.defaultContactMaterial.restitution = defaultRestitution
+        world.gravity.set(...gravity)
     }, [world])
 
     // Run world stepper every frame
@@ -47,7 +53,7 @@ export function useCannon({ ...props }, fn, deps = []) {
             ref.current.position.copy(body.position)
             ref.current.quaternion.copy(body.quaternion)
         }
-    })
+    }) 
 
     return ref
 }

@@ -63,7 +63,7 @@ ReactDOM.render(
                         intensity={.55}
                         target-position={[0, 0, 0]}
                     />
-                    <CannonProvider>
+                    <CannonProvider defaultFriction={1} defaultRestitution={.2}>
                         <Stack />
                     </CannonProvider>
                 </Provider>
