@@ -52,12 +52,8 @@ export default function Camera() {
 
     useEffect(() => {
         ref.current.lookAt(new Vector3(...target))
-
-        window.addEventListener("resize", () => {
-            setZoom(getZoom())
-        })
-
-        scene.fog = new Fog(0x535f73, 8, 16)
+        window.addEventListener("resize", () => setZoom(getZoom()))
+        scene.fog = new Fog(0x535f73, 5, 16)
     }, [])
 
     useRender(() => {
@@ -73,7 +69,7 @@ export default function Camera() {
             top={10}
             bottom={-10}
             near={-10}
-            far={100}
+            far={20}
             zoom={zoom}
             position={[x, intermediateY, z]}
             ref={ref}

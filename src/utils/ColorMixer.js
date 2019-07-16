@@ -1,7 +1,7 @@
 import { Color } from "three"
 
 export default class ColorMixer {
-    static shades = 8
+    static shades = 14
     static colors = [
         new Color(0xffffff),
         new Color(0x397fbf),

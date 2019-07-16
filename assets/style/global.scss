@@ -28,7 +28,7 @@ body {
 
 body {
     background-color: #222;
-    background-image: linear-gradient(rgba(255, 255, 255, .125), rgba(255, 255, 255, 0));
+    background-image: linear-gradient(rgba(#000, .1), rgba(#000, 0));
     transition: background-color 1.5s;
     color: #FFF;
 }
