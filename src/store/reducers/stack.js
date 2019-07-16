@@ -8,8 +8,8 @@ const init = {
     state: Config.STATE_READY,
     slices: [
         {
-            position: [0, -(15 - Config.SLICE_HEIGHT / 2), 0],
-            size: [Config.SLICE_SIZE, 30, Config.SLICE_SIZE],
+            position: [0, -(Config.BOTTOM_SLICE_HEIGHT / 2 - Config.SLICE_HEIGHT / 2), 0],
+            size: [Config.SLICE_SIZE, Config.BOTTOM_SLICE_HEIGHT, Config.SLICE_SIZE],
             mass: 0,
             color: ColorMixer.next()
         }
@@ -40,7 +40,7 @@ export default function (state = { ...init }, { type, payload }) {
         case StackAction.INCREMENT_OFFSET:
             return {
                 ...state,
-                sliceOffset: state.sliceOffset + .03
+                sliceOffset: state.sliceOffset + Config.SLICE_SPEED_INCREMENT
             }
         case StackAction.RESET_OFFSET:
             return {
