@@ -5,7 +5,15 @@ export const StackAction = {
     RESET_OFFSET: "stack:reset-offset",
     INVERT_OFFSET_AXIS: "stack:invert-offset-axis",
     SET_STATE: "stack:set-state",
-    RESET: "stack:reset"
+    RESET: "stack:reset",
+    SET_DIRECT_HITS: "stack:set-direct-hits"
+}
+
+export function setDirectHits(count) {
+    return {
+        type: StackAction.SET_DIRECT_HITS,
+        payload: count
+    }
 }
 
 export function addSlice(slice) {

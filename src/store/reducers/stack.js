@@ -6,6 +6,7 @@ const init = {
     sliceOffset: 0,
     offsetAxis: "x",
     state: Config.STATE_READY,
+    directHits: 0,
     slices: [
         {
             position: [0, -(Config.BOTTOM_SLICE_HEIGHT / 2 - Config.SLICE_HEIGHT / 2), 0],
@@ -20,7 +21,9 @@ const init = {
 export default function (state = { ...init }, { type, payload }) {
     switch (type) {
         case StackAction.RESET:
-            return { ...init, state: Config.STATE_ACTIVE }
+            return { ...init, state: Config.STATE_ACTIVE } 
+        case StackAction.SET_DIRECT_HITS:
+            return { ...state, directHits: payload }
         case StackAction.ADD_SLICE:
             return {
                 ...state,

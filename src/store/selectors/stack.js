@@ -2,6 +2,10 @@ export function getSlices(state) {
     return state.stack.slices
 }
 
+export function getDirectHits(state) {
+    return state.stack.directHits
+}
+
 export function getFragments(state) {
     return state.stack.fragments
 }
