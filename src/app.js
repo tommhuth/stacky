@@ -53,7 +53,7 @@ ReactDOM.render(
             <UI />
         </Provider>
         <div style={{ height: "100vh", width: "100vw" }}>
-            <Canvas>
+            <Canvas pixelRatio={Math.min(1.5, window.devicePixelRatio)}>
                 <Provider store={store}>
                     <CannonProvider defaultFriction={1} defaultRestitution={.2}>
                         <Camera />
