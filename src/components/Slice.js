@@ -31,18 +31,18 @@ export default function Slice({ position, mass = 0, size = [1, 1, 1], color, dir
 
     useEffect(() => {
         if (directHit) { 
-            let x = { sizeAddition, opacity }
+            let targets = { sizeAddition, opacity }
 
             anime({
-                targets: x,
-                sizeAddition: .75,
+                targets,
+                sizeAddition: .5,
                 opacity: 0,
                 duration: 800,
                 delay: 0,
                 easing: "easeOutQuart",
                 update() {
-                    setSizeAddition(x.sizeAddition) 
-                    setOpacity(x.opacity)
+                    setSizeAddition(targets.sizeAddition) 
+                    setOpacity(targets.opacity)
                 }
             })
         }
