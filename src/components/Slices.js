@@ -10,7 +10,7 @@ export default function Slices() {
     return (
         <>
             {slices.map((i, index) => {
-                return <Slice  color={i.color} key={index} position={i.position} mass={i.mass} size={i.size} />
+                return <Slice directHit={i.directHit} color={i.color} key={index} position={i.position} mass={i.mass} size={i.size} />
             })}
         </>
     )

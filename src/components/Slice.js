@@ -1,11 +1,18 @@
 
-import React, { useState, useEffect } from "react" 
+import React, { useState, useEffect, useRef } from "react"
 import { Box, Vec3 } from "cannon"
-import { useCannon } from "../utils/cannon" 
+import { DoubleSide } from "three"
+import { useCannon } from "../utils/cannon"
+import Config from "../Config"
+import Only from "./Only"
+import anime from "animejs"
 
-export default function Slice({ position, mass = 0, size = [1, 1, 1], color }) {  
-    const [body, setBody] = useState(null) 
-
+export default function Slice({ position, mass = 0, size = [1, 1, 1], color, directHit }) {
+    const planeRef = useRef()
+    const [body, setBody] = useState(null)
+    const [sizeAddition, setSizeAddition] = useState(0) 
+    const [opacity, setOpacity] = useState(1) 
+    
     const ref = useCannon(
         { mass },
         body => {
@@ -20,12 +27,43 @@ export default function Slice({ position, mass = 0, size = [1, 1, 1], color }) {
         if (body) {
             body.position.set(...position)
         }
-    }, [body, position]) 
+    }, [body, position])
+
+    useEffect(() => {
+        if (directHit) { 
+            let x = { sizeAddition, opacity }
+
+            anime({
+                targets: x,
+                sizeAddition: .75,
+                opacity: 0,
+                duration: 800,
+                delay: 0,
+                easing: "easeOutQuart",
+                update() {
+                    setSizeAddition(x.sizeAddition) 
+                    setOpacity(x.opacity)
+                }
+            })
+        }
+    }, [directHit])
 
     return (
-        <mesh ref={ref} castShadow receiveShadow>
-            <boxGeometry attach="geometry" args={size} />
-            <meshPhongMaterial color={color} attach="material" />
-        </mesh>
+        <>
+            <Only if={directHit}>
+                <mesh
+                    ref={planeRef}
+                    position={[position[0], position[1] + size[1] / 2 - Config.SLICE_HEIGHT, position[2]]}
+                    rotation-x={Math.PI / 2}
+                >
+                    <planeGeometry attach="geometry" args={[size[0] + sizeAddition, size[2] + sizeAddition, 1]} />
+                    <meshPhongMaterial transparent opacity={opacity} side={DoubleSide} color={0xFFFFFF} attach="material" />
+                </mesh>
+            </Only>
+            <mesh ref={ref} castShadow receiveShadow>
+                <boxGeometry attach="geometry" args={size} />
+                <meshPhongMaterial color={color} attach="material" />
+            </mesh>
+        </>
     )
 }

@@ -106,7 +106,8 @@ export function match() {
                     size.z + (directHitAddition ? .1 : 0)
                 ],
                 mass: 0,
-                color: ColorMixer.previous()
+                color: ColorMixer.previous(),
+                directHit
             }))
         } else {
             let size = bottom.getSize(new Vector3())
