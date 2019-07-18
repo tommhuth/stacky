@@ -10,6 +10,7 @@ import anime from "animejs"
 export default function Slice({ position, mass = 0, size = [1, 1, 1], color, directHit }) {
     const planeRef = useRef()
     const [body, setBody] = useState(null)
+    const [hasDirectHit, setHasDirectHit] = useState(directHit)
     const [sizeAddition, setSizeAddition] = useState(0) 
     const [opacity, setOpacity] = useState(1) 
     
@@ -43,6 +44,9 @@ export default function Slice({ position, mass = 0, size = [1, 1, 1], color, dir
                 update() {
                     setSizeAddition(targets.sizeAddition) 
                     setOpacity(targets.opacity)
+                },
+                complete() {
+                    setHasDirectHit(false)
                 }
             })
         }
@@ -50,7 +54,7 @@ export default function Slice({ position, mass = 0, size = [1, 1, 1], color, dir
 
     return (
         <>
-            <Only if={directHit}>
+            <Only if={hasDirectHit}>
                 <mesh
                     ref={planeRef}
                     position={[position[0], position[1] + size[1] / 2 - Config.SLICE_HEIGHT, position[2]]}
