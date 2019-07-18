@@ -32,14 +32,14 @@ function UI() {
             <Only if={state === Config.STATE_GAME_OVER}>
                 <div className="panel panel--game-over">
                     Game over
-                    <div className="panel__subtitle">Tap to restart</div>
                 </div>
+                <div className="panel__subtitle">Tap to restart</div>
             </Only>
             <Only if={state === Config.STATE_READY}>
-                <div className="panel panel--intro">
-                    {"Stacky".split().map(i => <span key={i}>{i}</span>)}
-                    <div className="panel__subtitle">Tap to start</div>
-                </div>
+                <div className="panel panel--intro logo">
+                    {"Stacky".split("").map((i,index) => <span style={{ animationDelay: index * 100 + "ms"}} key={i}>{i}</span>)}
+                </div> 
+                <div className="panel__subtitle">Tap to start</div>
             </Only>
         </>
     )

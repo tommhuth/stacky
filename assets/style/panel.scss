@@ -8,17 +8,24 @@
     pointer-events: none;
 
     &__subtitle {
-        font-size: 1.85rem;
-        margin-top: 2rem;
-        opacity: .7;
+        font-size: 1.65rem; 
+        opacity: .5;
         font-family: "Roboto";
         text-transform: uppercase;
+        position: absolute;
+        bottom: 3em;
+        left: 50%;
+        white-space: nowrap;
+        transform: translateX(-50%);
+        z-index: 1;
+        animation: subtitle-in .3s 1.5s both;
     }
 
     &--score {
         font-size: 11em;
         font-weight: 100;
         line-height: .85;
+        letter-spacing: -.05em;
         transform: translate(-50%, -100%);
 
         @media (max-width: 50em) {
@@ -27,7 +34,7 @@
     }
 
     &--intro {
-        font-size: 8em;
+        font-size: 10em;
         z-index: 1;
         font-family: "Abril Fatface";
         text-transform: lowercase;
@@ -41,10 +48,71 @@
         font-size: 3em;
         z-index: 1;
         line-height: 1;
-        text-transform: lowercase;
+        text-transform: uppercase;
+        margin-top: 1em;
+        white-space: nowrap;
+        animation: game-over-in .75s .25s both;
+
+        &::before,
+        &::after {
+            content: "";
+            display: inline-block;
+            width: .65em;
+            background-color: currentColor;
+            opacity: .15;
+            height: .035em;
+            margin-left: 1.25rem;
+            margin-right: 1.25rem;
+            vertical-align: middle;
+        }
 
         @media (max-width: 50em) {
             font-size: 2.25em;
         }
+    }
+}
+
+.logo {
+    white-space: nowrap;
+
+    span {
+        animation: logo-in .35s both;
+        display: inline-block;
+        position: relative;
+    }
+}
+
+@keyframes logo-in {
+    from {
+        transform: translateY(.5em);
+        opacity: 0;
+    }
+
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+
+@keyframes subtitle-in {
+    from {
+        bottom: 1em;
+        opacity: 0;
+    }
+
+    to {
+        bottom: 3em;
+        opacity: .5;
+    }
+}
+@keyframes game-over-in {
+    from {
+        margin-top: -2em;
+        opacity: 0;
+    }
+
+    to {
+        margin-top: 1em;
+        opacity: .65;
     }
 }

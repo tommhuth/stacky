@@ -9,8 +9,7 @@ import useActions from "../utils/useActions"
 import { getState, getStackSize } from "../store/selectors/stack"
 import Config from "../Config"
 import { useThree } from "react-three-fiber"
-import ColorMixer from "../utils/ColorMixer"
-import { Color } from "three"
+import ColorMixer from "../utils/ColorMixer" 
 import anime from "animejs"
 
 export default function Stack() {
@@ -37,19 +36,20 @@ export default function Stack() {
     }, [state])
 
     useEffect(() => {
-        let next = ColorMixer.previous().multiply(new Color(.5, .5, .5))
-
+        let backgroundColor = ColorMixer.previous().multiplyScalar(.6)
+        let fog = backgroundColor.clone().multiplyScalar(.5)
+ 
         anime({
             targets: scene.fog.color,
-            r: next.r,
-            g: next.g,
-            b: next.b,
+            r: fog.r,
+            g: fog.g,
+            b: fog.b,
             duration: 500,
             easing: "easeOutCubic",
             autoplay: true
         }) 
 
-        ColorMixer.setEnvironment()
+        ColorMixer.setEnvironment(backgroundColor)
     }, [stackSize])
 
     return (

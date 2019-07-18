@@ -1,7 +1,7 @@
 
 import React, { useState, useEffect, useRef } from "react"
 import { Box, Vec3 } from "cannon"
-import { DoubleSide } from "three"
+import { DoubleSide, FrontSide, BackSide } from "three"
 import { useCannon } from "../utils/cannon"
 import Config from "../Config"
 import Only from "./Only"
@@ -57,12 +57,12 @@ export default function Slice({ position, mass = 0, size = [1, 1, 1], color, dir
                     rotation-x={Math.PI / 2}
                 >
                     <planeGeometry attach="geometry" args={[size[0] + sizeAddition, size[2] + sizeAddition, 1]} />
-                    <meshPhongMaterial transparent opacity={opacity} side={DoubleSide} color={0xFFFFFF} attach="material" />
+                    <meshLambertMaterial transparent opacity={opacity} side={DoubleSide} color={0xFFFFFF} attach="material" />
                 </mesh>
             </Only>
             <mesh ref={ref} castShadow receiveShadow>
                 <boxGeometry attach="geometry" args={size} />
-                <meshPhongMaterial color={color} attach="material" />
+                <meshPhongMaterial  dithering color={color} attach="material" />
             </mesh>
         </>
     )

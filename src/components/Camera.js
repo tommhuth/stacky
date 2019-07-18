@@ -53,11 +53,11 @@ export default function Camera() {
     useEffect(() => {
         ref.current.lookAt(new Vector3(...target))
         window.addEventListener("resize", () => setZoom(getZoom()))
-        scene.fog = new Fog(0x535f73, 5, 16)
+        scene.fog = new Fog(0x091921, 5, 16)
     }, [])
 
     useRender(() => {
-        const targetY = state === Config.STATE_ACTIVE ? stackSize * Config.SLICE_HEIGHT + 5 : 5
+        const targetY = [Config.STATE_ACTIVE, Config.STATE_GAME_OVER].includes(state) ? stackSize * Config.SLICE_HEIGHT + 5 + (state === Config.STATE_GAME_OVER ? 2 : 0) : 5
 
         setIntermediateY(prev => prev + ((targetY - prev) / 120))
     }, false, [stackSize, state])

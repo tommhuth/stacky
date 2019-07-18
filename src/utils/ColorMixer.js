@@ -1,12 +1,14 @@
 import { Color } from "three"
 
 export default class ColorMixer {
-    static shades = 14
-    static colors = [
-        new Color(0xffffff),
-        new Color(0x397fbf),
-        new Color(0x15b99a),
-        new Color(0xd1064d)
+    static shades = 16
+    static colors = [ 
+        new Color(0x397fbf), // blue
+        new Color(0x15b99a), // green
+        new Color(0xfffb00), // yellow
+        new Color(0xe600ff), // pink #af00db
+        new Color(0xd1064d),  // red
+        new Color(0xaf00db) // purple
     ]
     static i = 0
     static j = 0
@@ -39,9 +41,7 @@ export default class ColorMixer {
         this.i = 0
         this.j = 2
     }
-    static setEnvironment() {
-        let color = this.previous()
-
+    static setEnvironment(color) { 
         document.body.style.backgroundColor = `rgba(
             ${Math.round(color.r * 255)}, 
             ${Math.round(color.g * 255)}, 
