@@ -56,13 +56,13 @@ export default function Slice({ position, mass = 0, size = [1, 1, 1], color, dir
                     position={[position[0], position[1] + size[1] / 2 - Config.SLICE_HEIGHT, position[2]]}
                     rotation-x={Math.PI / 2}
                 >
-                    <planeGeometry attach="geometry" args={[size[0] + sizeAddition, size[2] + sizeAddition, 1]} />
+                    <planeBufferGeometry attach="geometry" args={[size[0] + sizeAddition, size[2] + sizeAddition, 1]} />
                     <meshLambertMaterial transparent opacity={opacity} side={DoubleSide} color={0xFFFFFF} attach="material" />
                 </mesh>
             </Only>
             <mesh ref={ref} castShadow receiveShadow>
-                <boxGeometry attach="geometry" args={size} />
-                <meshPhongMaterial  dithering color={color} attach="material" />
+                <boxBufferGeometry attach="geometry" args={size} />
+                <meshPhongMaterial dithering color={color} attach="material" />
             </mesh>
         </>
     )
