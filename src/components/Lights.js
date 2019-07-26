@@ -19,12 +19,12 @@ export default function Lights() {
         <>
             <ambientLight 
                 color={0xFFFFFF} 
-                intensity={.125} 
+                intensity={.25} 
             />
             <directionalLight   
                 color={0xFFFFFF}
                 position={[0, stackSize * Config.SLICE_HEIGHT, 0]}
-                intensity={.9}
+                intensity={1.09}
                 target-position={[-6, stackSize * Config.SLICE_HEIGHT - 10, -2]}
                 onUpdate={self => {
                     self.target.updateMatrixWorld() 

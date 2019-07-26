@@ -1,8 +1,7 @@
 const express = require("express")
 const serveStatic = require("serve-static")
 const path = require("path")
-const compression = require("compression")
-const { version } = require("./package.json")
+const compression = require("compression") 
 
 const PORT = process.env.PORT || "3000"
 const NODE_ENV = process.env.NODE_ENV || "local"

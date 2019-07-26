@@ -8,52 +8,18 @@ import makeStore from "./store/make-store"
 import { Canvas } from "react-three-fiber"
 import { CannonProvider } from "./utils/cannon"
 import Camera from "./components/Camera"
-import Only from "./components/Only"
-import { useSelector } from "react-redux"
-import { getState, getStackSize } from "./store/selectors/stack"
-import Config from "./Config"
-import Lights from "./components/Lights"
-
-function UI() {
-    let state = useSelector(getState)
-    let score = useSelector(getStackSize)
-
-    return (
-        <>
-            <h1 className="visually-hidden">Stacky</h1>
-            <p className="visually-hidden">A JavaScript Stack clone made with React + Three.</p>
-
-            <Only if={state !== Config.STATE_READY}>
-                <div className="panel panel--score">
-                    <span className="visually-hidden">Score: </span>{score}
-                </div>
-            </Only>
-
-            <Only if={state === Config.STATE_GAME_OVER}>
-                <div className="panel panel--game-over">
-                    Game over
-                </div>
-                <div className="panel__subtitle">Tap to restart</div>
-            </Only>
-            <Only if={state === Config.STATE_READY}>
-                <div className="panel panel--intro logo">
-                    {"Stacky".split("").map((i,index) => <span style={{ animationDelay: index * 100 + "ms"}} key={i}>{i}</span>)}
-                </div> 
-                <div className="panel__subtitle">Tap to start</div>
-            </Only>
-        </>
-    )
-}
+import Lights from "./components/Lights" 
+import Ui from "./components/Ui"
 
 const store = makeStore()
 
 ReactDOM.render(
     <>
         <Provider store={store}>
-            <UI />
+            <Ui />
         </Provider>
         <div style={{ height: "100vh", width: "100vw" }}>
-            <Canvas pixelRatio={Math.min(1.25, window.devicePixelRatio)}>
+            <Canvas pixelRatio={window.matchMedia("(min-width: 1000px)").matches ? Math.min(1.5, window.devicePixelRatio) : window.devicePixelRatio }>
                 <Provider store={store}>
                     <CannonProvider defaultFriction={1} defaultRestitution={.2}>
                         <Camera />
