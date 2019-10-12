@@ -2,7 +2,7 @@ import { Color } from "three"
 
 export default class ColorMixer {
     static shades = 16
-    static colors = [ 
+    static colors = [
         new Color(0x397fbf), // blue
         new Color(0x15b99a), // green
         new Color(0xfffb00), // yellow
@@ -41,11 +41,13 @@ export default class ColorMixer {
         this.i = 0
         this.j = 2
     }
-    static setEnvironment(color) { 
+    static setEnvironment(color) {
+        let { r, g, b } = color.clone().lerp(new Color(0x000000), .7)
+
         document.body.style.backgroundColor = `rgba(
-            ${Math.round(color.r * 255)}, 
-            ${Math.round(color.g * 255)}, 
-            ${Math.round(color.b * 255)}, 
+            ${Math.round(r * 255)}, 
+            ${Math.round(g * 255)}, 
+            ${Math.round(b * 255)}, 
             .3
         )`
     }
