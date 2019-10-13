@@ -23,8 +23,8 @@ export default class ColorMixer {
     ]
     static i = 1
     static j = 0
-    static top = new Color(0x15b99a)
-    static bottom = new Color(0x397fbf)
+    static top = this.colors[1].clone()
+    static bottom = this.colors[0].clone()
     static _previous = this.colors[0].clone()
 
     static previous() {
