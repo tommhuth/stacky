@@ -7,7 +7,7 @@ import { Workbox } from "workbox-window"
 import Stack from "./components/Stack"
 import makeStore from "./store/make-store"
 import { Canvas } from "react-three-fiber"
-import ColorMixer from "./utils/ColorMixer
+import ColorMixer from "./utils/ColorMixer"
 import { CannonProvider } from "./utils/cannon"
 import Camera from "./components/Camera"
 import Lights from "./components/Lights"
