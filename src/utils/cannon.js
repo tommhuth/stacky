@@ -25,7 +25,7 @@ export function CannonProvider({
     useRender(() => world.step(1 / 40))
 
     // Distribute world via context
-    return <context.Provider value={world} children={children} />
+    return <context.Provider value={world}>{children}</context.Provider>
 }
 
 // Custom hook to maintain a world physics body
@@ -53,7 +53,7 @@ export function useCannon({ ...props }, fn, deps = []) {
             ref.current.position.copy(body.position)
             ref.current.quaternion.copy(body.quaternion)
         }
-    }) 
+    })
 
     return ref
 }

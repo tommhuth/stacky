@@ -1,7 +1,7 @@
 
 import React, { useState, useEffect, useRef } from "react"
 import { Box, Vec3 } from "cannon"
-import { DoubleSide, FrontSide, BackSide } from "three"
+import { DoubleSide } from "three"
 import { useCannon } from "../utils/cannon"
 import Config from "../Config"
 import Only from "./Only"
