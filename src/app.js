@@ -14,13 +14,14 @@ import Ui from "./components/Ui"
 import Config from "./Config"
 
 const store = makeStore()
+const pixelRatio = window.matchMedia("(min-width:900px)").matches ? Math.min(window.devicePixelRatio, 1.5) : window.devicePixelRatio
 
 ReactDOM.render(
     <>
         <Provider store={store}>
             <Ui />
         </Provider>
-        <Canvas pixelRatio={window.devicePixelRatio}>
+        <Canvas pixelRatio={pixelRatio}>
             <Provider store={store}>
                 <CannonProvider defaultFriction={1} defaultRestitution={.2}>
                     <Camera />

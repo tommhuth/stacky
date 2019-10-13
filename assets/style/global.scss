@@ -27,15 +27,9 @@ body {
 }
 
 body {
-    background-color: rgba(40, 100, 140, 0.3);
-    background-image: linear-gradient(rgba(#000, .2), rgba(#000, .1));
-    transition: background-color 1.5s;
+    background-image: linear-gradient(rgb(21, 185, 154), rgb(57, 127, 191));
     color: #FFF;
-}
-
-html {
-    background-color: #222;
-}
+} 
 
 canvas {
     width: 100vw !important;

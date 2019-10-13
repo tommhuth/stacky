@@ -9,7 +9,7 @@ import useActions from "../utils/useActions"
 import { getState, getStackSize } from "../store/selectors/stack"
 import Config from "../Config"
 import { useThree } from "react-three-fiber"
-import ColorMixer from "../utils/ColorMixer" 
+import ColorMixer from "../utils/ColorMixer"
 import anime from "animejs"
 
 export default function Stack() {
@@ -33,7 +33,7 @@ export default function Stack() {
         }
 
         let root = document.getElementById("root")
-        
+
         root.addEventListener("click", onClick)
         root.addEventListener("touchstart", onClick)
 
@@ -44,20 +44,17 @@ export default function Stack() {
     }, [state])
 
     useEffect(() => {
-        let backgroundColor = ColorMixer.previous().multiplyScalar(.6)
-        let fog = backgroundColor.clone().multiplyScalar(.5)
- 
+        let color = ColorMixer.colors[ColorMixer.i - 1]
+
         anime({
             targets: scene.fog.color,
-            r: fog.r,
-            g: fog.g,
-            b: fog.b,
-            duration: 500,
+            r: color.r,
+            g: color.g,
+            b: color.b,
+            duration: 1500,
             easing: "easeOutCubic",
             autoplay: true
-        }) 
-
-        ColorMixer.setEnvironment(backgroundColor)
+        })
     }, [stackSize])
 
     return (
