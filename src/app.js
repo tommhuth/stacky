@@ -21,7 +21,7 @@ ReactDOM.render(
             <Ui />
         </Provider>
         <div style={{ height: "100vh", width: "100vw" }}>
-            <Canvas pixelRatio={window.matchMedia("(min-width: 1000px)").matches ? Math.min(1.5, window.devicePixelRatio) : window.devicePixelRatio }>
+            <Canvas pixelRatio={window.devicePixelRatio}>
                 <Provider store={store}>
                     <CannonProvider defaultFriction={1} defaultRestitution={.2}>
                         <Camera />
