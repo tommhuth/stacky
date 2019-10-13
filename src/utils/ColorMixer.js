@@ -52,8 +52,8 @@ export default class ColorMixer {
         return blend
     }
     static reset() {
-        this.i = 0
-        this.j = 2
+        this.i = 1
+        this.j = 0
     }
     static setEnvironment() {
         let index = this.i
