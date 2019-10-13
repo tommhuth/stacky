@@ -37,6 +37,11 @@ html {
     background-color: #222;
 }
 
+canvas {
+    width: 100vw !important;
+    height: 100vh !important;
+}
+
 button {
     font-size: 1em;
 }

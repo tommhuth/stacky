@@ -9,8 +9,8 @@ import makeStore from "./store/make-store"
 import { Canvas } from "react-three-fiber"
 import { CannonProvider } from "./utils/cannon"
 import Camera from "./components/Camera"
-import Lights from "./components/Lights" 
-import Ui from "./components/Ui" 
+import Lights from "./components/Lights"
+import Ui from "./components/Ui"
 import Config from "./Config"
 
 const store = makeStore()
@@ -20,26 +20,24 @@ ReactDOM.render(
         <Provider store={store}>
             <Ui />
         </Provider>
-        <div style={{ height: "100vh", width: "100vw" }}>
-            <Canvas pixelRatio={window.devicePixelRatio}>
-                <Provider store={store}>
-                    <CannonProvider defaultFriction={1} defaultRestitution={.2}>
-                        <Camera />
-                        <Lights />
-                        <Stack />
-                    </CannonProvider>
-                </Provider>
-            </Canvas>
-        </div>
+        <Canvas pixelRatio={window.devicePixelRatio}>
+            <Provider store={store}>
+                <CannonProvider defaultFriction={1} defaultRestitution={.2}>
+                    <Camera />
+                    <Lights />
+                    <Stack />
+                </CannonProvider>
+            </Provider>
+        </Canvas>
     </>,
     document.getElementById("root")
 )
 
 if (Config.REGISTER_SERVICEWORKER) {
-    let worker = new Workbox("/serviceworker.js") 
+    let worker = new Workbox("/serviceworker.js")
 
     worker.addEventListener("installed", e => {
         console.info(`Service worker ${e.isUpdate ? "updated" : "installed"}`)
     })
-    worker.register() 
+    worker.register()
 }
