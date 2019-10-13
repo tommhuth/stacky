@@ -10,7 +10,7 @@ function getZoom() {
     const breakpoints = [
         {
             breakpoint: "(max-width: 30em)",
-            zoom: 65
+            zoom: 55
         },
         {
             breakpoint: "(max-width: 40em)",

@@ -39,7 +39,11 @@
         font-family: "Abril Fatface";
         text-transform: lowercase;
 
-        @media (max-width: 24em) {
+        @media (max-width: 37em) {
+            font-size: 7em;
+        }
+
+        @media (max-width: 27em) {
             font-size: 5em;
         }
     }
