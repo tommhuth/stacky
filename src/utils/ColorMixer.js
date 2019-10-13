@@ -54,6 +54,7 @@ export default class ColorMixer {
     static reset() {
         this.i = 1
         this.j = 0
+        this.setEnvironment()
     }
     static setEnvironment() {
         let index = this.i
@@ -88,5 +89,3 @@ export default class ColorMixer {
 
     }
 }
-
-ColorMixer.setEnvironment()

@@ -7,6 +7,7 @@ import { Workbox } from "workbox-window"
 import Stack from "./components/Stack"
 import makeStore from "./store/make-store"
 import { Canvas } from "react-three-fiber"
+import ColorMixer from "./utils/ColorMixer
 import { CannonProvider } from "./utils/cannon"
 import Camera from "./components/Camera"
 import Lights from "./components/Lights"
@@ -15,6 +16,8 @@ import Config from "./Config"
 
 const store = makeStore()
 const pixelRatio = window.matchMedia("(min-width:900px)").matches ? Math.min(window.devicePixelRatio, 1.5) : window.devicePixelRatio
+
+ColorMixer.setEnvironment()
 
 ReactDOM.render(
     <>
