@@ -63,6 +63,7 @@
         "three": "^0.106.2",
         "uuid": "^3.1.0",
         "webpack": "^4.33.0",
+        "webpack-bundle-analyzer": "^3.5.2",
         "webpack-cli": "^3.3.5",
         "webpack-pwa-manifest": "^4.0.0",
         "workbox-webpack-plugin": "^4.3.1"

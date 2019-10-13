@@ -1,12 +1,13 @@
 
 const webpack = require("webpack")
 const path = require("path")
-const HtmlWebpackPlugin = require("html-webpack-plugin") 
+const HtmlWebpackPlugin = require("html-webpack-plugin")
 const MiniCssExtractPlugin = require("mini-css-extract-plugin")
 const WebpackPwaManifest = require("webpack-pwa-manifest")
 const uuid = require("uuid")
 const { CleanWebpackPlugin } = require("clean-webpack-plugin")
 const { InjectManifest } = require("workbox-webpack-plugin")
+//const { BundleAnalyzerPlugin } = require("webpack-bundle-analyzer")
 
 let plugins = [
     new CleanWebpackPlugin(),
@@ -55,7 +56,7 @@ let plugins = [
             "/": uuid.v4()
         }
     })
-    //new BundleAnalyzerPlugin()
+    ///new BundleAnalyzerPlugin()
 ]
 
 module.exports = {
