@@ -1,24 +1,25 @@
- 
+
 const webpack = require("webpack")
 const path = require("path")
-const HtmlWebpackPlugin = require("html-webpack-plugin")
-const CopyWebpackPlugin = require("copy-webpack-plugin")
+const HtmlWebpackPlugin = require("html-webpack-plugin") 
 const MiniCssExtractPlugin = require("mini-css-extract-plugin")
 const WebpackPwaManifest = require("webpack-pwa-manifest")
 const uuid = require("uuid")
-const { CleanWebpackPlugin } = require("clean-webpack-plugin")  
+const { CleanWebpackPlugin } = require("clean-webpack-plugin")
 const { InjectManifest } = require("workbox-webpack-plugin")
 
 let plugins = [
     new CleanWebpackPlugin(),
-    new webpack.DefinePlugin({   }), 
+    new webpack.DefinePlugin({
+        "process.env.REGISTER_SERVICEWORKER": JSON.stringify(process.env.REGISTER_SERVICEWORKER)
+    }),
     new MiniCssExtractPlugin({
         filename: "css/[name].[hash:6].css"
     }),
     new HtmlWebpackPlugin({
         template: path.join(__dirname, "assets/views", "index.html"),
         filename: "index.html"
-    }),  
+    }),
     new WebpackPwaManifest({
         name: "Stacky",
         short_name: "Stacky",
@@ -103,6 +104,6 @@ module.exports = {
     },
     resolve: {
         extensions: [".js"]
-    }, 
+    },
     plugins,
 }
