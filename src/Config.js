@@ -8,5 +8,6 @@ export default {
     DIRECT_HIT_ADDITION_THRESHOLD: 3,
     STATE_READY: "state:ready",
     STATE_ACTIVE: "state:active",
-    STATE_GAME_OVER: "state:game-over"
+    STATE_GAME_OVER: "state:game-over",
+    REGISTER_SERVICEWORKER: process.env.REGISTER_SERVICEWORKER === "true"
 }

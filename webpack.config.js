@@ -4,7 +4,10 @@ const path = require("path")
 const HtmlWebpackPlugin = require("html-webpack-plugin")
 const CopyWebpackPlugin = require("copy-webpack-plugin")
 const MiniCssExtractPlugin = require("mini-css-extract-plugin")
+const WebpackPwaManifest = require("webpack-pwa-manifest")
+const uuid = require("uuid")
 const { CleanWebpackPlugin } = require("clean-webpack-plugin")  
+const { InjectManifest } = require("workbox-webpack-plugin")
 
 let plugins = [
     new CleanWebpackPlugin(),
@@ -16,6 +19,41 @@ let plugins = [
         template: path.join(__dirname, "assets/views", "index.html"),
         filename: "index.html"
     }),  
+    new WebpackPwaManifest({
+        name: "Stacky",
+        short_name: "Stacky",
+        background_color: "rgb(22, 26, 28)",
+        theme_color: "rgb(22, 26, 28)",
+        orientation: "portrait",
+        start_url: "/",
+        display: "fullscreen",
+        inject: true,
+        ios: {
+            "apple-mobile-web-app-status-bar-style": "black-translucent"
+        },
+        filename: "./manifest-[hash:6].json",
+        icons: [
+            {
+                src: path.join("assets", "icons/pwa-icon.png"),
+                destination: "images",
+                sizes: [192, 512]
+            },
+            {
+                src: path.join("assets", "icons/pwa-icon.png"),
+                destination: "images",
+                ios: true,
+                sizes: [120, 180]
+            }
+        ]
+    }),
+    new InjectManifest({
+        swSrc: "./src/serviceworker.js",
+        swDest: "serviceworker.js",
+        exclude: ["serviceworker.js", "index.html"],
+        templatedURLs: {
+            "/": uuid.v4()
+        }
+    })
     //new BundleAnalyzerPlugin()
 ]
 
