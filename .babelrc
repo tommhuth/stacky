@@ -4,14 +4,18 @@
         [
             "@babel/preset-env",
             {
-                "targets": "last 2 versions, not < 0.2%, not ie 10, not ie 9, not ie 11, not dead, not android < 5, safari 11",
+                "targets": "last 2 versions, not < 0.2%, not ie 10, not ie 9, not ie 11, not dead, not android < 5",
                 "debug": true,
+                "modules": false,
                 "useBuiltIns": "usage",
-                "corejs": { "version": 3, "proposals": true }
+                "corejs": {
+                    "version": 3,
+                    "proposals": true
+                }
             }
         ]
     ],
     "plugins": [
-        "@babel/plugin-proposal-class-properties" 
+        "@babel/plugin-proposal-class-properties"
     ]
 }
