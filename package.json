@@ -4,6 +4,10 @@
     "engines": {},
     "description": "",
     "main": "index.js",
+    "sideEffects": [
+        "*.scss",
+        "core-js/stable"
+    ],
     "scripts": {
         "start": "node server.js",
         "ngrok": "ngrok http localhost:3000",
