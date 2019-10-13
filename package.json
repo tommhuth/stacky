@@ -6,7 +6,7 @@
     "main": "index.js",
     "scripts": {
         "start": "node server.js",
-        "ngrok": "ngrok http localhost:3001",
+        "ngrok": "ngrok http localhost:3000",
         "dev": "webpack --watch --mode development & yarn start",
         "build": "webpack --mode production",
         "lint": "eslint \"**/*.js\" --fix",

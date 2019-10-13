@@ -19,7 +19,9 @@ export default function Stack() {
     let { scene } = useThree()
 
     useEffect(() => {
-        function onClick() {
+        function onClick(e) {
+            e.preventDefault()
+
             switch (state) {
                 case Config.STATE_READY:
                     return actions.start()
@@ -30,9 +32,15 @@ export default function Stack() {
             }
         }
 
-        window.addEventListener("click", onClick)
+        let root = document.getElementById("root")
+        
+        root.addEventListener("click", onClick)
+        root.addEventListener("touchstart", onClick)
 
-        return () => window.removeEventListener("click", onClick)
+        return () => {
+            root.removeEventListener("click", onClick)
+            root.removeEventListener("touchstart", onClick)
+        }
     }, [state])
 
     useEffect(() => {
