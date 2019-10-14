@@ -1,11 +1,9 @@
-
 import React from "react"
-import { useSelector } from "react-redux"
-import { getFragments } from "../store/selectors/stack"
+import { useStore } from "../data/store"
 import Slice from "./Slice"
 
 export default function Fragments() {
-    const fragments = useSelector(getFragments)
+    const fragments = useStore(state => state.fragments)
 
     return (
         <>

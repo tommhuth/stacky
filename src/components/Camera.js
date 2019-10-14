@@ -1,10 +1,8 @@
-
-import React, { useState, useEffect, createRef } from "react"
-import { useSelector } from "react-redux"
+import React, { useState, useEffect, createRef } from "react" 
 import { useThree, useRender } from "react-three-fiber"
 import { Vector3, Fog } from "three"
 import Config from "../Config"
-import { getStackSize, getState } from "../store/selectors/stack"
+import { useStore } from "../data/store" 
 
 function getZoom() {
     const breakpoints = [
@@ -40,10 +38,10 @@ function getZoom() {
 }
 
 export default function Camera() {
+    const stackSize = useStore(state => state.slices.length)
     const ref = createRef()
     const { setDefaultCamera, scene } = useThree()
-    const stackSize = useSelector(getStackSize)
-    const state = useSelector(getState)
+    const state = useStore(state => state.state)
     const [intermediateY, setIntermediateY] = useState(5)
     const [zoom, setZoom] = useState(getZoom())
     const x = Config.SLICE_SIZE
@@ -57,7 +55,8 @@ export default function Camera() {
     }, [])
 
     useRender(() => {
-        const targetY = [Config.STATE_ACTIVE, Config.STATE_GAME_OVER].includes(state) ? stackSize * Config.SLICE_HEIGHT + 5 + (state === Config.STATE_GAME_OVER ? 2 : 0) : 5
+        const gameOverOffset  = state === Config.STATE_GAME_OVER ? .5 : 0
+        const targetY = [Config.STATE_ACTIVE, Config.STATE_GAME_OVER].includes(state) ? stackSize * Config.SLICE_HEIGHT + 5 + gameOverOffset : 5
 
         setIntermediateY(prev => prev + ((targetY - prev) / 20))
     }, false, [stackSize, state])

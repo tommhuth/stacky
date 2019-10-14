@@ -1,12 +1,11 @@
 import React from "react"
-import Only from "./Only"
-import { useSelector } from "react-redux"
-import { getState, getStackSize } from "../store/selectors/stack"
+import Only from "./Only" 
 import Config from "../Config"
+import { useStore } from "../data/store"
 
 export default function Ui() {
-    let state = useSelector(getState)
-    let score = useSelector(getStackSize)
+    let state = useStore(state => state.state)
+    let score = useStore(state => state.slices.length)
 
     return (
         <>

@@ -26,10 +26,10 @@
         font-weight: 100;
         line-height: .85;
         letter-spacing: -.05em;
-        transform: translate(-50%, -100%);
+        transform: translate(-50%, calc(-100% - .35em));
 
-        @media (max-width: 50em) {
-            font-size: 6em;
+        @media (max-width: 35em) {
+            font-size: 9em;
         }
     }
 

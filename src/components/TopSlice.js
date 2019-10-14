@@ -1,43 +1,64 @@
-
-import React, {useState, useEffect} from "react"
-import { useSelector, useDispatch } from "react-redux"
+import React, { useState, useEffect, useRef } from "react"
 import { useRender } from "react-three-fiber"
-import { getSlices, getOffsetAxis, getSliceOffset, getLastSlice, getState } from "../store/selectors/stack"
-import { incrementOffset } from "../store/actions/stack"
 import Config from "../Config"
 import { getPositionWithOffset } from "../utils/helpers"
 import Only from "./Only"
 import Slice from "./Slice"
 import ColorMixer from "../utils/ColorMixer"
-
+import { useStore, api } from "../data/store" 
 
 export default function TopSlice() {
-    const dispatch = useDispatch()
-    const sliceOffset = useSelector(getSliceOffset)
-    const offsetAxis = useSelector(getOffsetAxis)
-    const state = useSelector(getState)
-    const prev = useSelector(getLastSlice)
-    const slices = useSelector(getSlices)
-    const [color, setColor] = useState(null)
+    let offsetAxis = useStore(state => state.offsetAxis)
+    let state = useStore(state => state.state)
+    let prev = useStore(state => state.slices[state.slices.length - 1])
+    let slices = useStore(state => state.slices)
+    let incrementOffset = useStore(state => state.incrementOffset)
+    let [color, setColor] = useState(null)
+    let ref = useRef() 
 
     useRender(() => {
         if (state === Config.STATE_ACTIVE) {
-            dispatch(incrementOffset())
+            incrementOffset()
         }
     }, false, [state])
 
     useEffect(() => {
+        if (state === Config.STATE_ACTIVE) {
+            return api.subscribe(
+                (sliceOffset) => {
+                    let position = getPositionWithOffset(
+                        prev.position[0],
+                        slices.length * Config.SLICE_HEIGHT,
+                        prev.position[2],
+                        sliceOffset,
+                        offsetAxis
+                    )
+
+                    ref.current.position.set(...position)
+                },
+                state => state.sliceOffset
+            )
+        }
+    }, [state, offsetAxis, slices, prev, ref.current])
+
+    useEffect(() => {
         setColor(ColorMixer.next())
-    },[slices.length])
+    }, [slices.length])
 
     return (
         <Only if={state === Config.STATE_ACTIVE}>
             <Slice
                 color={color}
-                key={slices.length}
                 size={[prev.size[0], Config.SLICE_HEIGHT, prev.size[2]]}
                 mass={0}
-                position={getPositionWithOffset(prev.position[0], slices.length * Config.SLICE_HEIGHT, prev.position[2], sliceOffset, offsetAxis)}
+                ref={ref}
+                position={getPositionWithOffset(
+                    prev.position[0],
+                    slices.length * Config.SLICE_HEIGHT,
+                    prev.position[2],
+                    0,
+                    offsetAxis
+                )}
             />
         </Only>
     )

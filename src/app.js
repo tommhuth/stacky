@@ -1,11 +1,9 @@
 import "../assets/style/app.scss"
 
 import React from "react"
-import { Provider } from "react-redux"
 import ReactDOM from "react-dom"
 import { Workbox } from "workbox-window"
 import Stack from "./components/Stack"
-import makeStore from "./store/make-store"
 import { Canvas } from "react-three-fiber"
 import ColorMixer from "./utils/ColorMixer"
 import { CannonProvider } from "./utils/cannon"
@@ -14,24 +12,19 @@ import Lights from "./components/Lights"
 import Ui from "./components/Ui"
 import Config from "./Config"
 
-const store = makeStore()
 const pixelRatio = window.matchMedia("(min-width:900px)").matches ? Math.min(window.devicePixelRatio, 1.5) : window.devicePixelRatio
 
 ColorMixer.setEnvironment()
 
 ReactDOM.render(
     <>
-        <Provider store={store}>
-            <Ui />
-        </Provider>
+        <Ui />
         <Canvas pixelRatio={pixelRatio}>
-            <Provider store={store}>
-                <CannonProvider defaultFriction={1} defaultRestitution={.2}>
-                    <Camera />
-                    <Lights />
-                    <Stack />
-                </CannonProvider>
-            </Provider>
+            <CannonProvider defaultFriction={1} defaultRestitution={.2}>
+                <Camera />
+                <Lights />
+                <Stack />
+            </CannonProvider>
         </Canvas>
     </>,
     document.getElementById("root")

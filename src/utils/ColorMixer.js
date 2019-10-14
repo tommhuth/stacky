@@ -2,7 +2,7 @@ import { Color } from "three"
 import anime from "animejs"
 
 export default class ColorMixer {
-    static shades = 10
+    static shades = 8
     static colors = [
         new Color(0x397fbf), // blue
         new Color(0x15b99a), // green

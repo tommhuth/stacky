@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect, useRef } from "react"
 import { Box, Vec3 } from "cannon"
 import { DoubleSide } from "three"
@@ -7,14 +6,21 @@ import Config from "../Config"
 import Only from "./Only"
 import anime from "animejs"
 
-export default function Slice({ position, mass = 0, size = [1, 1, 1], color, directHit }) {
+export default React.forwardRef(({
+    position,
+    mass = 0,
+    size = [1, 1, 1],
+    color, 
+    directHit
+}, forwardedRef) => {
     const planeRef = useRef()
     const [body, setBody] = useState(null)
     const [hasDirectHit, setHasDirectHit] = useState(directHit)
-    const [sizeAddition, setSizeAddition] = useState(0) 
-    const [opacity, setOpacity] = useState(1) 
-    
-    const ref = useCannon(
+    const [sizeAddition, setSizeAddition] = useState(0)
+    const [opacity, setOpacity] = useState(1)
+ 
+
+    let ref = useCannon(
         { mass },
         body => {
             body.addShape(new Box(new Vec3(size[0] / 2, size[1] / 2, size[2] / 2)))
@@ -24,6 +30,12 @@ export default function Slice({ position, mass = 0, size = [1, 1, 1], color, dir
         }
     )
 
+    useEffect(()=> { 
+        if(ref.current && forwardedRef) {
+            forwardedRef.current = ref.current  
+        } 
+    }, [ref.current, forwardedRef])
+
     useEffect(() => {
         if (body) {
             body.position.set(...position)
@@ -31,7 +43,7 @@ export default function Slice({ position, mass = 0, size = [1, 1, 1], color, dir
     }, [body, position])
 
     useEffect(() => {
-        if (directHit) { 
+        if (directHit) {
             let targets = { sizeAddition, opacity }
 
             anime({
@@ -42,7 +54,7 @@ export default function Slice({ position, mass = 0, size = [1, 1, 1], color, dir
                 delay: 0,
                 easing: "easeOutQuart",
                 update() {
-                    setSizeAddition(targets.sizeAddition) 
+                    setSizeAddition(targets.sizeAddition)
                     setOpacity(targets.opacity)
                 },
                 complete() {
@@ -70,4 +82,4 @@ export default function Slice({ position, mass = 0, size = [1, 1, 1], color, dir
             </mesh>
         </>
     )
-}
+})

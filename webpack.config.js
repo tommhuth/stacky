@@ -7,7 +7,7 @@ const WebpackPwaManifest = require("webpack-pwa-manifest")
 const uuid = require("uuid")
 const { CleanWebpackPlugin } = require("clean-webpack-plugin")
 const { InjectManifest } = require("workbox-webpack-plugin")
-//const { BundleAnalyzerPlugin } = require("webpack-bundle-analyzer")
+const { BundleAnalyzerPlugin } = require("webpack-bundle-analyzer")
 
 let plugins = [
     new CleanWebpackPlugin(),
@@ -55,8 +55,8 @@ let plugins = [
         templatedURLs: {
             "/": uuid.v4()
         }
-    })
-    ///new BundleAnalyzerPlugin()
+    }),
+    //new BundleAnalyzerPlugin()
 ]
 
 module.exports = {

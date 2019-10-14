@@ -1,14 +1,12 @@
-
-import React, { useEffect } from "react"
-import { useSelector } from "react-redux"
+import React, { useEffect } from "react" 
 import { useThree } from "react-three-fiber"
 import { PCFSoftShadowMap } from "three"
-import Config from "../Config"
-import { getStackSize } from "../store/selectors/stack"
+import Config from "../Config" 
+import { useStore } from "../data/store"
  
 export default function Lights() {
     const { gl } = useThree()
-    const stackSize = useSelector(getStackSize)
+    const stackSize = useStore(state => state.slices.length)
 
     useEffect(() => {
         gl.shadowMap.enabled = true

@@ -1,12 +1,10 @@
-
-import React, { useState, useEffect } from "react"
-import { useSelector } from "react-redux"
-import { getSlices } from "../store/selectors/stack"
+import React, { useState, useEffect } from "react" 
 import Slice from "./Slice"
 import anime from "animejs"
+import { useStore } from "../data/store"
 
 export default function Slices() {
-    let slices = useSelector(getSlices)
+    let slices = useStore(state => state.slices)
     let [offsetY, setOffsetY] = useState(-10)
 
     useEffect(() => {
