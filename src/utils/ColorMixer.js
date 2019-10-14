@@ -5,14 +5,14 @@ export default class ColorMixer {
     static shades = 8
     static colors = [
         new Color(0x397fbf), // blue
-        new Color(0x15b99a), // green
-        new Color(0xc2d9ff), // white blue
+        new Color(0x15b99a), // green 
         new Color(0xfffb00), // yellow
         new Color(0xd1064d), // red
         new Color(0xffc4eb), // light pink
         new Color(0xaf00db), // purple
         new Color(0xff7700), // orange
         new Color(0xffdd00), // gold
+        new Color(0xc2d9ff), // white blue
         new Color(0x14162b), // dark gray blue
         new Color(0xe600ff), // pink 
         new Color(0x2200c9), // bright blue
@@ -25,7 +25,7 @@ export default class ColorMixer {
     static j = 0
     static top = this.colors[1].clone()
     static bottom = this.colors[0].clone()
-    static _previous = this.colors[0].clone()
+    static _previous = this.colors[0].clone() 
 
     static previous() {
         return this._previous.clone()
@@ -59,18 +59,18 @@ export default class ColorMixer {
     static setEnvironment() {
         let index = this.i
         let top = this.colors[index]
-        let bottom = this.colors[index - 1] 
-
+        let bottom = this.colors[index - 1]
+       
         anime
             .timeline({
-                duration: 4000,
+                duration: 2500,
                 easing: "easeInOutQuad",
                 autoplay: true,
-                update: () => { 
+                update: () => {
                     document.body.style.backgroundImage = `linear-gradient(
                         to bottom,
-                        rgba(${this.top.r * 255}, ${this.top.g * 255}, ${this.top.b * 255}, 1),
-                        rgba(${this.bottom.r * 255}, ${this.bottom.g * 255}, ${this.bottom.b * 255}, 1)
+                        rgba(${this.top.r * 255}, ${this.top.g * 255}, ${this.top.b * 255}, .6),
+                        rgba(${this.bottom.r * 255}, ${this.bottom.g * 255}, ${this.bottom.b * 255}, .7)
                     )`
                 }
             })
@@ -85,7 +85,6 @@ export default class ColorMixer {
                 r: bottom.r,
                 g: bottom.g,
                 b: bottom.b,
-            }, 0)
-
+            }, 0) 
     }
 }

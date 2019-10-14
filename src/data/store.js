@@ -36,8 +36,8 @@ const [useStore, api] = create((set, get) => {
             set({ sliceOffset })
         }, 
         restart() {
-            set({ ...init, state: Config.STATE_ACTIVE })
             ColorMixer.reset()
+            set({ ...init, state: Config.STATE_ACTIVE })
         }, 
         addSlice(slice) {
             set({
@@ -158,8 +158,8 @@ const [useStore, api] = create((set, get) => {
                 })
             }
 
-            set({ sliceOffset: 0 })
-            set({ offsetAxis: get().offsetAxis === "x" ? "z" : "x" })
+            set({ sliceOffset: 0 , offsetAxis: offsetAxis === "x" ? "z" : "x"})
+       
         }
     }
 })

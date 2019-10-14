@@ -6,19 +6,18 @@ import Config from "../Config"
 import Only from "./Only"
 import anime from "animejs"
 
-export default React.forwardRef(({
+export default function Slice({
     position,
     mass = 0,
     size = [1, 1, 1],
-    color, 
+    color,
     directHit
-}, forwardedRef) => {
+})  {
     const planeRef = useRef()
     const [body, setBody] = useState(null)
     const [hasDirectHit, setHasDirectHit] = useState(directHit)
     const [sizeAddition, setSizeAddition] = useState(0)
     const [opacity, setOpacity] = useState(1)
- 
 
     let ref = useCannon(
         { mass },
@@ -28,13 +27,7 @@ export default React.forwardRef(({
 
             setBody(body)
         }
-    )
-
-    useEffect(()=> { 
-        if(ref.current && forwardedRef) {
-            forwardedRef.current = ref.current  
-        } 
-    }, [ref.current, forwardedRef])
+    ) 
 
     useEffect(() => {
         if (body) {
@@ -76,10 +69,11 @@ export default React.forwardRef(({
                     <meshLambertMaterial transparent opacity={opacity} side={DoubleSide} color={0xFFFFFF} attach="material" />
                 </mesh>
             </Only>
-            <mesh ref={ref} castShadow receiveShadow>
+            
+            <mesh ref={ref}>
                 <boxBufferGeometry attach="geometry" args={size} />
-                <meshPhongMaterial dithering color={color} attach="material" />
+                <meshPhongMaterial color={color} attach="material" />
             </mesh>
         </>
     )
-})
+}

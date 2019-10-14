@@ -3,6 +3,8 @@ import { useThree, useRender } from "react-three-fiber"
 import { Vector3, Fog } from "three"
 import Config from "../Config"
 import { useStore } from "../data/store" 
+import ColorMixer from "../utils/ColorMixer"
+import anime from "animejs"
 
 function getZoom() {
     const breakpoints = [
@@ -46,7 +48,7 @@ export default function Camera() {
     const [zoom, setZoom] = useState(getZoom())
     const x = Config.SLICE_SIZE
     const z = Config.SLICE_SIZE
-    const target = [0, 0, 0]
+    const target = [0, 0, 0] 
 
     useEffect(() => {
         ref.current.lookAt(new Vector3(...target))
@@ -56,10 +58,27 @@ export default function Camera() {
 
     useRender(() => {
         const gameOverOffset  = state === Config.STATE_GAME_OVER ? .5 : 0
-        const targetY = [Config.STATE_ACTIVE, Config.STATE_GAME_OVER].includes(state) ? stackSize * Config.SLICE_HEIGHT + 5 + gameOverOffset : 5
+        const targetY = [
+            Config.STATE_ACTIVE, 
+            Config.STATE_GAME_OVER
+        ].includes(state) ? stackSize * Config.SLICE_HEIGHT + 5 + gameOverOffset : 5
 
         setIntermediateY(prev => prev + ((targetY - prev) / 20))
     }, false, [stackSize, state])
+
+    useEffect(() => {
+        let color = ColorMixer.colors[ColorMixer.i - 1]
+
+        anime({
+            targets: scene.fog.color,
+            r: color.r,
+            g: color.g,
+            b: color.b,
+            duration: 2500,
+            easing: "easeOutCubic",
+            autoplay: true
+        })
+    }, [stackSize])
 
     return (
         <orthographicCamera
