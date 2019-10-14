@@ -13,7 +13,7 @@ export default function TopSlice() {
     let prev = useStore(state => state.slices[state.slices.length - 1])
     let slices = useStore(state => state.slices)
     let incrementOffset = useStore(state => state.incrementOffset)
-    let [color, setColor] = useState(null)
+    let [color, setColor] = useState()
     let ref = useRef() 
 
     useRender(() => {
