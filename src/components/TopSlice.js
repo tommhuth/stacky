@@ -2,13 +2,11 @@ import React, { useState, useEffect, useRef } from "react"
 import { useRender } from "react-three-fiber"
 import Config from "../Config"
 import { getPositionWithOffset } from "../utils/helpers"
-import Only from "./Only"
-import Slice from "./Slice"
+import Only from "./Only" 
 import ColorMixer from "../utils/ColorMixer"
 import { useStore, api } from "../data/store"
 
-export default function TopSlice() {
-    let offsetAxis = useStore(state => state.offsetAxis)
+export default function TopSlice() { 
     let state = useStore(state => state.state)
     let prev = useStore(state => state.slices[state.slices.length - 1])
     let slices = useStore(state => state.slices)
