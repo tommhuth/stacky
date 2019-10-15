@@ -5,7 +5,7 @@ import { useStore } from "../data/store"
 
 export default function Slices() {
     let slices = useStore(state => state.slices)
-    let [offsetY, setOffsetY] = useState(-20)
+    let [offsetY, setOffsetY] = useState(-15)
 
     useEffect(() => {
         let targets = { offsetY } 
@@ -17,6 +17,9 @@ export default function Slices() {
             delay: 500,
             change () {
                 setOffsetY(targets.offsetY)
+            },
+            complete () {
+                setOffsetY(0) 
             }
         })
     }, [])
