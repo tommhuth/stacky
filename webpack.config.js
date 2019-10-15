@@ -6,9 +6,11 @@ const MiniCssExtractPlugin = require("mini-css-extract-plugin")
 const WebpackPwaManifest = require("webpack-pwa-manifest")
 const uuid = require("uuid")
 const { CleanWebpackPlugin } = require("clean-webpack-plugin")
+const CopyWebpackPlugin = require("copy-webpack-plugin")
 const { InjectManifest } = require("workbox-webpack-plugin")
 const { BundleAnalyzerPlugin } = require("webpack-bundle-analyzer")
 
+let rev = uuid.v4()
 let plugins = [
     new CleanWebpackPlugin(),
     new webpack.DefinePlugin({
@@ -19,8 +21,17 @@ let plugins = [
     }),
     new HtmlWebpackPlugin({
         template: path.join(__dirname, "assets/views", "index.html"),
-        filename: "index.html"
+        filename: "index.html",
+        rev
     }),
+    new CopyWebpackPlugin(
+        [
+            {
+                from: path.join(__dirname, "assets", "splashscreens"),
+                to: "splashscreens/[name]." + rev + ".[ext]"
+            }
+        ]
+    ),
     new WebpackPwaManifest({
         name: "Stacky",
         short_name: "Stacky",
