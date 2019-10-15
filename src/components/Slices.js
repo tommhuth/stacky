@@ -5,20 +5,18 @@ import { useStore } from "../data/store"
 
 export default function Slices() {
     let slices = useStore(state => state.slices)
-    let [offsetY, setOffsetY] = useState(-10)
+    let [offsetY, setOffsetY] = useState(-20)
 
     useEffect(() => {
         let targets = { offsetY } 
 
         anime({
             targets,
-            duration: 2000,
+            duration: 2500,
             offsetY: 0,
+            delay: 500,
             change () {
                 setOffsetY(targets.offsetY)
-            },
-            complete () {
-                setOffsetY(0)
             }
         })
     }, [])
