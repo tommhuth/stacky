@@ -23,8 +23,8 @@ export default class ColorMixer {
     ]
     static i = 1
     static j = 0
-    static top = this.colors[1].clone()
-    static bottom = this.colors[0].clone()
+    static top = this.colors[1].clone().lerp(new Color(0xFFFFFF), .4)
+    static bottom = this.colors[0].clone().lerp(new Color(0xFFFFFF), .3)
     static _previous = this.colors[0].clone() 
 
     static previous() {
@@ -58,8 +58,8 @@ export default class ColorMixer {
     }
     static setEnvironment() {
         let index = this.i
-        let top = this.colors[index]
-        let bottom = this.colors[index - 1]
+        let top = this.colors[index].clone().lerp(new Color(0xFFFFFF), .4)
+        let bottom = this.colors[index - 1].clone().lerp(new Color(0xFFFFFF), .3)
        
         anime
             .timeline({
@@ -69,8 +69,8 @@ export default class ColorMixer {
                 update: () => {
                     document.body.style.backgroundImage = `linear-gradient(
                         to bottom,
-                        rgba(${this.top.r * 255}, ${this.top.g * 255}, ${this.top.b * 255}, .6),
-                        rgba(${this.bottom.r * 255}, ${this.bottom.g * 255}, ${this.bottom.b * 255}, .7)
+                        rgb(${this.top.r * 255}, ${this.top.g * 255}, ${this.top.b * 255}),
+                        rgb(${this.bottom.r * 255}, ${this.bottom.g * 255}, ${this.bottom.b * 255})
                     )`
                 }
             })
