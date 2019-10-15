@@ -28,11 +28,11 @@ export default function Stack() {
         let root = document.getElementById("root")
 
         root.addEventListener("click", onClick)
-        root.addEventListener("touchstart", onClick, { passive: true })
+        root.addEventListener("touchstart", onClick)
 
         return () => {
             root.removeEventListener("click", onClick)
-            root.removeEventListener("touchstart", onClick, { passive: true })
+            root.removeEventListener("touchstart", onClick)
         }
     }, [state])
  
