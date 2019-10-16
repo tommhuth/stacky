@@ -10,6 +10,7 @@ export default function Stack() {
     let match = useStore(state => state.match)
     let start = useStore(state => state.start)
     let state = useStore(state => state.state) 
+    let clean = useStore(state => state.clean) 
 
     useEffect(() => {
         function onClick(e) {
@@ -25,14 +26,14 @@ export default function Stack() {
             }
         }
 
-        let root = document.getElementById("root")
+        let root = document.getElementById("root") 
 
         root.addEventListener("click", onClick)
         root.addEventListener("touchstart", onClick)
 
         return () => {
             root.removeEventListener("click", onClick)
-            root.removeEventListener("touchstart", onClick)
+            root.removeEventListener("touchstart", onClick) 
         }
     }, [state])
  

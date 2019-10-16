@@ -27,6 +27,7 @@
         line-height: .85;
         letter-spacing: -.05em;
         transform: translate(-50%, calc(-100% - .15em));
+        animation: score-in both .35s;
 
         @media (max-width: 35em) {
             font-size: 9em;
@@ -81,6 +82,17 @@
 
     to {
         transform: translateY(0);
+        opacity: 1;
+    }
+}
+@keyframes score-in {
+    from {
+        margin-top: -.5em;
+        opacity: 0;
+    }
+
+    to {
+        margin-top: 0;
         opacity: 1;
     }
 }

@@ -3,7 +3,7 @@ import Config from "../Config"
 import { useStore } from "../data/store"
 
 export default function Lights() {
-    const stackSize = useStore(state => state.slices.length)
+    const stackSize = useStore(state => state.score)
     let ref = useRef()
 
     useEffect(() => { 

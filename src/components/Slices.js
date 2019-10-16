@@ -26,14 +26,14 @@ export default function Slices() {
 
     return (
         <>
-            {slices.map((i, index) => {
+            {slices.map((i) => {
                 return (
                     <Slice
                         directHit={i.directHit}
                         color={i.color}
-                        key={index}
+                        key={i.id}
                         position={[i.position[0], i.position[1] + offsetY, i.position[2]]}
-                        mass={i.mass}
+                        mass={0}
                         size={i.size}
                     />
                 )

@@ -11,7 +11,8 @@ export default function Slice({
     mass = 0,
     size = [1, 1, 1],
     color,
-    directHit
+    directHit,
+    id
 })  {
     const planeRef = useRef()
     const [body, setBody] = useState(null)
@@ -30,7 +31,7 @@ export default function Slice({
     ) 
 
     useEffect(() => {
-        if (body) {
+        if (body) { 
             body.position.set(...position)
         }
     }, [body, position])
@@ -41,7 +42,7 @@ export default function Slice({
 
             anime({
                 targets,
-                sizeAddition: .5,
+                sizeAddition: .95,
                 opacity: 0,
                 duration: 800,
                 delay: 0,

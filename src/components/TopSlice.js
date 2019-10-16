@@ -8,8 +8,10 @@ import { useStore, api } from "../data/store"
 
 export default function TopSlice() {
     let state = useStore(state => state.state)
+    let offsetAxis = useStore(state => state.offsetAxis)
+    let sliceOffset = useStore(state => state.sliceOffset)
     let prev = useStore(state => state.slices[state.slices.length - 1])
-    let slices = useStore(state => state.slices)
+    let score = useStore(state => state.score)
     let incrementOffset = useStore(state => state.incrementOffset)
     let [color, setColor] = useState()
     let ref = useRef()
@@ -23,32 +25,40 @@ export default function TopSlice() {
     useEffect(() => {
         if (state === Config.STATE_ACTIVE) {
             return api.subscribe(
-                (state) => {
-                    if (state) {
-                        let prev = state.slices[state.slices.length - 1]
+                (sliceOffset) => {
+                    if (sliceOffset) {
                         let position = getPositionWithOffset(
                             prev.position[0],
-                            state.slices.length * Config.SLICE_HEIGHT,
+                            score * Config.SLICE_HEIGHT + Config.SLICE_HEIGHT / 2,
                             prev.position[2],
-                            state.sliceOffset,
-                            state.offsetAxis
+                            sliceOffset,
+                            offsetAxis
                         )
 
-                        ref.current.position.set(...position)
+                        // ref.current.position.set(...position)
                     }
                 },
-                state => state
+                state => state.sliceOffset
             )
         }
-    }, [state, ref.current])
+    }, [state, ref.current, prev, score, offsetAxis])
 
     useEffect(() => {
         setColor(ColorMixer.next())
-    }, [slices.length])
+    }, [score])
 
     return (
         <Only if={state === Config.STATE_ACTIVE}>
-            <mesh ref={ref}>
+            <mesh
+                position={getPositionWithOffset(
+                    prev.position[0],
+                    score * Config.SLICE_HEIGHT + Config.SLICE_HEIGHT / 2,
+                    prev.position[2],
+                    sliceOffset,
+                    offsetAxis
+                )}
+                ref={ref}
+                key={"topslice"}>
                 <boxBufferGeometry
                     attach="geometry"
                     args={[prev.size[0], Config.SLICE_HEIGHT, prev.size[2]]}

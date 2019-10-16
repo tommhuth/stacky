@@ -40,7 +40,7 @@ function getZoom() {
 }
 
 export default function Camera() {
-    const stackSize = useStore(state => state.slices.length)
+    const stackSize = useStore(state => state.score)
     const ref = createRef()
     const { setDefaultCamera, scene } = useThree()
     const state = useStore(state => state.state)

@@ -2,10 +2,12 @@ import create from "zustand"
 import Config from "../Config"
 import ColorMixer from "../utils/ColorMixer"
 import { Box3, Vector3 } from "three"
+import uuid from "uuid"
 import { getPositionWithOffset, getOffset } from "../utils/helpers"
 
 const init = {
     sliceOffset: 0,
+    score: 0,
     offsetAxis: "x",
     state: Config.STATE_READY,
     directHits: 0,
@@ -14,9 +16,10 @@ const init = {
         {
             position: [
                 0,
-                -(Config.BOTTOM_SLICE_HEIGHT / 2 - Config.SLICE_HEIGHT / 2),
+                -Config.BOTTOM_SLICE_HEIGHT / 2,
                 0
             ],
+            id: uuid.v4(),
             size: [Config.SLICE_SIZE, Config.BOTTOM_SLICE_HEIGHT, Config.SLICE_SIZE],
             mass: 0,
             color: ColorMixer.next()
@@ -34,16 +37,19 @@ const [useStore, api] = create((set, get) => {
             let sliceOffset = get().sliceOffset + Config.SLICE_SPEED_INCREMENT
 
             set({ sliceOffset })
-        }, 
+        },
         restart() {
             ColorMixer.reset()
             set({ ...init, state: Config.STATE_ACTIVE })
-        }, 
+        },
         addSlice(slice) {
             set({
                 slices: [
                     ...get().slices,
-                    slice
+                    {
+                        ...slice,
+                        id: uuid.v4(),
+                    }
                 ]
             })
         },
@@ -51,9 +57,45 @@ const [useStore, api] = create((set, get) => {
             set({
                 fragments: [
                     ...get().fragments,
-                    fragment
+                    {
+                        ...fragment,
+                        id: uuid.v4(),
+                    }
                 ]
             })
+        },
+        clean() {
+            let { score, fragments, slices } = get()
+            let buffer = 16
+            let removedFragments = []
+            let removedSlices = [] 
+
+            for (let { id, position, size } of fragments) {
+                let elementPosition = position[1] + size[1] / 2
+
+                if (elementPosition < score * Config.SLICE_HEIGHT - Config.SLICE_HEIGHT * buffer) { 
+                    removedFragments.push(id)
+                }
+            }
+            for (let { id, position, size } of slices) {
+                let elementPosition = position[1] + size[1] / 2
+
+                if (elementPosition < score * Config.SLICE_HEIGHT - Config.SLICE_HEIGHT * buffer) { 
+                    removedSlices.push(id)
+                }
+            }
+
+            if (removedFragments.length) {
+                set({
+                    fragments: fragments.filter(i => !removedFragments.includes(i.id))
+                })
+            }
+
+            if (removedSlices.length) {
+                set({
+                    slices: slices.filter(i => !removedSlices.includes(i.id))
+                })
+            }
         },
         start() {
             set({ state: Config.STATE_ACTIVE })
@@ -63,9 +105,10 @@ const [useStore, api] = create((set, get) => {
                 offsetAxis,
                 directHits,
                 slices,
-                sliceOffset, 
+                sliceOffset,
                 addFragment,
                 addSlice,
+                score,
             } = get()
             let prev = slices[slices.length - 1]
             let bottom = new Box3(
@@ -81,7 +124,7 @@ const [useStore, api] = create((set, get) => {
                 )
             )
             let bottomSize = bottom.getSize(new Vector3())
-            let y = slices.length * Config.SLICE_HEIGHT
+            let y = score * Config.SLICE_HEIGHT + Config.SLICE_HEIGHT / 2
             let distance = bottom.getCenter(new Vector3()).distanceTo(new Vector3(
                 bottom.getCenter(new Vector3()).x + (offsetAxis === "x" ? getOffset(sliceOffset) : 0),
                 bottom.getCenter(new Vector3()).y,
@@ -98,7 +141,7 @@ const [useStore, api] = create((set, get) => {
             )
 
             if (directHit && !directHitAddition) {
-                set({ directHits: directHits+1 }) 
+                set({ directHits: directHits + 1 })
             } else {
                 set({ directHits: 0 })
             }
@@ -127,13 +170,13 @@ const [useStore, api] = create((set, get) => {
                             addFragment({
                                 position: [center.x, y, center.z],
                                 size: [size.x, Config.SLICE_HEIGHT, size.z],
-                                mass: size.x * Config.SLICE_HEIGHT * size.z,
                                 color: ColorMixer.previous()
                             })
                         }
                     }
                 }
 
+                set({ score: score + 1 })
                 addSlice({
                     position: [center.x, y, center.z],
                     size: [
@@ -141,25 +184,26 @@ const [useStore, api] = create((set, get) => {
                         Config.SLICE_HEIGHT,
                         size.z + (directHitAddition ? .1 : 0)
                     ],
-                    mass: 0,
                     color: ColorMixer.previous(),
                     directHit
                 })
             } else {
                 let size = bottom.getSize(new Vector3())
                 let center = bottom.getCenter(new Vector3())
- 
+
                 set({ state: Config.STATE_GAME_OVER })
                 addFragment({
                     position: getPositionWithOffset(center.x, y, center.z, sliceOffset, offsetAxis),
                     size: [size.x, Config.SLICE_HEIGHT, size.z],
-                    mass: size.x * Config.SLICE_HEIGHT * size.z,
                     color: ColorMixer.previous()
                 })
             }
 
-            set({ sliceOffset: 0 , offsetAxis: offsetAxis === "x" ? "z" : "x"})
-       
+            set({ sliceOffset: 0, offsetAxis: offsetAxis === "x" ? "z" : "x" })
+
+            if (score % 2 === 0) {
+                get().clean()
+            }
         }
     }
 })

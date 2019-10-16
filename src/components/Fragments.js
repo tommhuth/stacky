@@ -7,8 +7,16 @@ export default function Fragments() {
 
     return (
         <>
-            {fragments.map((i, index) => {
-                return <Slice color={i.color} key={index} position={i.position} mass={i.mass} size={i.size} />
+            {fragments.map(({ color, position, size, id }) => {
+                return (
+                    <Slice
+                        color={color}
+                        key={id}
+                        position={position}
+                        mass={size[0] * size[2]}
+                        size={size}
+                    />
+                )
             })}
         </>
     )

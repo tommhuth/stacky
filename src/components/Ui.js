@@ -5,14 +5,14 @@ import { useStore } from "../data/store"
 
 export default function Ui() {
     let state = useStore(state => state.state)
-    let score = useStore(state => state.slices.length)
+    let score = useStore(state => state.score)
 
     return (
         <>
             <h1 className="visually-hidden">Stacky</h1>
             <p className="visually-hidden">A JavaScript Stack clone made with React + Three.</p>
 
-            <Only if={state !== Config.STATE_READY}>
+            <Only if={state !== Config.STATE_READY && score > 0}>
                 <div className="panel panel--score">
                     <span className="visually-hidden">Score: </span>{score}
                 </div>
