@@ -66,7 +66,7 @@ const [useStore, api] = create((set, get) => {
         },
         clean() {
             let { score, fragments, slices } = get()
-            let buffer = 16
+            let buffer = 21
             let removedFragments = []
             let removedSlices = [] 
 

@@ -1,8 +1,8 @@
-import React, { useState, useEffect, createRef } from "react" 
+import React, { useState, useEffect, createRef } from "react"
 import { useThree, useRender } from "react-three-fiber"
 import { Vector3, Fog } from "three"
 import Config from "../Config"
-import { useStore } from "../data/store" 
+import { useStore } from "../data/store"
 import ColorMixer from "../utils/ColorMixer"
 import anime from "animejs"
 
@@ -44,27 +44,31 @@ export default function Camera() {
     const ref = createRef()
     const { setDefaultCamera, scene } = useThree()
     const state = useStore(state => state.state)
-    const [intermediateY, setIntermediateY] = useState(5)
-    const [zoom, setZoom] = useState(getZoom())
-    const x = Config.SLICE_SIZE
-    const z = Config.SLICE_SIZE
-    const target = [0, 0, 0] 
+    const currentSlice = useStore(state => state.slices[state.slices.length - 1])
+    const [zoom, setZoom] = useState(() => getZoom()) 
 
     useEffect(() => {
-        ref.current.lookAt(new Vector3(...target))
+        ref.current.position.set(Config.SLICE_SIZE, 5, Config.SLICE_SIZE)
+        ref.current.lookAt(new Vector3(0,0,0))
+
         window.addEventListener("resize", () => setZoom(getZoom()))
+        
         scene.fog = new Fog(0x397fbf, 7, 18)
     }, [])
 
     useRender(() => {
-        const gameOverOffset  = state === Config.STATE_GAME_OVER ? .5 : 0
+        const gameOverOffset = state === Config.STATE_GAME_OVER ? .25 : 0
         const targetY = [
-            Config.STATE_ACTIVE, 
+            Config.STATE_ACTIVE,
             Config.STATE_GAME_OVER
         ].includes(state) ? stackSize * Config.SLICE_HEIGHT + 5 + gameOverOffset : 5
 
-        setIntermediateY(prev => prev + ((targetY - prev) / 20))
-    }, false, [stackSize, state])
+        if (ref.current) { 
+            ref.current.position.x += (currentSlice.position[0] + Config.SLICE_SIZE - ref.current.position.x) / 80
+            ref.current.position.y += (targetY - ref.current.position.y) / 30
+            ref.current.position.z += (currentSlice.position[2] + Config.SLICE_SIZE - ref.current.position.z) / 80
+        }
+    }, false, [stackSize, currentSlice, state, ref.current])
 
     useEffect(() => {
         let color = ColorMixer.colors[ColorMixer.i - 1]
@@ -80,6 +84,7 @@ export default function Camera() {
         })
     }, [stackSize])
 
+
     return (
         <orthographicCamera
             left={-10}
@@ -89,7 +94,6 @@ export default function Camera() {
             near={-10}
             far={20}
             zoom={zoom}
-            position={[x, intermediateY, z]}
             ref={ref}
             onUpdate={self => {
                 setDefaultCamera(self)
