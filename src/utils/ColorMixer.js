@@ -57,20 +57,26 @@ export default class ColorMixer {
         this.setEnvironment()
     }
     static setEnvironment() {
-        let index = this.i
-        let top = this.colors[index].clone().lerp(new Color(0xFFFFFF), .4)
+        let index = this.i 
+        let top = this.colors[index].clone().lerp(new Color(0xFFFFFF), .4) 
         let bottom = this.colors[index - 1].clone().lerp(new Color(0xFFFFFF), .3)
-       
+        
         anime
             .timeline({
                 duration: 2500,
                 easing: "easeInOutQuad",
                 autoplay: true,
                 update: () => {
+                    let topHsl = this.top.getHSL({})
+                    let bottomHsl = this.bottom.getHSL({}) 
+
+                    topHsl.l = .8 
+                    bottomHsl.l = .8
+
                     document.body.style.backgroundImage = `linear-gradient(
                         to bottom,
-                        rgb(${this.top.r * 255}, ${this.top.g * 255}, ${this.top.b * 255}),
-                        rgb(${this.bottom.r * 255}, ${this.bottom.g * 255}, ${this.bottom.b * 255})
+                        hsl(${Math.floor(topHsl.h * 360)}, ${Math.floor(topHsl.s * 100)}%, ${Math.floor(topHsl.l * 100)}%),
+                        hsl(${Math.floor(bottomHsl.h * 360)}, ${Math.floor(bottomHsl.s * 100)}%, ${Math.floor(bottomHsl.l * 100)}%)
                     )`
                 }
             })

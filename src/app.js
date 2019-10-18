@@ -25,6 +25,7 @@ ReactDOM.render(
                 <Lights />
                 <Stack />
             </CannonProvider>
+            <fog args={[0x397fbf, 6, 20]} attach={"fog"} />
         </Canvas>
     </>,
     document.getElementById("root")

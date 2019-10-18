@@ -1,6 +1,6 @@
 import React, { useState, useEffect, createRef } from "react"
 import { useThree, useRender } from "react-three-fiber"
-import { Vector3, Fog } from "three"
+import { Vector3 } from "three"
 import Config from "../Config"
 import { useStore } from "../data/store"
 import ColorMixer from "../utils/ColorMixer"
@@ -51,9 +51,7 @@ export default function Camera() {
         ref.current.position.set(Config.SLICE_SIZE, 5, Config.SLICE_SIZE)
         ref.current.lookAt(new Vector3(0,0,0))
 
-        window.addEventListener("resize", () => setZoom(getZoom()))
-        
-        scene.fog = new Fog(0x397fbf, 7, 18)
+        window.addEventListener("resize", () => setZoom(getZoom())) 
     }, [])
 
     useRender(() => {
