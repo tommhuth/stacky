@@ -40,12 +40,11 @@ function getZoom() {
 }
 
 export default function Camera() {
-    let { camera } = useThree()
+    let { camera, scene } = useThree()
     let stackSize = useStore(state => state.score)
     let state = useStore(state => state.state)
     let currentSlice = useStore(state => state.slices[state.slices.length - 1])
     let [zoom, setZoom] = useState(() => getZoom())
-    let { scene } = useThree()
 
     useFrame(() => {
         let gameOverOffset = state === Config.STATE_GAME_OVER ? .25 : 0
