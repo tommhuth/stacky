@@ -3,7 +3,7 @@ import { useStore } from "../data/store"
 import Slice from "./Slice"
 
 export default function Fragments() {
-    const fragments = useStore(state => state.fragments)
+    let fragments = useStore(state => state.fragments)
 
     return (
         <>

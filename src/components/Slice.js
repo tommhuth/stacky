@@ -13,12 +13,11 @@ export default function Slice({
     color,
     directHit
 }) {
-    const planeRef = useRef()
-    const [body, setBody] = useState(null)
-    const [hasDirectHit, setHasDirectHit] = useState(directHit)
-    const [sizeAddition, setSizeAddition] = useState(0)
-    const [opacity, setOpacity] = useState(1)
-
+    let planeRef = useRef()
+    let [body, setBody] = useState(null)
+    let [hasDirectHit, setHasDirectHit] = useState(directHit)
+    let [sizeAddition, setSizeAddition] = useState(0)
+    let [opacity, setOpacity] = useState(1)
     let ref = useCannon(
         { mass },
         body => { 

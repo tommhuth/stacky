@@ -11,7 +11,7 @@ export function CannonProvider({
     defaultFriction = .1,
     gravity = [0, -9.8, 0]
 }) {
-    const [world] = useState(() => new World())
+    let [world] = useState(() => new World())
 
     useEffect(() => {
         world.broadphase = new NaiveBroadphase()
@@ -30,11 +30,11 @@ export function CannonProvider({
 
 // Custom hook to maintain a world physics body
 export function useCannon({ ...props }, fn, deps = []) {
-    const ref = useRef()
+    let ref = useRef()
     // Get cannon world object
-    const world = useContext(context)
+    let world = useContext(context)
     // Instanciate a physics body
-    const [body] = useState(() => new Body(props))
+    let [body] = useState(() => new Body(props))
 
     useEffect(() => {
         // Call function so the user can add shapes

@@ -12,7 +12,7 @@ import Lights from "./components/Lights"
 import Ui from "./components/Ui"
 import Config from "./Config" 
 
-const pixelRatio = window.matchMedia("(min-width:900px)").matches ? Math.min(window.devicePixelRatio, 1.5) : window.devicePixelRatio
+let pixelRatio = window.matchMedia("(min-width:900px)").matches ? Math.min(window.devicePixelRatio, 1.5) : window.devicePixelRatio
 
 ColorMixer.setEnvironment()
 

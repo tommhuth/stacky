@@ -7,7 +7,7 @@ import ColorMixer from "../utils/ColorMixer"
 import anime from "animejs"
 
 function getZoom() {
-    const breakpoints = [
+    let breakpoints = [
         {
             breakpoint: "(max-width: 30em)",
             zoom: 55
@@ -41,15 +41,15 @@ function getZoom() {
 
 export default function Camera() {
     let { camera } = useThree()
-    const stackSize = useStore(state => state.score)
-    const state = useStore(state => state.state)
-    const currentSlice = useStore(state => state.slices[state.slices.length - 1])
-    const [zoom, setZoom] = useState(() => getZoom())
-    const { scene } = useThree()
+    let stackSize = useStore(state => state.score)
+    let state = useStore(state => state.state)
+    let currentSlice = useStore(state => state.slices[state.slices.length - 1])
+    let [zoom, setZoom] = useState(() => getZoom())
+    let { scene } = useThree()
 
     useFrame(() => {
-        const gameOverOffset = state === Config.STATE_GAME_OVER ? .25 : 0
-        const targetY = [
+        let gameOverOffset = state === Config.STATE_GAME_OVER ? .25 : 0
+        let targetY = [
             Config.STATE_ACTIVE,
             Config.STATE_GAME_OVER
         ].includes(state) ? stackSize * Config.SLICE_HEIGHT + 5 + gameOverOffset : 5
@@ -63,6 +63,7 @@ export default function Camera() {
 
     useEffect(() => {
         let listener = () => setZoom(getZoom())
+
         camera.zoom = zoom
         camera.updateProjectionMatrix()
 
@@ -73,10 +74,7 @@ export default function Camera() {
 
     useEffect(() => {
         camera.position.set(Config.SLICE_SIZE, 5, Config.SLICE_SIZE)
-        camera.lookAt(new Vector3(0, 0, 0))
-        camera.updateMatrixWorld()
-        camera.updateWorldMatrix()
-        camera.updateProjectionMatrix()
+        camera.lookAt(new Vector3(0, 0, 0)) 
     }, [])
 
     useEffect(() => {
