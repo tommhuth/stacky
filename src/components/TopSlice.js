@@ -1,10 +1,10 @@
 import React, { useState, useEffect, useRef } from "react"
-import { useRender } from "react-three-fiber"
+import { useFrame } from "react-three-fiber"
 import Config from "../Config"
 import { getPositionWithOffset } from "../utils/helpers"
 import Only from "./Only"
 import ColorMixer from "../utils/ColorMixer"
-import { useStore, api } from "../data/store"
+import { useStore } from "../data/store"
 
 export default function TopSlice() {
     let state = useStore(state => state.state)
@@ -16,32 +16,11 @@ export default function TopSlice() {
     let [color, setColor] = useState()
     let ref = useRef()
 
-    useRender(() => {
+    useFrame(() => {
         if (state === Config.STATE_ACTIVE) {
             incrementOffset()
         }
-    }, false, [state])
-
-    useEffect(() => {
-        if (state === Config.STATE_ACTIVE) {
-            return api.subscribe(
-                (sliceOffset) => {
-                    if (sliceOffset) {
-                        let position = getPositionWithOffset(
-                            prev.position[0],
-                            score * Config.SLICE_HEIGHT + Config.SLICE_HEIGHT / 2,
-                            prev.position[2],
-                            sliceOffset,
-                            offsetAxis
-                        )
-
-                        // ref.current.position.set(...position)
-                    }
-                },
-                state => state.sliceOffset
-            )
-        }
-    }, [state, ref.current, prev, score, offsetAxis])
+    })   
 
     useEffect(() => {
         setColor(ColorMixer.next())

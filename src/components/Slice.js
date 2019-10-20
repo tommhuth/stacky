@@ -11,8 +11,7 @@ export default function Slice({
     mass = 0,
     size = [1, 1, 1],
     color,
-    directHit,
-    id
+    directHit
 })  {
     const planeRef = useRef()
     const [body, setBody] = useState(null)

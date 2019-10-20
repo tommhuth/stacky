@@ -1,4 +1,3 @@
-
 const webpack = require("webpack")
 const path = require("path")
 const HtmlWebpackPlugin = require("html-webpack-plugin")
@@ -8,7 +7,7 @@ const uuid = require("uuid")
 const { CleanWebpackPlugin } = require("clean-webpack-plugin")
 const CopyWebpackPlugin = require("copy-webpack-plugin")
 const { InjectManifest } = require("workbox-webpack-plugin")
-const { BundleAnalyzerPlugin } = require("webpack-bundle-analyzer")
+//const { BundleAnalyzerPlugin } = require("webpack-bundle-analyzer")
 
 let rev = uuid.v4()
 let plugins = [

@@ -9,8 +9,7 @@ export default function Stack() {
     let restart = useStore(state => state.restart)
     let match = useStore(state => state.match)
     let start = useStore(state => state.start)
-    let state = useStore(state => state.state) 
-    let clean = useStore(state => state.clean) 
+    let state = useStore(state => state.state)  
 
     useEffect(() => {
         function onClick(e) {

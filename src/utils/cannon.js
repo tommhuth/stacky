@@ -1,6 +1,6 @@
 import { World, NaiveBroadphase, Body } from "cannon"
 import React, { useRef, useEffect, useState, useContext } from "react"
-import { useRender } from "react-three-fiber"
+import { useFrame } from "react-three-fiber"
 
 const context = React.createContext()
 
@@ -22,7 +22,7 @@ export function CannonProvider({
     }, [world])
 
     // Run world stepper every frame
-    useRender(() => world.step(1 / 40))
+    useFrame(() => world.step(1 / 40))
 
     // Distribute world via context
     return <context.Provider value={world}>{children}</context.Provider>
@@ -47,7 +47,7 @@ export function useCannon({ ...props }, fn, deps = []) {
         return () => world.removeBody(body)
     }, deps)
 
-    useRender(() => {
+    useFrame(() => {
         if (ref.current) {
             // Transport cannon physics into the referenced threejs object
             ref.current.position.copy(body.position)

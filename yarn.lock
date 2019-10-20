@@ -4079,11 +4079,6 @@ lock@^0.1.2:
   resolved "https://registry.yarnpkg.com/lock/-/lock-0.1.4.tgz#fec7deaef17e7c3a0a55e1da042803e25d91745d"
   integrity sha1-/sfervF+fDoKVeHaBCgD4l2RdF0=
 
-lodash-es@^4.17.15:
-  version "4.17.15"
-  resolved "https://registry.yarnpkg.com/lodash-es/-/lodash-es-4.17.15.tgz#21bd96839354412f23d7a10340e5eac6ee455d78"
-  integrity sha512-rlrc3yU3+JNOpZ9zj5pQtxnx2THmvRykwL4Xlxoa8I9lHBlVbbyPhgyPMioxVZ4NqyxaVVtaJnzsyOidQIhyyQ==
-
 lodash._reinterpolate@^3.0.0:
   version "3.0.0"
   resolved "https://registry.yarnpkg.com/lodash._reinterpolate/-/lodash._reinterpolate-3.0.0.tgz#0ccf2d89166af03b3663c796538b75ac6e114d9d"
@@ -5121,11 +5116,6 @@ pngjs@^3.0.0:
   resolved "https://registry.yarnpkg.com/pngjs/-/pngjs-3.4.0.tgz#99ca7d725965fb655814eaf65f38f12bbdbf555f"
   integrity sha512-NCrCHhWmnQklfH4MtJMRjZ2a8c80qXeMlQMv2uVp9ISJMTt562SbGd6n2oq0PaPgKm7Z6pL9E2UlLIhC+SHL3w==
 
-pointer-events-polyfill@^0.4.4-pre:
-  version "0.4.4-pre"
-  resolved "https://registry.yarnpkg.com/pointer-events-polyfill/-/pointer-events-polyfill-0.4.4-pre.tgz#d745eb0cef8aa3f661cdba1364b9728b46d0872f"
-  integrity sha512-t7iitVY5jW9mGOFZEHphJOzB8eMhoYaE6I5HqsUX14rjsPa9F6OlMOCj3EpqDzNb/8XtMk2BxMpOyePPyuefHw==
-
 posix-character-classes@^0.1.0:
   version "0.1.1"
   resolved "https://registry.yarnpkg.com/posix-character-classes/-/posix-character-classes-0.1.1.tgz#01eac0fe3b5af71a2a6c02feabb8c1fef7e00eab"
@@ -5397,7 +5387,7 @@ rc@^1.2.7:
     minimist "^1.2.0"
     strip-json-comments "~2.0.1"
 
-react-dom@^16.8.6:
+react-dom@^16.10.2:
   version "16.10.2"
   resolved "https://registry.yarnpkg.com/react-dom/-/react-dom-16.10.2.tgz#4840bce5409176bc3a1f2bd8cb10b92db452fda6"
   integrity sha512-kWGDcH3ItJK4+6Pl9DZB16BXYAZyrYQItU4OMy0jAkv5aNqc+mAKb4TpFtAteI6TJZu+9ZlNhaeNQSVQDHJzkw==
@@ -5412,6 +5402,13 @@ react-is@^16.8.1:
   resolved "https://registry.yarnpkg.com/react-is/-/react-is-16.10.2.tgz#984120fd4d16800e9a738208ab1fba422d23b5ab"
   integrity sha512-INBT1QEgtcCCgvccr5/86CfD71fw9EPmDxgiJX4I2Ddr6ZsV6iFXsuby+qWJPtmNuMY0zByTsG4468P7nHuNWA==
 
+react-promise-suspense@^0.3.1:
+  version "0.3.1"
+  resolved "https://registry.yarnpkg.com/react-promise-suspense/-/react-promise-suspense-0.3.1.tgz#b4eb428c36efb27f0a3df265de4647acdb27aa1a"
+  integrity sha512-3EE8QdWReri6kfwNQZW/y24x1jm2oaOGhy+/7A9z7eVMfPAofZJCqx7BuGLr7jok/NxclGL98AhLY6aHcDSTkA==
+  dependencies:
+    fast-deep-equal "^2.0.1"
+
 react-reconciler@0.20.4:
   version "0.20.4"
   resolved "https://registry.yarnpkg.com/react-reconciler/-/react-reconciler-0.20.4.tgz#3da6a95841592f849cb4edd3d38676c86fd920b2"
@@ -5422,20 +5419,20 @@ react-reconciler@0.20.4:
     prop-types "^15.6.2"
     scheduler "^0.13.6"
 
-react-three-fiber@^2.2.11:
-  version "2.4.3"
-  resolved "https://registry.yarnpkg.com/react-three-fiber/-/react-three-fiber-2.4.3.tgz#2eb16d2ba7a8b40e37a8a994507745b2769162db"
-  integrity sha512-XL5GxJyoX2FY1UjdPmlKU95+NCR7UIVgI4upQEXockpp41K5z+hXoC3S8gvJbd0XfRs1dii1uk5F9pz9vp/IvQ==
+react-three-fiber@^3.0.3:
+  version "3.0.3"
+  resolved "https://registry.yarnpkg.com/react-three-fiber/-/react-three-fiber-3.0.3.tgz#7ec3413102d04e3185c625497141ae8bb5a358ee"
+  integrity sha512-BeqkHsmy4hGVsOO9PbxvGtbO30i+qM4a5NBYMvOuNT7dFUvzzEXVLQ5fKCbFp7Scvz7c/gEQp46jQOyjh8PUcA==
   dependencies:
     "@babel/runtime" "^7.4.4"
     "@types/three" "^0.103.2"
-    lodash-es "^4.17.15"
-    pointer-events-polyfill "^0.4.4-pre"
+    react-promise-suspense "^0.3.1"
     react-reconciler "0.20.4"
     resize-observer-polyfill "^1.5.1"
     scheduler "0.13.3"
+    tiny-emitter "^2.1.0"
 
-react@^16.8.6:
+react@^16.10.2:
   version "16.10.2"
   resolved "https://registry.yarnpkg.com/react/-/react-16.10.2.tgz#a5ede5cdd5c536f745173c8da47bda64797a4cf0"
   integrity sha512-MFVIq0DpIhrHFyqLU0S3+4dIcBhhOvBE8bJ/5kHPVOVaGdo0KuiQzpcjCPsf585WvhypqtrMILyoE2th6dT+Lw==
@@ -6409,15 +6406,10 @@ text-table@^0.2.0:
   resolved "https://registry.yarnpkg.com/text-table/-/text-table-0.2.0.tgz#7f5ee823ae805207c00af2df4a84ec3fcfa570b4"
   integrity sha1-f17oI66AUgfACvLfSoTsP8+lcLQ=
 
-three@*:
+three@*, three@^0.109.0:
   version "0.109.0"
   resolved "https://registry.yarnpkg.com/three/-/three-0.109.0.tgz#611c9ef860d10bd107695cead6c6abcd2422e5fd"
   integrity sha512-XT99T3Hvgh2CEvwPdHYEunNE+clLK6KiT1U8En7YOgIqTUw4MrLeIc8zxQAJ6wbP8hhJaY5+Cff3jwBPpBa0gA==
-
-three@^0.106.2:
-  version "0.106.2"
-  resolved "https://registry.yarnpkg.com/three/-/three-0.106.2.tgz#6752d304c470e4df230944ecd45325e7bf79e1f8"
-  integrity sha512-4Tlx43uoxnIaZFW2Bzkd1rXsatvVHEWAZJy8LuE+s6Q8c66ogNnhfq1bHiBKPAnXP230LD11H/ScIZc2LZMviA==
 
 through2@^2.0.0:
   version "2.0.5"
@@ -6438,6 +6430,11 @@ timers-browserify@^2.0.4:
   integrity sha512-60aV6sgJ5YEbzUdn9c8kYGIqOubPoUdqQCul3SBAsRCZ40s6Y5cMcrW4dt3/k/EsbLVJNl9n6Vz3fTc+k2GeKQ==
   dependencies:
     setimmediate "^1.0.4"
+
+tiny-emitter@^2.1.0:
+  version "2.1.0"
+  resolved "https://registry.yarnpkg.com/tiny-emitter/-/tiny-emitter-2.1.0.tgz#1d1a56edfc51c43e863cbb5382a72330e3555423"
+  integrity sha512-NB6Dk1A9xgQPMoGqC5CVXn123gWyte215ONT5Pp5a0yt4nlEoO1ZWeCwpncaekPHXO60i47ihFnZPiRPjRMq4Q==
 
 tinycolor2@^1.1.2:
   version "1.4.1"
