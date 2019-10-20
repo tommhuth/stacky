@@ -33,7 +33,7 @@ ReactDOM.render(
                 far: 20
             }}
         >
-            <CannonProvider defaultFriction={1} defaultRestitution={.62}>
+            <CannonProvider defaultFriction={1} defaultRestitution={.25}>
                 <Lights />
                 <Camera />
                 <Stack />

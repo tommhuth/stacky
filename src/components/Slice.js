@@ -12,7 +12,7 @@ export default function Slice({
     size = [1, 1, 1],
     color,
     directHit
-})  {
+}) {
     const planeRef = useRef()
     const [body, setBody] = useState(null)
     const [hasDirectHit, setHasDirectHit] = useState(directHit)
@@ -21,16 +21,26 @@ export default function Slice({
 
     let ref = useCannon(
         { mass },
-        body => {
+        body => { 
             body.addShape(new Box(new Vec3(size[0] / 2, size[1] / 2, size[2] / 2)))
             body.position.set(...position)
 
+            if (mass > 0) {
+                let random = (min, max) => Math.random() * (max - min) + min
+                let point = body.position.clone()
+
+                point.x += random(-size[0] / 2, size[0] / 2)
+                point.z += random(-size[2] / 2, size[2] / 2)
+    
+                body.applyImpulse(new Vec3(0, -mass * .6, 0), point) 
+            }
+
             setBody(body)
         }
-    ) 
+    )
 
     useEffect(() => {
-        if (body) { 
+        if (body) {
             body.position.set(...position)
         }
     }, [body, position])
@@ -69,7 +79,7 @@ export default function Slice({
                     <meshLambertMaterial transparent opacity={opacity} side={DoubleSide} color={0xFFFFFF} attach="material" />
                 </mesh>
             </Only>
-            
+
             <mesh ref={ref}>
                 <boxBufferGeometry attach="geometry" args={size} />
                 <meshPhongMaterial color={color} attach="material" />
