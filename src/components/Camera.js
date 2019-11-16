@@ -43,7 +43,6 @@ export default function Camera() {
     let { camera, scene } = useThree()
     let stackSize = useStore(state => state.score)
     let state = useStore(state => state.state)
-    let currentSlice = useStore(state => state.slices[state.slices.length - 1])
     let [zoom, setZoom] = useState(() => getZoom())
 
     useFrame(() => {
@@ -54,10 +53,9 @@ export default function Camera() {
         ].includes(state) ? stackSize * Config.SLICE_HEIGHT + 5 + gameOverOffset : 5
 
         if (camera) {
-            camera.position.x += (currentSlice.position[0] + Config.SLICE_SIZE - camera.position.x) / 80
-            camera.position.y += (targetY - camera.position.y) / 30
-            camera.position.z += (currentSlice.position[2] + Config.SLICE_SIZE - camera.position.z) / 80
+            camera.position.y += (targetY - camera.position.y) * .1
         }
+
     })
 
     useEffect(() => {
@@ -73,11 +71,11 @@ export default function Camera() {
 
     useEffect(() => {
         camera.position.set(Config.SLICE_SIZE, 5, Config.SLICE_SIZE)
-        camera.lookAt(new Vector3(0, 0, 0)) 
+        camera.lookAt(new Vector3(0, 0, 0))
     }, [])
 
     useEffect(() => {
-        let color =  ColorMixer.colors[ColorMixer.i - 1]
+        let color = ColorMixer.colors[ColorMixer.i - 1]
 
         anime({
             targets: scene.fog.color,
