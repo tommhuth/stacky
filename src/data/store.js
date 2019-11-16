@@ -5,8 +5,9 @@ import { Box3, Vector3 } from "three"
 import uuid from "uuid"
 import { getPositionWithOffset, getOffset } from "../utils/helpers"
 
+const outOffset = Config.SLICE_SIZE * 1.25
 const init = {
-    sliceOffset: 0,
+    sliceOffset: outOffset,
     score: 0,
     offsetAxis: "x",
     state: Config.STATE_READY,
@@ -199,7 +200,7 @@ const [useStore, api] = create((set, get) => {
                 })
             }
 
-            set({ sliceOffset: 0, offsetAxis: offsetAxis === "x" ? "z" : "x" })
+            set({ sliceOffset: outOffset, offsetAxis: offsetAxis === "x" ? "z" : "x" })
 
             if (score % 2 === 0) {
                 get().clean()
