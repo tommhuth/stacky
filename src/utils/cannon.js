@@ -40,6 +40,7 @@ export function CannonProvider({
             gravity: new Vec3(gravityX, gravityY, gravityZ)
         })
     }, [allowSleep, gravityX, gravityY, gravityZ])
+    let lastCalled = useRef()
 
     useEffect(() => {
         if (axisIndex) {
@@ -54,7 +55,19 @@ export function CannonProvider({
     }, [world, axisIndex, iterations, defaultRestitution])
 
     useFrame(() => {
-        world.step(step, undefined, 5)
+        // from cannon-es demo
+        const now = performance.now() / 1000
+
+        if (!lastCalled.current) {
+            // last call time not saved, cant guess elapsed time. Take a simple step.
+            world.step(step)
+            lastCalled.current = now
+        } else {
+            let timeSinceLastCall = now - lastCalled.current
+
+            world.step(step, timeSinceLastCall, 10)
+            lastCalled.current = now
+        }
     })
 
     return (
@@ -165,7 +178,7 @@ export function useInstancedBody({
                 position: body.position.toArray(),
                 rotation: body.quaternion.toArray(),
                 scale: [scaleX, scaleY, scaleZ]
-            }) 
+            })
         }
     }, [body, index, instance, scaleX, scaleY, scaleZ])
 
@@ -176,8 +189,8 @@ export function useInstancedBody({
                 setMatrixAt({
                     index,
                     instance,
-                    position: [-100000, 0, -100000],  
-                }) 
+                    position: [-100000, 0, -100000],
+                })
             }
         }
     }, [instance, keepAround, index])

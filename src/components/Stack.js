@@ -23,12 +23,12 @@ export default function Stack() {
     let baseColor = useMemo(() => getColorAt(0), [])
     let topColor = useMemo(() => getColorAt(height + 1), [height])
 
-    useFrame(() => {
+    useFrame((_state, delta) => {
         if (state !== State.ACTIVE || !slice) {
             return
         }
 
-        let speed = .125
+        let speed = 7.5 * delta 
 
         slice.position.y = topSlice.position[1] + 1
         slice.position[axis] += speed * (axisFlipped ? -1 : 1)

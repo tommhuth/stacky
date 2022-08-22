@@ -29,7 +29,7 @@ window.addEventListener("resize", () => {
         camera: {
             zoom: getZoomValue()
         },
-        dpr: [1, 1],
+        dpr: [1, window.devicePixelRatio * .75],
         gl: {
             antialias: false,
             depth: true,

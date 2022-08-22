@@ -100,12 +100,7 @@ export default function Background() {
             easing: "easeOutQuad",
             duration: state === State.GAME_OVER ? 1000 : 4000,
         })
-    }, [major, state])
-
-    useFrame(({ clock }) => {
-        uniforms.uTime.value = clock.getElapsedTime()
-        uniforms.uTime.needsUpdate = true
-    })
+    }, [major, state]) 
 
     useFrame(() => {
         ref.current.position.y = camera.position.y - cameraStartY * 2
