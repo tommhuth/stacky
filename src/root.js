@@ -4,7 +4,7 @@ import { createRoot as createReactRoot } from "react-dom/client"
 import { createRoot as createFiberRoot, extend, events } from "@react-three/fiber"
 import { Group } from "three"
 import { Workbox } from "workbox-window"
-import App from "./App"
+import Game from "./Game"
 import { getZoomValue } from "./components/Camera"
 import Ui from "./components/Ui" 
 import Config from "./Config"
@@ -37,7 +37,7 @@ window.addEventListener("resize", () => {
             alpha: true
         }
     })
-    fiberRoot.render(<App />)
+    fiberRoot.render(<Game />)
 })
  
 window.dispatchEvent(new Event("resize"))

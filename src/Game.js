@@ -7,7 +7,7 @@ import Stack from "./components/Stack"
 import Background from "./components/Background"
 import { palette } from "./utils/color"
 
-export default function App() {
+export default function Game() {
     let id = useStore(i => i.id)
 
     useEffect(() => {
