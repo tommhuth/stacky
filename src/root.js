@@ -6,7 +6,7 @@ import { Group } from "three"
 import { Workbox } from "workbox-window"
 import App from "./App"
 import { getZoomValue } from "./components/Camera"
-import Ui from "./components/UI" 
+import Ui from "./components/Ui" 
 import Config from "./Config"
 
 extend({
