@@ -1,26 +1,33 @@
-workbox.setConfig({ debug: false })
+import { registerRoute, NavigationRoute } from "workbox-routing"
+import { CacheFirst, StaleWhileRevalidate } from "workbox-strategies"
+import { CacheableResponsePlugin } from "workbox-cacheable-response"
+import { ExpirationPlugin } from "workbox-expiration"
+import { skipWaiting, clientsClaim } from "workbox-core"
+import { precacheAndRoute, createHandlerBoundToURL } from "workbox-precaching"
 
-workbox.core.skipWaiting()
-workbox.core.clientsClaim()
-  
+skipWaiting()
+clientsClaim()
+
+precacheAndRoute(self.__WB_MANIFEST)
+
 // Cache the Google Fonts stylesheets with a stale-while-revalidate strategy.
-workbox.routing.registerRoute(
-    /^https:\/\/fonts\.googleapis\.com/,
-    new workbox.strategies.StaleWhileRevalidate({
-        cacheName: "google-fonts-stylesheets"
+registerRoute(
+    ({ url }) => url.origin === "https://fonts.googleapis.com",
+    new StaleWhileRevalidate({
+        cacheName: "google-fonts-stylesheets",
     })
 )
 
 // Cache the underlying font files with a cache-first strategy for 1 year.
-workbox.routing.registerRoute(
-    /^https:\/\/fonts\.gstatic\.com/,
-    new workbox.strategies.CacheFirst({
+registerRoute(
+    ({ url }) => url.origin === "https://fonts.gstatic.com",
+    new CacheFirst({
         cacheName: "google-fonts-webfonts",
         plugins: [
-            new workbox.cacheableResponse.Plugin({
+            new CacheableResponsePlugin({
                 statuses: [0, 200],
             }),
-            new workbox.expiration.Plugin({
+            new ExpirationPlugin({
                 maxAgeSeconds: 60 * 60 * 24 * 365,
                 maxEntries: 30,
             }),
@@ -28,4 +35,6 @@ workbox.routing.registerRoute(
     })
 )
 
-workbox.precaching.precacheAndRoute(self.__precacheManifest || [])
+// return a specific response for all navigation requests
+// https://developers.google.com/web/tools/workbox/modules/workbox-routing
+registerRoute(new NavigationRoute(createHandlerBoundToURL("/index.html")))

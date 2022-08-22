@@ -1,0 +1,43 @@
+* {
+    margin: 0;
+    padding: 0;
+    border: none;
+    font-family: inherit;
+    font-size: inherit;
+    line-height: inherit;
+    color: inherit;
+    outline: none;
+    text-decoration: none;
+    list-style: none; 
+    background-color: transparent;
+    -webkit-tap-highlight-color: rgba(255, 255, 255, 0) !important;
+    appearance: none; 
+}  
+
+html, 
+body {
+    height: 100vh;
+    overflow: hidden;
+    background-color: var(--background-color);
+}
+
+.visually-hidden {
+    position: absolute;
+    overflow: hidden;
+    clip: rect(0 0 0 0);
+    height: 1px;
+    width: 1px;
+    margin: -1px;
+    padding: 0;
+    border: 0;
+} 
+ 
+#root { 
+    top: 0; 
+    position: fixed;
+    display: block;
+    height: 100vh !important; 
+    width: 100% !important;
+    right: 0;
+    left: 0;
+}

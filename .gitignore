@@ -1,5 +1,4 @@
-node_modules
-.vscode
-public/app.js
-public/app.js.map
-!/public/flare.png
+node_modules/
+public/
+*.blend1
+.error

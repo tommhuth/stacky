@@ -1,54 +1,60 @@
-import "../assets/style/app.scss"
-
-import React from "react"
-import ReactDOM from "react-dom"
-import { Workbox } from "workbox-window"
-import Stack from "./components/Stack"
-import { Canvas  } from "react-three-fiber"
-import ColorMixer from "./utils/ColorMixer"
-import { CannonProvider } from "./utils/cannon"
 import Camera from "./components/Camera"
-import Lights from "./components/Lights"
-import Ui from "./components/Ui"
-import Config from "./Config" 
+import { EffectComposer } from "@react-three/postprocessing"
+import { Suspense, useEffect } from "react"
+import { CannonProvider } from "./utils/cannon"
+import { match, reset, start, State, store, useStore } from "./utils/store"
+import Stack from "./components/Stack"
+import Background from "./components/Background"
+import { palette } from "./utils/color"
 
-let pixelRatio = window.matchMedia("(min-width:900px)").matches ? Math.min(window.devicePixelRatio, 1.5) : window.devicePixelRatio
+export default function App() {
+    let id = useStore(i => i.id)
 
-ColorMixer.setEnvironment()
+    useEffect(() => {
+        let onClick = (e) => {  
+            e.preventDefault()
+            let state = store.getState().state
 
-ReactDOM.render(
-    <>
-        <Ui />
-        <Canvas
-            orthographic
-            pixelRatio={pixelRatio}
-            camera={{
-                position: [Config.SLICE_SIZE, 5, Config.SLICE_SIZE],
-                zoom: 50,
-                left: -10,
-                right: 10,
-                top: 10,
-                bottom: -10,
-                near: -10,
-                far: 20
-            }}
-        >
-            <CannonProvider defaultFriction={1} defaultRestitution={.25}>
-                <Lights />
-                <Camera />
-                <Stack />
+            switch (state) {
+                case State.IDLE:
+                    return start()
+                case State.ACTIVE:
+                    return match()
+                case State.GAME_OVER:
+                    return reset()
+            }
+        }
+
+        window.addEventListener("mousedown", onClick)
+        window.addEventListener("touchstart", onClick, {passive: false})
+
+        return () => {
+            window.removeEventListener("mousedown", onClick)
+            window.removeEventListener("touchstart", onClick)
+        }
+    }, [])
+
+    return (
+        <>
+            <fog near={18} far={44} color={palette[1]} attach="fog" />
+            <Camera key={id} />
+
+            <directionalLight
+                color={0xffffff}
+                position={[-6, 8, -5]}
+                intensity={1}
+            />
+            <ambientLight color={0xffffff} intensity={.7} />
+
+            <Background />
+
+            <CannonProvider axisIndex={1}>
+                <Stack key={id} />
             </CannonProvider>
-            <fog args={[0x397fbf, 6, 20]} attach={"fog"} />
-        </Canvas>
-    </>,
-    document.getElementById("root")
-)
 
-if (Config.REGISTER_SERVICEWORKER) {
-    let worker = new Workbox("/serviceworker.js")
-
-    worker.addEventListener("installed", e => {
-        console.info(`Service worker ${e.isUpdate ? "updated" : "installed"}`)
-    })
-    worker.register()
+            <Suspense fallback={null}>
+                <EffectComposer />
+            </Suspense>
+        </>
+    )
 }

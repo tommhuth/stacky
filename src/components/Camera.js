@@ -1,92 +1,54 @@
-import { useState, useEffect } from "react"
-import { useThree, useFrame } from "react-three-fiber"
-import { Vector3 } from "three"
-import Config from "../Config"
-import { useStore } from "../data/store"
-import ColorMixer from "../utils/ColorMixer"
-import anime from "animejs"
+import { useFrame, useThree } from "@react-three/fiber"
+import { useEffect, useLayoutEffect } from "react" 
+import { SliceType, State, store } from "../utils/store"
+import { map } from "../utils/utils"
 
-function getZoom() {
-    let breakpoints = [
-        {
-            breakpoint: "(max-width: 30em)",
-            zoom: 55
-        },
-        {
-            breakpoint: "(max-width: 40em)",
-            zoom: 60
-        },
-        {
-            breakpoint: "(max-width: 45em)",
-            zoom: 60
-        },
-        {
-            breakpoint: "(max-width: 65em)",
-            zoom: 75
-        },
-        {
-            breakpoint: "(min-width: 80em)",
-            zoom: 90
-        },
-    ]
+export const cameraStartY = 15
 
-    for (let { zoom, breakpoint } of breakpoints) {
-        if (window.matchMedia(breakpoint).matches) {
-            return zoom
-        }
-    }
-
-    return 90
+export function getZoomValue() {
+    return map(window.innerWidth, 400, 1200, 34, 65)
 }
 
-export default function Camera() {
-    let { camera, scene } = useThree()
-    let stackSize = useStore(state => state.score)
-    let state = useStore(state => state.state)
-    let [zoom, setZoom] = useState(() => getZoom())
+export default function Camera({ startPosition = [10, cameraStartY, -10] }) {
+    let { camera, viewport } = useThree() 
+
+    useLayoutEffect(() => {
+        camera.position.set(...startPosition)
+        camera.zoom = map(window.innerWidth, 400, 1000, 30, 70)
+        camera.near = -10
+        camera.updateProjectionMatrix()
+        camera.lookAt(0, 0, 0)
+        camera.position.y = cameraStartY * .5 
+    }, [camera, ...startPosition]) 
+
+    useEffect(()=> {
+        camera.zoom = getZoomValue()
+        camera.updateProjectionMatrix() 
+    }, [camera, viewport])
 
     useFrame(() => {
-        let gameOverOffset = state === Config.STATE_GAME_OVER ? .25 : 0
-        let targetY = [
-            Config.STATE_ACTIVE,
-            Config.STATE_GAME_OVER
-        ].includes(state) ? stackSize * Config.SLICE_HEIGHT + 5 + gameOverOffset : 5
+        let { stack, state } = store.getState()
+        let isGameOver = state === State.GAME_OVER
+        let topSlice = stack.parts.find(i => i.type === SliceType.SLICE)
+        let targetX = isGameOver ? startPosition[0] : topSlice.position[0] + startPosition[0]
+        let targetZ = isGameOver ? startPosition[2] : topSlice.position[2] + startPosition[2]
 
-        if (camera) {
-            camera.position.y += (targetY - camera.position.y) * .1
-        }
+        camera.position.x += (targetX - camera.position.x) * (isGameOver ? .05 : .005)
+        camera.position.y += (stack.height - (isGameOver ? startPosition[1] * .75 : 0) + startPosition[1] - camera.position.y) * (isGameOver ? .05 : .025)
+        camera.position.z += (targetZ - camera.position.z) * (isGameOver ? .05 : .005)
+  
+        if (isGameOver) {
+            let targetZoom = getZoomValue() * (isGameOver ? .7 : 1)
 
+            camera.zoom += (targetZoom - camera.zoom) * .01
+
+            if (Math.abs(targetZoom - camera.zoom) > .001) {
+                camera.updateProjectionMatrix() 
+            } else {
+                camera.zoom = targetZoom 
+            }
+        }  
     })
-
-    useEffect(() => {
-        let listener = () => setZoom(getZoom())
-
-        camera.zoom = zoom
-        camera.updateProjectionMatrix()
-
-        window.addEventListener("resize", listener)
-
-        return () => window.removeEventListener("resize", listener)
-    }, [zoom])
-
-    useEffect(() => {
-        camera.position.set(Config.SLICE_SIZE, 5, Config.SLICE_SIZE)
-        camera.lookAt(new Vector3(0, 0, 0))
-    }, [])
-
-    useEffect(() => {
-        let color = ColorMixer.colors[ColorMixer.i - 1]
-
-        anime({
-            targets: scene.fog.color,
-            r: color.r,
-            g: color.g,
-            b: color.b,
-            duration: 2500,
-            easing: "easeOutCubic",
-            autoplay: true
-        })
-    }, [stackSize])
 
     return null
 }

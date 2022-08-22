@@ -1,88 +1,57 @@
-import React, { useState, useEffect, useRef } from "react"
-import { Box, Vec3 } from "cannon"
-import { DoubleSide } from "three"
-import { useCannon } from "../utils/cannon"
-import Config from "../Config"
-import Only from "./Only"
-import anime from "animejs"
+import random from "@huth/random"
+import { useFrame } from "@react-three/fiber"
+import { Box, Vec3 } from "cannon-es"
+import { memo, useEffect, useLayoutEffect, useMemo, useRef } from "react"
+import { Color } from "three"
+import { removePart, SliceType, useStore } from "../utils/store"
+import { useInstancedBody } from "../utils/cannon"
+import { cameraStartY } from "./Camera"
 
-export default function Slice({
-    position,
-    mass = 0,
-    size = [1, 1, 1],
-    color,
-    directHit
-}) {
-    let planeRef = useRef()
-    let [body, setBody] = useState(null)
-    let [hasDirectHit, setHasDirectHit] = useState(directHit)
-    let [sizeAddition, setSizeAddition] = useState(0)
-    let [opacity, setOpacity] = useState(1)
-    let ref = useCannon(
-        { mass },
-        body => { 
-            body.addShape(new Box(new Vec3(size[0] / 2, size[1] / 2, size[2] / 2)))
-            body.position.set(...position)
+const _color = new Color()
 
-            if (mass > 0) {
-                let random = (min, max) => Math.random() * (max - min) + min
-                let point = body.position.clone()
-
-                point.x += random(-size[0] / 2, size[0] / 2)
-                point.z += random(-size[2] / 2, size[2] / 2)
-    
-                body.applyImpulse(new Vec3(0, -mass * .6, 0), point) 
-            }
-
-            setBody(body)
-        }
-    )
+const Slice = memo(function ({ position, color, index, type, size, id }) {
+    let instance = useStore(i => i.stack.instance)
+    let hasSetColor = useRef(false)
+    let dead = useRef(false)
+    let definition = useMemo(() => new Box(new Vec3(size[0] / 2, size[1] / 2, size[2] / 2)), size)
+    let [body] = useInstancedBody({
+        keepAround: type === SliceType.SLICE,
+        instance,
+        index,
+        position,
+        mass: type === SliceType.FRAGMENT ? size[0] * size[2] : 0,
+        scale: size,
+        definition,
+    })
 
     useEffect(() => {
-        if (body) {
-            body.position.set(...position)
+        if (type === SliceType.FRAGMENT) {
+            body.applyLocalImpulse(
+                new Vec3(0, -size[0] * size[2] * random.float(1.25, 2), 0),
+                new Vec3(random.float(-size[0] / 2, size[0] / 2), 0, random.float(-size[2] / 2, size[2] / 2))
+            )
         }
-    }, [body, position])
+    }, [body, type])
 
-    useEffect(() => {
-        if (directHit) {
-            let targets = { sizeAddition, opacity }
-
-            anime({
-                targets,
-                sizeAddition: .95,
-                opacity: 0,
-                duration: 800,
-                delay: 0,
-                easing: "easeOutQuart",
-                update() {
-                    setSizeAddition(targets.sizeAddition)
-                    setOpacity(targets.opacity)
-                },
-                complete() {
-                    setHasDirectHit(false)
-                }
-            })
+    useLayoutEffect(() => {
+        if (instance && !hasSetColor.current) {
+            instance.setColorAt(index, _color.set(color))
+            instance.instanceColor.needsUpdate = true
+            hasSetColor.current = true
         }
-    }, [directHit])
+    }, [instance, index])
 
-    return (
-        <>
-            <Only if={hasDirectHit}>
-                <mesh
-                    ref={planeRef}
-                    position={[position[0], position[1] + size[1] / 2 - Config.SLICE_HEIGHT, position[2]]}
-                    rotation-x={Math.PI / 2}
-                >
-                    <planeBufferGeometry attach="geometry" args={[size[0] + sizeAddition, size[2] + sizeAddition, 1]} />
-                    <meshLambertMaterial transparent opacity={opacity} side={DoubleSide} color={0xFFFFFF} attach="material" />
-                </mesh>
-            </Only>
+    useFrame(({ camera, viewport }) => {
+        let threshold = cameraStartY + viewport.getCurrentViewport(camera).height * 2
+        let isOffscreen = body.position.y + threshold < camera.position.y
 
-            <mesh ref={ref}>
-                <boxBufferGeometry attach="geometry" args={size} />
-                <meshPhongMaterial color={color} attach="material" />
-            </mesh>
-        </>
-    )
-}
+        if (isOffscreen && !dead.current) {
+            dead.current = true
+            removePart(id)
+        }
+    })
+
+    return null
+})
+
+export default Slice
