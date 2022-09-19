@@ -17,6 +17,7 @@
 html, 
 body {
     height: 100%; 
+    width: 100%;   
     overflow: hidden;
     background-color: var(--background-color);
 }
@@ -34,11 +35,10 @@ body {
  
 #root { 
     top: 0; 
-    position: fixed;
+    position: absolute;
     display: block;
     height: 100% !important; 
     width: 100% !important;
     right: 0;
-    left: 0;
-    bottom: 0;
+    left: 0; 
 }
