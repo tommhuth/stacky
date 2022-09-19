@@ -1,5 +1,5 @@
 import { cameraStartY } from "../components/Camera"
-import { useEffect, useRef } from "react"
+import { useEffect, useLayoutEffect, useRef } from "react"
 import { State, useStore } from "../utils/store"
 import { Color, MeshBasicMaterial, Vector3 } from "three"
 import { useFrame, useThree } from "@react-three/fiber"
@@ -16,8 +16,8 @@ export default function Background() {
     let position = [-10, -20, 10]
     let height = useStore(i => i.stack.height)
     let state = useStore(i => i.state)
-    let topOpacity =  0
-    let bottomOpacity =  .8
+    let topOpacity = 0
+    let bottomOpacity = .8
     let ref = useRef()
     let [material, uniforms] = useShader({
         fog: false,
@@ -63,7 +63,6 @@ export default function Background() {
         }
     })
     let major = getMajorColorAt(height)
-    let viewport = getCurrentViewport(camera, _position.set(...position))
 
     useEffect(() => {
         let bottom = palette[major].toArray()
@@ -84,11 +83,11 @@ export default function Background() {
                 r1: bottom[0],
                 g1: bottom[1],
                 b1: bottom[2],
-                a1:   bottomOpacity,
+                a1: bottomOpacity,
                 r2: top[0],
                 g2: top[1],
                 b2: top[2],
-                a2:  topOpacity,
+                a2: topOpacity,
             },
             render({ r1, g1, b1, a1, r2, g2, b2, a2 }) {
                 uniforms.uBottomColor.value = [r1, g1, b1, a1]
@@ -100,7 +99,13 @@ export default function Background() {
             easing: "easeOutQuad",
             duration: state === State.GAME_OVER ? 1000 : 4000,
         })
-    }, [major, state]) 
+    }, [major, state])
+
+    useLayoutEffect(() => {
+        let viewport = getCurrentViewport(camera, ref.current?.position || _position.set(...position))
+
+        ref.current.scale.set(viewport.width * 1.1, viewport.height * 1.1, 1)
+    }, [])
 
     useFrame(() => {
         ref.current.position.y = camera.position.y - cameraStartY * 2
@@ -108,17 +113,14 @@ export default function Background() {
         ref.current.position.z = position[2] + camera.position.z + 10
         ref.current.lookAt(camera.position)
 
-        if (state === State.GAME_OVER) {
-            let viewport = getCurrentViewport(camera, _position.set(...position))
+        let viewport = getCurrentViewport(camera, _position.set(...position))
 
-            ref.current.scale.set(viewport.width * 1.1, viewport.height * 1.1, 1)
-        }
+        ref.current.scale.set(viewport.width * 1.1, viewport.height * 1.1, 1) 
     })
 
     return (
         <mesh
-            ref={ref}
-            scale={[viewport.width, viewport.height, 1]}
+            ref={ref} 
             material={material}
         >
             <planeBufferGeometry args={[1, 1, 1, 1]} />

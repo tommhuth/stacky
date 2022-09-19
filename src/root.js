@@ -5,7 +5,7 @@ import { createRoot as createFiberRoot, extend, events } from "@react-three/fibe
 import { Group } from "three"
 import { Workbox } from "workbox-window"
 import Game from "./Game"
-import { getZoomValue } from "./components/Camera"
+import { cameraStartY, getZoomValue } from "./components/Camera"
 import Ui from "./components/Ui" 
 import Config from "./Config"
 
@@ -27,7 +27,8 @@ window.addEventListener("resize", () => {
         events,
         flat: true,
         camera: {
-            zoom: getZoomValue()
+            zoom: getZoomValue(),
+            position: [10, cameraStartY, -10],
         },
         dpr: [1, window.devicePixelRatio * .75],
         gl: {

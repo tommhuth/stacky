@@ -22,7 +22,7 @@
         white-space: nowrap;
         transform: translateX(-50%);
         z-index: 1;
-        animation: subtitle-in .3s 1.5s both;
+        animation: subtitle-in .3s 1.5s both cubic-bezier(0.83, 0, 0.17, 1);
     }
 
     &--score {
@@ -31,7 +31,7 @@
         line-height: .85;
         letter-spacing: -.05em;
         transform: translate(-50%, calc(-100% - 1em));
-        animation: score-in both .35s;
+        animation: score-in both .35s cubic-bezier(0.83, 0, 0.17, 1);
 
         @media (max-width: 35em) {
             font-size: 9em;
@@ -40,9 +40,7 @@
 
     &--intro {
         font-size: 10em;
-        z-index: 1;
-        font-family: "Abril Fatface";
-        text-transform: lowercase;
+        z-index: 1;  
 
         @media (max-width: 37em) {
             font-size: 7em;
@@ -58,6 +56,7 @@
         z-index: 1;
         line-height: 1;
         text-transform: uppercase;
+        font-weight: 300;
         margin-top: 1em;
         white-space: nowrap;
         animation: game-over-in .75s .25s both; 
@@ -70,6 +69,21 @@
 
 .logo {
     white-space: nowrap;
+
+    svg {
+        display: block;
+        width: clamp(1vw, 5em, 80vw); 
+
+        path {
+            animation: logo-in both .85s 1s cubic-bezier(0.83, 0, 0.17, 1); 
+
+            @for $i from 1 through 6 {
+                &:nth-child(#{$i}) {
+                    animation-delay: ($i - 1) * .1s ;
+                }
+            }  
+        }
+    }
 
     span {
         animation: logo-in .35s both;

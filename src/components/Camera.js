@@ -26,21 +26,26 @@ export default function Camera({ startPosition = [10, cameraStartY, -10] }) {
         camera.updateProjectionMatrix() 
     }, [camera, viewport])
 
-    useFrame((_state, delta) => {
+    useFrame((_, delta) => {
         let { stack, state } = store.getState()
+
+        if (state === State.LOADING) {
+            return
+        }
+        
         let isGameOver = state === State.GAME_OVER
         let topSlice = stack.parts.find(i => i.type === SliceType.SLICE)
         let targetX = isGameOver ? startPosition[0] : topSlice.position[0] + startPosition[0]
         let targetZ = isGameOver ? startPosition[2] : topSlice.position[2] + startPosition[2]
 
-        camera.position.x += (targetX - camera.position.x) * (isGameOver ? 3 : .03) * delta
-        camera.position.y += (stack.height - (isGameOver ? startPosition[1] * .75 : 0) + startPosition[1] - camera.position.y) * (isGameOver ? 3 : 1.5) * delta
-        camera.position.z += (targetZ - camera.position.z) * (isGameOver ? 3 : .03) * delta
+        camera.position.x += (targetX - camera.position.x) * ((isGameOver ? 3 : .03) * delta)
+        camera.position.y += (stack.height - (isGameOver ? startPosition[1] * .75 : 0) + startPosition[1] - camera.position.y) * ((isGameOver ? 3 : 1.5) * delta)
+        camera.position.z += (targetZ - camera.position.z) * ((isGameOver ? 3 : .03) * delta)
   
         if (isGameOver) {
             let targetZoom = getZoomValue() * (isGameOver ? .7 : 1)
 
-            camera.zoom += (targetZoom - camera.zoom) * .6
+            camera.zoom += (targetZoom - camera.zoom) * (30 * delta)
 
             if (Math.abs(targetZoom - camera.zoom) > .001) {
                 camera.updateProjectionMatrix() 

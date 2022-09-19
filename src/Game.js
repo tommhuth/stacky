@@ -2,7 +2,7 @@ import Camera from "./components/Camera"
 import { EffectComposer } from "@react-three/postprocessing"
 import { Suspense, useEffect } from "react"
 import { CannonProvider } from "./utils/cannon"
-import { match, reset, start, State, store, useStore } from "./utils/store"
+import { loaded, match, reset, start, State, store, useStore } from "./utils/store"
 import Stack from "./components/Stack"
 import Background from "./components/Background"
 import { palette } from "./utils/color"
@@ -11,7 +11,15 @@ export default function Game() {
     let id = useStore(i => i.id)
 
     useEffect(() => {
-        let onClick = (e) => {  
+        let id = setTimeout(() => loaded(), 1500)
+
+        return () => {
+            clearTimeout(id)
+        }
+    }, [])
+
+    useEffect(() => {
+        let onClick = (e) => {
             e.preventDefault()
             let state = store.getState().state
 
@@ -26,7 +34,7 @@ export default function Game() {
         }
 
         window.addEventListener("mousedown", onClick)
-        window.addEventListener("touchstart", onClick, {passive: false})
+        window.addEventListener("touchstart", onClick, { passive: false })
 
         return () => {
             window.removeEventListener("mousedown", onClick)
@@ -37,7 +45,6 @@ export default function Game() {
     return (
         <>
             <fog near={18} far={44} color={palette[1]} attach="fog" />
-            <Camera key={id} />
 
             <directionalLight
                 color={0xffffff}
@@ -47,6 +54,7 @@ export default function Game() {
             <ambientLight color={0xffffff} intensity={.7} />
 
             <Background />
+            <Camera key={id} />
 
             <CannonProvider axisIndex={1}>
                 <Stack key={id} />

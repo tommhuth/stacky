@@ -4,6 +4,7 @@ import { getColorAt } from "./color"
 import { Box3, Vector3 } from "three"
 
 export const State = {
+    LOADING: "loading",
     GAME_OVER: "gameover",
     IDLE: "idle",
     ACTIVE: "active",
@@ -16,7 +17,7 @@ export const SliceType = {
 
 const startCount = 1
 const init = {
-    state: State.IDLE,
+    state: State.LOADING,
     stack: {
         parts: new Array(startCount).fill().map((i, index) => ({
             id: random.id(),
@@ -169,6 +170,12 @@ export function end() {
 export function start() {
     store.setState({
         state: State.ACTIVE,
+    })
+}
+
+export function loaded() {
+    store.setState({
+        state: State.IDLE,
     })
 }
 
