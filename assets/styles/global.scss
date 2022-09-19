@@ -16,7 +16,7 @@
 
 html, 
 body {
-    height: 100vh;
+    height: 100%; 
     overflow: hidden;
     background-color: var(--background-color);
 }
@@ -40,4 +40,5 @@ body {
     width: 100% !important;
     right: 0;
     left: 0;
+    bottom: 0;
 }
